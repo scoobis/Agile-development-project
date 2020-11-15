@@ -1,6 +1,6 @@
 const service = {}
 
-service.test = function () {
+service.test = () => {
     return { message: 'hey!' }
 }
 
