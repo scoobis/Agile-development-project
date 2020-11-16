@@ -1,3 +1,4 @@
+// NOTE: Only example, remove later
 const service = {}
 
 service.test = () => {
