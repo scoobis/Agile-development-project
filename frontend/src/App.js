@@ -1,24 +1,30 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import './App.css'
-import axios from './helpers/axios-wrapper'
+
+import Header from './components/layouts/Header'
+import Footer from './components/layouts/Footer'
+
+import Home from './pages/Home'
+import Producer from './pages/sign-up/Producer'
 
 function App () {
-  const [message, setMessage] = useState('')
-
-  useEffect(() => {
-    axios.get('/').then(result => {
-      setMessage(result.data.message)
-      console.log(result)
-    })
-  }, [])
-
   return (
     <div className='App'>
-      <header className='App-header'>
-        <p>
-          {message}
-        </p>
-      </header>
+      <Router>
+        <Header />
+
+        <Switch>
+          <Route path='/signup/producer'>
+            <Producer />
+          </Route>
+          <Route path='/'>
+            <Home />
+          </Route>
+        </Switch>
+
+        <Footer />
+      </Router>
     </div>
   )
 }
