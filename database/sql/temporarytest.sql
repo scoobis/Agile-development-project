@@ -5,7 +5,6 @@ CREATE TABLE User (
   password VARCHAR(100) NOT NULL,
   full_name VARCHAR(40) NOT NULL,
   role VARCHAR(20) NOT NULL,
-  address_id INT(7),
   PRIMARY KEY (id)
 );
 
