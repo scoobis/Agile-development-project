@@ -1,6 +1,17 @@
 ---
 version: "3.8"
 services:
+
+# Backend API
+  backend:
+    build: 
+      context: ./backend/
+      target: development
+    volumes:
+      - "./backend/src:/app/src"
+    ports:
+      - '5001:5001'
+
   mariadb:
     image: mariadb:latest
     ports:
