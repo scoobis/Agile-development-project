@@ -13,5 +13,6 @@ ENV PATH=/app/node_modules/.bin:$PATH
 RUN npm install -g --only=development
 CMD [ "nodemon", "./src/app.js"]
 
+# Untested
 FROM builder AS production
 CMD [ "node", "./src/app.js" ]
