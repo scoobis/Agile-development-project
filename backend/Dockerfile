@@ -12,7 +12,7 @@ FROM builder AS development
 ENV NODE_ENV=development
 ENV PATH=/app/node_modules/.bin:$PATH
 RUN npm install --only=development
-CMD [ "nodemon", "./src/app.js"]
+CMD [ "nodemon", "./src/app.js", "-L"]
 
 # Untested
 FROM builder AS production
