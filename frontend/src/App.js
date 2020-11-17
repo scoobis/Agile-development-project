@@ -7,6 +7,7 @@ import Footer from './components/layouts/Footer'
 
 import Home from './pages/Home'
 import Producer from './pages/sign-up/Producer'
+import Customer from './pages/sign-up/Customer'
 
 function App () {
   return (
@@ -17,6 +18,9 @@ function App () {
         <Switch>
           <Route path='/signup/producer'>
             <Producer />
+          </Route>
+          <Route path='/signup/customer'>
+            <Customer />
           </Route>
           <Route path='/'>
             <Home />
