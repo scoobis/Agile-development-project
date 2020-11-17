@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Button, TextField, FormControlLabel, Checkbox, Link, Container, Grid, Typography, FormControl, FormHelperText } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { isValidName, isValidEmail, isValidPassword } from '../../../helpers/user'
-import { isAlreadyRegistered, saveUser } from '../../../helpers/api'
+import { saveUser } from '../../../helpers/api'
 import { Producer } from '../../../helpers/roles'
 
 const useStyles = makeStyles((theme) => ({
@@ -36,28 +36,19 @@ export default function SignUpForm () {
     name: false,
     email: false,
     password: false,
-    checked: false,
-    alreadyRegistered: false,
-    registrationFailed: false
+    checked: false
   })
+
+  const [notice, setNotice] = useState({ isError: false, message: '' })
 
   const { name, email, password } = inputs
 
   const handleChange = (e) => {
-    setAllErrorsTo(false)
     setInputs({ ...inputs, [e.target.name]: e.target.value })
   }
 
   const handleSubmit = (e) => {
     e.preventDefault()
-
-    if (isAlreadyRegistered(email)) {
-      setErrors({
-        ...errors,
-        alreadyRegistered: true
-      })
-      return
-    }
 
     setErrors({
       name: !isValidName(name),
@@ -69,13 +60,10 @@ export default function SignUpForm () {
     if (hasValidCredentials()) {
       saveUser({ name, email, password, role: Producer })
         .then(result => result.error
-          ? setErrors({ ...errors, registrationFailed: true })
-          : setErrors({ ...errors, registrationFailed: false }))
+          ? setNotice({ isError: true, message: result.error })
+          : setNotice({ isError: false, message: result.message }))
     }
   }
-
-  const setAllErrorsTo = (value) =>
-    setErrors(Object.assign(...Object.keys(errors).map(k => ({ [k]: value }))))
 
   const hasValidCredentials = () =>
     isValidName(name) &&
@@ -147,7 +135,7 @@ export default function SignUpForm () {
                       }}
                     />
                   }
-                  label='Jag har läst och godkänner villkoren för producenter.'
+                  label={<Typography variant='body2'>Jag har läst och godkänner villkoren för producenter.</Typography>}
                 />
                 {errors.checked && (
                   <FormHelperText>Villkoren måste godkännas.</FormHelperText>
@@ -155,13 +143,11 @@ export default function SignUpForm () {
               </FormControl>
             </Grid>
             <Grid item xs={12}>
-              {errors.alreadyRegistered || errors.registrationFailed ? (
-                <Typography component='p' color='error'>
-                  {errors.alreadyRegistered
-                    ? 'E-postadressen är redan registrerad.'
-                    : 'Registrering misslyckades.'}
+              {notice.message && (
+                <Typography color={notice.isError && 'error'}>
+                  {notice.message}
                 </Typography>
-              ) : ''}
+              )}
             </Grid>
           </Grid>
           <Button
