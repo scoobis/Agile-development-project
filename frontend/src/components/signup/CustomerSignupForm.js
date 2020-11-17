@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
-import { Button, TextField, FormControlLabel, Checkbox, Link, Container, Grid, Typography, FormControl, FormHelperText } from '@material-ui/core'
+import Link from 'next/link'
+import { Button, TextField, FormControlLabel, Checkbox, Container, Grid, Typography, FormControl, FormHelperText } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-import { isValidName, isValidEmail, isValidPassword } from '../../../helpers/user'
-import { saveUser } from '../../../helpers/api'
-import { Producer } from '../../../helpers/roles'
+import { isValidName, isValidEmail, isValidPassword } from '../../utils/user'
+import { saveUser } from '../../utils/api'
+import { Customer } from '../../utils/roles'
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -25,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
-export default function SignUpForm () {
+export default function CustomerSignupForm () {
   const [inputs, setInputs] = useState({
     name: '',
     email: '',
@@ -58,7 +59,7 @@ export default function SignUpForm () {
     })
 
     if (hasValidCredentials()) {
-      saveUser({ name, email, password, role: Producer })
+      saveUser({ name, email, password, role: Customer })
         .then(result => result.error
           ? setNotice({ isError: true, message: result.error })
           : setNotice({ isError: false, message: result.message }))
@@ -77,7 +78,10 @@ export default function SignUpForm () {
     <Container component='main' maxWidth='xs'>
       <div className={classes.paper}>
         <Typography component='h1' variant='h5'>
-           Registrera dig som producent
+          Registrera kundkonto
+        </Typography>
+        <Typography>
+          När du registrerar ett konto får du ta del av fördelar som att kunna spara din adress, se orderhistorik etc.
         </Typography>
 
         <form className={classes.form} onSubmit={handleSubmit}>
@@ -135,7 +139,7 @@ export default function SignUpForm () {
                       }}
                     />
                   }
-                  label={<Typography variant='body2'>Jag har läst och godkänner villkoren för producenter.</Typography>}
+                  label={<Typography variant='body2'>Jag har läst och godkänner köpvillkoren.'</Typography>}
                 />
                 {errors.checked && (
                   <FormHelperText>Villkoren måste godkännas.</FormHelperText>
@@ -162,9 +166,9 @@ export default function SignUpForm () {
           </Button>
           <Grid container justify='center'>
             <Grid item>
-              <Link href='#' variant='body2'>
-                Är du redan producent? Logga in
-              </Link>
+              <Typography variant='body2'>
+            Är du redan kund? <Link href='#'><a>Logga in</a></Link>
+              </Typography>
             </Grid>
           </Grid>
         </form>
