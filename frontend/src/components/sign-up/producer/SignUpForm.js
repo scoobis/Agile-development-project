@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
 import { Button, TextField, FormControlLabel, Checkbox, Link, Container, Grid, Typography, FormControl, FormHelperText } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-import axios from '../../../helpers/axios-wrapper'
+import { isValidName, isValidEmail, isValidPassword } from '../../../helpers/user'
+import { isAlreadyRegistered, saveUser } from '../../../helpers/api'
+import { Producer } from '../../../helpers/roles'
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -29,48 +31,57 @@ export default function SignUpForm () {
     email: '',
     password: ''
   })
-
+  const [checked, setChecked] = useState(false)
   const [errors, setErrors] = useState({
     name: false,
     email: false,
     password: false,
-    checked: false
+    checked: false,
+    alreadyRegistered: false,
+    registrationFailed: false
   })
 
-  const [checked, setChecked] = useState(false)
+  const { name, email, password } = inputs
 
   const handleChange = (e) => {
+    setAllErrorsTo(false)
     setInputs({ ...inputs, [e.target.name]: e.target.value })
   }
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    const hasValidName = isValidName()
-    const hasValidEmail = isValidEmail()
-    const hasValidPassword = isValidPassword()
+
+    if (isAlreadyRegistered(email)) {
+      setErrors({
+        ...errors,
+        alreadyRegistered: true
+      })
+      return
+    }
 
     setErrors({
-      name: !hasValidName,
-      email: !hasValidEmail,
-      password: !hasValidPassword,
+      name: !isValidName(name),
+      email: !isValidEmail(email),
+      password: !isValidPassword(password),
       checked: !checked
     })
 
-    if (hasValidName && hasValidEmail && hasValidPassword && checked) {
-      axios.post('/users', {
-        name: inputs.name,
-        email: inputs.email,
-        password: inputs.password,
-        role: 'Producer'
-      })
+    if (hasValidCredentials()) {
+      saveUser({ name, email, password, role: Producer })
+        .then(result => result.error
+          ? setErrors({ ...errors, registrationFailed: true })
+          : setErrors({ ...errors, registrationFailed: false }))
     }
   }
 
-  const isValidName = () => inputs.name.length >= 3
+  const setAllErrorsTo = (value) =>
+    setErrors(Object.assign(...Object.keys(errors).map(k => ({ [k]: value }))))
 
-  const isValidEmail = () => /\S+@\S+\.\S+/.test(inputs.email)
-
-  const isValidPassword = () => inputs.password.length >= 6
+  const hasValidCredentials = () =>
+    isValidName(name) &&
+    isValidEmail(email) &&
+    isValidPassword(password) &&
+    checked
 
   const classes = useStyles()
 
@@ -78,10 +89,10 @@ export default function SignUpForm () {
     <Container component='main' maxWidth='xs'>
       <div className={classes.paper}>
         <Typography component='h1' variant='h5'>
-          Registrera dig som producent
+           Registrera dig som producent
         </Typography>
 
-        <form className={classes.form} noValidate autoComplete='off' onSubmit={handleSubmit}>
+        <form className={classes.form} onSubmit={handleSubmit}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
@@ -91,7 +102,7 @@ export default function SignUpForm () {
                 fullWidth
                 autoFocus
                 required
-                value={inputs.name}
+                value={name}
                 onChange={handleChange}
                 error={errors.name}
                 helperText={errors.name && 'Ogiltigt namn'}
@@ -103,7 +114,7 @@ export default function SignUpForm () {
                 label='E-post'
                 variant='outlined'
                 required
-                value={inputs.email}
+                value={email}
                 onChange={handleChange}
                 error={errors.email}
                 helperText={errors.email && 'Ogiltig e-post'}
@@ -117,7 +128,7 @@ export default function SignUpForm () {
                 type='password'
                 required
                 fullWidth
-                value={inputs.password}
+                value={password}
                 onChange={handleChange}
                 error={errors.password}
                 helperText={errors.password && 'Lösenordet är för svagt'}
@@ -130,15 +141,27 @@ export default function SignUpForm () {
                     <Checkbox
                       color='primary'
                       checked={checked}
-                      onChange={(e) => setChecked(e.target.checked)}
+                      onChange={(e) => {
+                        setChecked(e.target.checked)
+                        setErrors({ ...errors, checked: !e.target.checked })
+                      }}
                     />
                   }
-                  label='Jag har läst och godkänner villkoren för producenter och intygar att jag är en faktisk producent.'
+                  label='Jag har läst och godkänner villkoren för producenter.'
                 />
                 {errors.checked && (
                   <FormHelperText>Villkoren måste godkännas.</FormHelperText>
                 )}
               </FormControl>
+            </Grid>
+            <Grid item xs={12}>
+              {errors.alreadyRegistered || errors.registrationFailed ? (
+                <Typography component='p' color='error'>
+                  {errors.alreadyRegistered
+                    ? 'E-postadressen är redan registrerad.'
+                    : 'Registrering misslyckades.'}
+                </Typography>
+              ) : ''}
             </Grid>
           </Grid>
           <Button
@@ -159,7 +182,6 @@ export default function SignUpForm () {
             </Grid>
           </Grid>
         </form>
-
       </div>
     </Container>
   )
