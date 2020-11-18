@@ -2,6 +2,18 @@
 version: "3.8"
 services:
 
+# Frontend
+  frontend:
+    build:
+      context: ./frontend/
+      target: development
+    volumes:
+      - ./frontend/pages:/app/pages 
+      - ./frontend/public:/app/public 
+      - ./frontend/src:/app/src
+    ports: 
+      - 3000:3000
+
 # Backend API
   backend:
     build: 
@@ -14,6 +26,7 @@ services:
     ports:
       - 5001:5001
 
+# Database
   mariadb:
     image: mariadb:latest
     ports:
