@@ -5,10 +5,11 @@ CREATE TABLE user (
   password VARCHAR(100) NOT NULL,
   full_name VARCHAR(40) NOT NULL,
   role VARCHAR(20) NOT NULL,
-  PRIMARY KEY (id)
+  PRIMARY KEY (id),
+  UNIQUE (email)
 );
 
 INSERT INTO user (email, password, full_name, role) 
 VALUES
-  ('admin@mail.com', 'admin', 'Admin Adminsson', 'ADMIN'),
-  ('producenten@mail.com', 'producenten', 'Produ Centen', 'PRODUCENT');
+  ('admin@mail.com', 'admin', 'Admin Adminsson', 'admin'),
+  ('producenten@mail.com', 'producenten', 'Produ Centen', 'producer');
