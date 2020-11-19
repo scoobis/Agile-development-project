@@ -2,12 +2,40 @@ const pool = require('./databaseConnection')
 
 const userDAO = {}
 
-userDAO.registerUser = async (user) => {
+/**
+ * Registers a new user
+ * 
+ * @param {user} user 
+ */
+userDAO.create = async (user) => {
     let conn;
-    conn = await pool.getConnection();
+    try {
+        conn = await pool.getConnection();
+        conn.query("INSERT INTO user (email, password, full_name, role) VALUES ('" + user.email + "', '" + user.password + "', '" + user.name + "', '" + user.role + "')")
+    } catch (error) {
+        throw error
+    } finally {
+        if (conn) conn.release()
+    }
+}
 
-    conn.query("INSERT INTO user (email, password, full_name, role) VALUES ('" + user.email + "', '" + user.password + "', '" + user.name + "', '" + user.role + "')");
-    conn.close();
+/**
+ * Finds a user by email
+ * 
+ * @param {string} email
+ * @returns {object} user
+ */
+userDAO.findByEmail = async (email) => {
+    let conn;
+    try {
+        conn = await pool.getConnection();
+        let [user] = await conn.query("SELECT * FROM user WHERE email=('" + email + "')")
+        return user
+    } catch (error) {
+        throw error
+    } finally {
+        if (conn) conn.release()
+    }
 }
 
 module.exports = userDAO
