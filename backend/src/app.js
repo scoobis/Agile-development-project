@@ -17,9 +17,8 @@ app.use(express.urlencoded({ extended: true }))
 app.use(headers)
 
 // Routes
-app.use('/', require('./routes/registerRouter'))
-app.use('/users', require('./routes/registerRouter'))
+app.use('/', require('./routes/userRouter'))
+app.use('/users', require('./routes/userRouter'))
 
 const port = process.env.PORT || 5001
 app.listen(port, () => console.log(`Listening on port ${port}...`))
-
