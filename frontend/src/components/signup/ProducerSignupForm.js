@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { Button, TextField, FormControlLabel, Checkbox, Container, Grid, Typography, FormControl, FormHelperText } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
@@ -27,45 +27,38 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export default function ProducerSignupForm () {
-  const [inputs, setInputs] = useState({
-    name: '',
-    email: '',
-    password: '',
-    orgNumber: '',
-    streetAddress: '',
-    zipCode: '',
-    city: ''
-  })
-  const [checked, setChecked] = useState(false)
-  const [errors, setErrors] = useState({
-    name: false,
-    email: false,
-    password: false,
-    orgNumber: false,
-    streetAddress: false,
-    zipCode: false,
-    city: false,
-    checked: false
+  const [state, setState] = useState({
+    name: { value: '', hasError: false, helperText: '' },
+    email: { value: '', hasError: false, helperText: '' },
+    password: { value: '', hasError: false, helperText: '' },
+    orgNumber: { value: '', hasError: false, helperText: '' },
+    streetAddress: { value: '', hasError: false, helperText: '' },
+    zipCode: { value: '', hasError: false, helperText: '' },
+    city: { value: '', hasError: false, helperText: '' }
   })
 
+  const [checked, setChecked] = useState(false)
   const [notice, setNotice] = useState({ isError: false, message: '' })
 
-  const { name, email, password, orgNumber, streetAddress, zip, city } = inputs
+  const { name, email, password, orgNumber, streetAddress, zipCode, city } = state
 
   const handleChange = (e) => {
-    setInputs({ ...inputs, [e.target.name]: e.target.value })
+    setState({
+      ...state,
+      [e.target.name]: { ...state[e.target.name], value: e.target.value }
+    })
   }
 
   const handleSubmit = (e) => {
     e.preventDefault()
 
-    setErrors({
-      name: !isValidName(name),
-      email: !isValidEmail(email),
-      password: !isValidPassword(password),
-      orgNumber: !isValidOrganizationNumber(orgNumber),
-      zipCode: !isValidZipCode(zip),
-      checked: !checked
+    setState({
+      ...state,
+      name: { ...name, hasError: !isValidName(name) },
+      email: { ...email, hasError: !isValidEmail(email) },
+      password: { ...password, hasError: !isValidPassword(password) },
+      orgNumber: { ...orgNumber, hasError: !isValidOrganizationNumber(orgNumber) },
+      zipCode: { ...zipCode, hasError: !isValidZipCode(zipCode) }
     })
 
     if (hasValidCredentials()) {
@@ -77,9 +70,9 @@ export default function ProducerSignupForm () {
   }
 
   const hasValidCredentials = () =>
-    isValidName(name) &&
-    isValidEmail(email) &&
-    isValidPassword(password) &&
+    !name.hasError &&
+    !email.hasError &&
+    !password.hasError &&
     checked
 
   const classes = useStyles()
@@ -101,10 +94,10 @@ export default function ProducerSignupForm () {
                 fullWidth
                 autoFocus
                 required
-                value={name}
+                value={name.value}
                 onChange={handleChange}
-                error={errors.name}
-                helperText={errors.name && 'Ogiltigt namn'}
+                error={name.hasError}
+                helperText={name.hasError && name.helperText}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -113,10 +106,10 @@ export default function ProducerSignupForm () {
                 label='E-post'
                 variant='outlined'
                 required
-                value={email}
+                value={email.value}
                 onChange={handleChange}
-                error={errors.email}
-                helperText={errors.email && 'Ogiltig e-post'}
+                error={email.hasError}
+                helperText={email.hasError && email.helperText}
               />
             </Grid>
             <Grid item xs={12}>
@@ -127,10 +120,10 @@ export default function ProducerSignupForm () {
                 type='password'
                 required
                 fullWidth
-                value={password}
+                value={password.value}
                 onChange={handleChange}
-                error={errors.password}
-                helperText={errors.password && 'Lösenordet är för svagt'}
+                error={password.hasError}
+                helperText={password.hasError && email.helperText}
               />
             </Grid>
             <Grid item xs={12}>
@@ -141,14 +134,14 @@ export default function ProducerSignupForm () {
                 type='text'
                 required
                 fullWidth
-                value={orgNumber}
+                value={orgNumber.value}
                 onChange={handleChange}
-                error={errors.orgNumber}
-                helperText={errors.orgNumber && 'Kontrollera organisationsnumret'}
+                error={orgNumber.hasError}
+                helperText={orgNumber.hasError && orgNumber.helperText}
               />
             </Grid>
             <Grid item xs={12}>
-              <Typography>Adressuppgifter till er gård</Typography>
+              <Typography>Adressuppgifter till er verksamhet</Typography>
             </Grid>
             <Grid item xs={6}>
               <TextField
@@ -158,10 +151,10 @@ export default function ProducerSignupForm () {
                 type='text'
                 required
                 fullWidth
-                value={streetAddress}
+                value={streetAddress.value}
                 onChange={handleChange}
-                error={errors.streetAddress}
-                helperText={errors.streetAddress && 'Adressen är inte giltig'}
+                error={streetAddress.hasError}
+                helperText={streetAddress.hasError && streetAddress.helperText}
               />
             </Grid>
             <Grid item xs={6}>
@@ -172,9 +165,9 @@ export default function ProducerSignupForm () {
                 type='text'
                 required
                 fullWidth
-                value={zip}
-                error={errors.zip}
-                helperText={errors.zip && 'Ogiltigt postnummer'}
+                value={zipCode.value}
+                error={zipCode.hasError}
+                helperText={zipCode.hasError && zipCode.helperText}
               />
             </Grid>
             <Grid item xs={12}>
@@ -185,9 +178,9 @@ export default function ProducerSignupForm () {
                 type='text'
                 required
                 fullWidth
-                value={city}
+                value={city.value}
                 onChange={handleChange}
-                error={errors.city && 'Ogiltig ort?'}
+                error={city.hasError && city.helperText}
               />
             </Grid>
             <Grid item xs={12}>
@@ -197,16 +190,13 @@ export default function ProducerSignupForm () {
                     <Checkbox
                       color='primary'
                       checked={checked}
-                      onChange={(e) => {
-                        setChecked(e.target.checked)
-                        setErrors({ ...errors, checked: !e.target.checked })
-                      }}
+                      onChange={(e) => { setChecked(e.target.checked) }}
                     />
                   }
-                  label={<Typography variant='body2'>Jag har läst och godkänner villkoren för producenter.</Typography>}
+                  label={<Typography variant='body2'>Jag har läst och godkänner villkoren för producenter</Typography>}
                 />
-                {errors.checked && (
-                  <FormHelperText>Villkoren måste godkännas.</FormHelperText>
+                {!checked && (
+                  <FormHelperText>Obligatoriskt</FormHelperText>
                 )}
               </FormControl>
             </Grid>
