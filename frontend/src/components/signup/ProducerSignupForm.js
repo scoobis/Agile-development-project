@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import Link from 'next/link'
 import { Button, TextField, FormControlLabel, Checkbox, Container, Grid, Typography, FormControl, FormHelperText } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-import { isValidName, isValidEmail, isValidPassword } from '../../utils/user'
+import { isValidName, isValidEmail, isValidPassword, isValidOrganizationNumber, isValidZipCode, isValidPhoneNumber } from '../../utils/user'
 import { saveUser } from '../../utils/api'
 import { Producer } from '../../utils/roles'
 
@@ -27,49 +27,67 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export default function ProducerSignupForm () {
-  const [inputs, setInputs] = useState({
-    name: '',
-    email: '',
-    password: ''
-  })
-  const [checked, setChecked] = useState(false)
-  const [errors, setErrors] = useState({
-    name: false,
-    email: false,
-    password: false,
-    checked: false
+  const [state, setState] = useState({
+    name: { value: '', hasError: false, helperText: '' },
+    email: { value: '', hasError: false, helperText: '' },
+    phone: { value: '', hasError: false, helperText: '' },
+    password: { value: '', hasError: false, helperText: '' },
+    orgNumber: { value: '', hasError: false, helperText: '' },
+    streetAddress: { value: '', hasError: false, helperText: '' },
+    zip: { value: '', hasError: false, helperText: '' },
+    city: { value: '', hasError: false, helperText: '' }
   })
 
+  const [checked, setChecked] = useState(false)
   const [notice, setNotice] = useState({ isError: false, message: '' })
 
-  const { name, email, password } = inputs
+  const { name, email, password, orgNumber, streetAddress, zip, city, phone } = state
 
   const handleChange = (e) => {
-    setInputs({ ...inputs, [e.target.name]: e.target.value })
+    const name = e.target.name
+    const value = e.target.value
+
+    setState({
+      ...state,
+      [name]: { ...state[name], value: value, hasError: false }
+    })
   }
 
   const handleSubmit = (e) => {
     e.preventDefault()
 
-    setErrors({
-      name: !isValidName(name),
-      email: !isValidEmail(email),
-      password: !isValidPassword(password),
-      checked: !checked
+    setState({
+      ...state,
+      name: { ...name, hasError: !isValidName(name.value) },
+      email: { ...email, hasError: !isValidEmail(email.value) },
+      phone: { ...phone, hasError: !isValidPhoneNumber(phone.value) },
+      password: { ...password, hasError: !isValidPassword(password.value) },
+      orgNumber: { ...orgNumber, hasError: !isValidOrganizationNumber(orgNumber.value) },
+      zip: { ...zip, hasError: !isValidZipCode(zip.value) }
     })
 
     if (hasValidCredentials()) {
-      saveUser({ name, email, password, role: Producer })
-        .then(result => result.error
-          ? setNotice({ isError: true, message: result.error })
-          : setNotice({ isError: false, message: result.message }))
+      saveUser({
+        name: name.value,
+        email: email.value,
+        password: password.value,
+        role: Producer,
+        orgNumber: orgNumber.value,
+        streetAddress: streetAddress.value,
+        zip: zip.value,
+        city: city.value
+      })
+        .then(res => setNotice({
+          message: res && res.data ? res.data.message : res && res.message ? res.message : '',
+          isError: res && res.status !== 200
+        }))
     }
   }
 
   const hasValidCredentials = () =>
-    isValidName(name) &&
-    isValidEmail(email) &&
-    isValidPassword(password) &&
+    !name.hasError &&
+    !email.hasError &&
+    !password.hasError &&
     checked
 
   const classes = useStyles()
@@ -91,10 +109,10 @@ export default function ProducerSignupForm () {
                 fullWidth
                 autoFocus
                 required
-                value={name}
+                value={name.value}
                 onChange={handleChange}
-                error={errors.name}
-                helperText={errors.name && 'Ogiltigt namn'}
+                error={name.hasError}
+                helperText={name.hasError && name.helperText}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -103,10 +121,36 @@ export default function ProducerSignupForm () {
                 label='E-post'
                 variant='outlined'
                 required
-                value={email}
+                value={email.value}
                 onChange={handleChange}
-                error={errors.email}
-                helperText={errors.email && 'Ogiltig e-post'}
+                error={email.hasError}
+                helperText={email.hasError && email.helperText}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                name='phone'
+                label='Telefonnummer'
+                variant='outlined'
+                required
+                value={phone.value}
+                onChange={handleChange}
+                error={phone.hasError}
+                helperText={phone.hasError && phone.helperText}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                name='orgNumber'
+                label='Organisationsnummer'
+                variant='outlined'
+                type='text'
+                required
+                fullWidth
+                value={orgNumber.value}
+                onChange={handleChange}
+                error={orgNumber.hasError}
+                helperText={orgNumber.hasError && orgNumber.helperText}
               />
             </Grid>
             <Grid item xs={12}>
@@ -117,10 +161,55 @@ export default function ProducerSignupForm () {
                 type='password'
                 required
                 fullWidth
-                value={password}
+                value={password.value}
                 onChange={handleChange}
-                error={errors.password}
-                helperText={errors.password && 'Lösenordet är för svagt'}
+                error={password.hasError}
+                helperText={password.hasError && email.helperText}
+              />
+            </Grid>
+
+            <Grid item xs={12}>
+              <Typography>Adressuppgifter till er verksamhet</Typography>
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                name='streetAddress'
+                label='Gatuadress'
+                variant='outlined'
+                type='text'
+                required
+                fullWidth
+                value={streetAddress.value}
+                onChange={handleChange}
+                error={streetAddress.hasError}
+                helperText={streetAddress.hasError && streetAddress.helperText}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                name='zip'
+                label='Postnummer'
+                variant='outlined'
+                type='text'
+                required
+                fullWidth
+                value={zip.value}
+                onChange={handleChange}
+                error={zip.hasError}
+                helperText={zip.hasError && zip.helperText}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                name='city'
+                label='Ort'
+                variant='outlined'
+                type='text'
+                required
+                fullWidth
+                value={city.value}
+                onChange={handleChange}
+                error={city.hasError && city.helperText}
               />
             </Grid>
             <Grid item xs={12}>
@@ -130,22 +219,19 @@ export default function ProducerSignupForm () {
                     <Checkbox
                       color='primary'
                       checked={checked}
-                      onChange={(e) => {
-                        setChecked(e.target.checked)
-                        setErrors({ ...errors, checked: !e.target.checked })
-                      }}
+                      onChange={(e) => { setChecked(e.target.checked) }}
                     />
                   }
-                  label={<Typography variant='body2'>Jag har läst och godkänner villkoren för producenter.</Typography>}
+                  label={<Typography variant='body2'>Jag har läst och godkänner villkoren för producenter</Typography>}
                 />
-                {errors.checked && (
-                  <FormHelperText>Villkoren måste godkännas.</FormHelperText>
+                {!checked && (
+                  <FormHelperText>Obligatoriskt</FormHelperText>
                 )}
               </FormControl>
             </Grid>
             <Grid item xs={12}>
               {notice.message && (
-                <Typography color={notice.isError && 'error'}>
+                <Typography color={notice.isError ? 'error' : 'secondary'}>
                   {notice.message}
                 </Typography>
               )}
