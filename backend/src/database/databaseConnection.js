@@ -6,7 +6,7 @@ const pool = mariadb.createPool({
   user: 'root',
   password: 'root123',
   database: 'dbtest',
-  connectionLimit: 50
+  connectionLimit: 1
 });
 
 //From https://dev.to/probablyrealrob/getting-started-with-mariadb-using-docker-and-node-js-3djg
@@ -20,4 +20,4 @@ module.exports={
         });
       });
     }
-  } 
+  }
