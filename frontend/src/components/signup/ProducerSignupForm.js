@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import Link from 'next/link'
 import { Button, TextField, FormControlLabel, Checkbox, Container, Grid, Typography, FormControl, FormHelperText } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-import { isValidName, isValidEmail, isValidPassword, isValidOrganizationNumber, isValidZipCode } from '../../utils/user'
+import { isValidName, isValidEmail, isValidPassword, isValidOrganizationNumber, isValidZipCode, isValidPhoneNumber } from '../../utils/user'
 import { saveUser } from '../../utils/api'
 import { Producer } from '../../utils/roles'
 
@@ -30,22 +30,26 @@ export default function ProducerSignupForm () {
   const [state, setState] = useState({
     name: { value: '', hasError: false, helperText: '' },
     email: { value: '', hasError: false, helperText: '' },
+    phone: { value: '', hasError: false, helperText: '' },
     password: { value: '', hasError: false, helperText: '' },
     orgNumber: { value: '', hasError: false, helperText: '' },
     streetAddress: { value: '', hasError: false, helperText: '' },
-    zipCode: { value: '', hasError: false, helperText: '' },
+    zip: { value: '', hasError: false, helperText: '' },
     city: { value: '', hasError: false, helperText: '' }
   })
 
   const [checked, setChecked] = useState(false)
   const [notice, setNotice] = useState({ isError: false, message: '' })
 
-  const { name, email, password, orgNumber, streetAddress, zipCode, city } = state
+  const { name, email, password, orgNumber, streetAddress, zip, city, phone } = state
 
   const handleChange = (e) => {
+    const name = e.target.name
+    const value = e.target.value
+
     setState({
       ...state,
-      [e.target.name]: { ...state[e.target.name], value: e.target.value }
+      [name]: { ...state[name], value: value, hasError: false }
     })
   }
 
@@ -54,18 +58,29 @@ export default function ProducerSignupForm () {
 
     setState({
       ...state,
-      name: { ...name, hasError: !isValidName(name) },
-      email: { ...email, hasError: !isValidEmail(email) },
-      password: { ...password, hasError: !isValidPassword(password) },
-      orgNumber: { ...orgNumber, hasError: !isValidOrganizationNumber(orgNumber) },
-      zipCode: { ...zipCode, hasError: !isValidZipCode(zipCode) }
+      name: { ...name, hasError: !isValidName(name.value) },
+      email: { ...email, hasError: !isValidEmail(email.value) },
+      phone: { ...phone, hasError: !isValidPhoneNumber(phone.value) },
+      password: { ...password, hasError: !isValidPassword(password.value) },
+      orgNumber: { ...orgNumber, hasError: !isValidOrganizationNumber(orgNumber.value) },
+      zip: { ...zip, hasError: !isValidZipCode(zip.value) }
     })
 
     if (hasValidCredentials()) {
-      saveUser({ name, email, password, role: Producer })
-        .then(result => result.error
-          ? setNotice({ isError: true, message: result.error })
-          : setNotice({ isError: false, message: result.message }))
+      saveUser({
+        name: name.value,
+        email: email.value,
+        password: password.value,
+        role: Producer,
+        orgNumber: orgNumber.value,
+        streetAddress: streetAddress.value,
+        zip: zip.value,
+        city: city.value
+      })
+        .then(res => setNotice({
+          message: res && res.data ? res.data.message : res && res.message ? res.message : '',
+          isError: res && res.status !== 200
+        }))
     }
   }
 
@@ -112,6 +127,32 @@ export default function ProducerSignupForm () {
                 helperText={email.hasError && email.helperText}
               />
             </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                name='phone'
+                label='Telefonnummer'
+                variant='outlined'
+                required
+                value={phone.value}
+                onChange={handleChange}
+                error={phone.hasError}
+                helperText={phone.hasError && phone.helperText}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                name='orgNumber'
+                label='Organisationsnummer'
+                variant='outlined'
+                type='text'
+                required
+                fullWidth
+                value={orgNumber.value}
+                onChange={handleChange}
+                error={orgNumber.hasError}
+                helperText={orgNumber.hasError && orgNumber.helperText}
+              />
+            </Grid>
             <Grid item xs={12}>
               <TextField
                 name='password'
@@ -126,20 +167,7 @@ export default function ProducerSignupForm () {
                 helperText={password.hasError && email.helperText}
               />
             </Grid>
-            <Grid item xs={12}>
-              <TextField
-                name='orgNumber'
-                label='Organisationsnummer'
-                variant='outlined'
-                type='text'
-                required
-                fullWidth
-                value={orgNumber.value}
-                onChange={handleChange}
-                error={orgNumber.hasError}
-                helperText={orgNumber.hasError && orgNumber.helperText}
-              />
-            </Grid>
+
             <Grid item xs={12}>
               <Typography>Adressuppgifter till er verksamhet</Typography>
             </Grid>
@@ -159,15 +187,16 @@ export default function ProducerSignupForm () {
             </Grid>
             <Grid item xs={6}>
               <TextField
-                name='zipCode'
+                name='zip'
                 label='Postnummer'
                 variant='outlined'
                 type='text'
                 required
                 fullWidth
-                value={zipCode.value}
-                error={zipCode.hasError}
-                helperText={zipCode.hasError && zipCode.helperText}
+                value={zip.value}
+                onChange={handleChange}
+                error={zip.hasError}
+                helperText={zip.hasError && zip.helperText}
               />
             </Grid>
             <Grid item xs={12}>
@@ -202,7 +231,7 @@ export default function ProducerSignupForm () {
             </Grid>
             <Grid item xs={12}>
               {notice.message && (
-                <Typography color={notice.isError && 'error'}>
+                <Typography color={notice.isError ? 'error' : 'secondary'}>
                   {notice.message}
                 </Typography>
               )}
