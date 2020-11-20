@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import Link from 'next/link'
 import { Button, TextField, FormControlLabel, Checkbox, Container, Grid, Typography, FormControl, FormHelperText } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-import { isValidName, isValidEmail, isValidPassword } from '../../utils/user'
+import { isValidName, isValidEmail, isValidPassword, isValidOrganizationNumber, isValidZipCode } from '../../utils/user'
 import { saveUser } from '../../utils/api'
 import { Producer } from '../../utils/roles'
 
@@ -30,19 +30,27 @@ export default function ProducerSignupForm () {
   const [inputs, setInputs] = useState({
     name: '',
     email: '',
-    password: ''
+    password: '',
+    orgNumber: '',
+    streetAddress: '',
+    zipCode: '',
+    city: ''
   })
   const [checked, setChecked] = useState(false)
   const [errors, setErrors] = useState({
     name: false,
     email: false,
     password: false,
+    orgNumber: false,
+    streetAddress: false,
+    zipCode: false,
+    city: false,
     checked: false
   })
 
   const [notice, setNotice] = useState({ isError: false, message: '' })
 
-  const { name, email, password } = inputs
+  const { name, email, password, orgNumber, streetAddress, zip, city } = inputs
 
   const handleChange = (e) => {
     setInputs({ ...inputs, [e.target.name]: e.target.value })
@@ -55,6 +63,8 @@ export default function ProducerSignupForm () {
       name: !isValidName(name),
       email: !isValidEmail(email),
       password: !isValidPassword(password),
+      orgNumber: !isValidOrganizationNumber(orgNumber),
+      zipCode: !isValidZipCode(zip),
       checked: !checked
     })
 
@@ -121,6 +131,63 @@ export default function ProducerSignupForm () {
                 onChange={handleChange}
                 error={errors.password}
                 helperText={errors.password && 'Lösenordet är för svagt'}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                name='orgNumber'
+                label='Organisationsnummer'
+                variant='outlined'
+                type='text'
+                required
+                fullWidth
+                value={orgNumber}
+                onChange={handleChange}
+                error={errors.orgNumber}
+                helperText={errors.orgNumber && 'Kontrollera organisationsnumret'}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <Typography>Adressuppgifter till er gård</Typography>
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                name='streetAddress'
+                label='Gatuadress'
+                variant='outlined'
+                type='text'
+                required
+                fullWidth
+                value={streetAddress}
+                onChange={handleChange}
+                error={errors.streetAddress}
+                helperText={errors.streetAddress && 'Adressen är inte giltig'}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                name='zipCode'
+                label='Postnummer'
+                variant='outlined'
+                type='text'
+                required
+                fullWidth
+                value={zip}
+                error={errors.zip}
+                helperText={errors.zip && 'Ogiltigt postnummer'}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                name='city'
+                label='Ort'
+                variant='outlined'
+                type='text'
+                required
+                fullWidth
+                value={city}
+                onChange={handleChange}
+                error={errors.city && 'Ogiltig ort?'}
               />
             </Grid>
             <Grid item xs={12}>
