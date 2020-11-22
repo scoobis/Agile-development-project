@@ -8,8 +8,8 @@ controller.test = async (req, res, next) => {
   } catch (err) { next(err) }
 }
 
-controller.create = async (req, res, text) => {
-  service.create(req, res)
+controller.create = async (req, res, next) => {
+  service.create(req, res, next)
 }
 
 module.exports = controller

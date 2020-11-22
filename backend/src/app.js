@@ -20,5 +20,10 @@ app.use(headers)
 app.use('/', require('./routes/userRouter'))
 app.use('/users', require('./routes/userRouter'))
 
+app.use((err, req, res, next) => {
+res.status(err.status).send({ message: `${err.message}` })
+})
+
+
 const port = process.env.PORT || 5001
 app.listen(port, () => console.log(`Listening on port ${port}...`))

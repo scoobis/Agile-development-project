@@ -1,18 +1,23 @@
 const user = require('../models/user')
 const userDAO = require('../database/userDAO')
+const createError = require('http-errors')
 
 const service = {}
 
-service.create = async (req, res) => {
-  try {
+service.create = async (req, res, next) => {
+  
     if (!isValidEmail(req.body.email)) {
-      throw new Error('Not a valid email address!')
+      const error = createError(400, 'Not a valid email address!')
+      return next(error)
     } else if (!isValidName(req.body.name)) {
-      throw new Error('Name needs to be at least 3 characters long!')
+      const error = createError(400, 'Name needs to be at least 3 characters long!')
+      return next(error)
     } else if (!isValidPassword(req.body.password)) {
-      throw new Error('Password needs to be at least 6 characters long!')
+      const error = createError(400, 'Password needs to be at least 6 characters long!')
+      return next(error)
     } else if (await isAlreadyRegistered(req.body.email)) {
-      throw new Error('Email already exists')
+      const error = createError(400, 'Email already exists')
+      return next(error)
     } else {
       const userToRegister = new user(
         req.body.email, req.body.password, req.body.name, req.body.role
@@ -20,11 +25,8 @@ service.create = async (req, res) => {
       await userDAO.create(userToRegister)
 
       res.status(200).json({ 'success': true, 'message' : 'Account created!'})
-    }
-  } catch (error) {
-
-     res.status(400).json({ 'error': true, 'message' : error.message})  
-  }
+    } 
+   
 }
 
 // Placera funkionerna här under i delad mapp med frontend? Vad sa vi om det?
