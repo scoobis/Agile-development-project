@@ -18,12 +18,12 @@ service.create = async (req, res) => {
         req.body.email, req.body.password, req.body.name, req.body.role
       )
       await userDAO.create(userToRegister)
-      //SKA ANVÄNDAs NÄR DET ÄR IMPLEMENTERAT PÅ FRONTEND
-      //res.status(200).json({ 'success': true, 'message' : 'Account created!'})
+
+      res.status(200).json({ 'success': true, 'message' : 'Account created!'})
     }
   } catch (error) {
-    //SKA ANVÄNDAs NÄR DET ÄR IMPLEMENTERAT PÅ FRONTEND
-    //res.status(400).json({ 'error': true, 'message' : error.message})  
+
+     res.status(400).json({ 'error': true, 'message' : error.message})  
   }
 }
 
