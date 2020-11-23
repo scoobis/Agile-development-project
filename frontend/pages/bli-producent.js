@@ -1,7 +1,7 @@
 import React from 'react'
 import ProducerSignupForm from '../src/components/signup/ProducerSignupForm'
 
-function BecomeProducer () {
+function BecomeProducer() {
   return (
     <ProducerSignupForm />
   )
