@@ -24,6 +24,12 @@ app.use((err, req, res, next) => {
 res.status(err.status).send({ message: `${err.message}` })
 })
 
+app.use((req, res, next) => {
+    const error = new Error('404 Not Found')
+    error.status = 404
+    next(error)
+  })
+
 
 const port = process.env.PORT || 5001
 app.listen(port, () => console.log(`Listening on port ${port}...`))

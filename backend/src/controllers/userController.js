@@ -32,13 +32,13 @@ controller.create = async (req, res, next) => {
   } else if (!isValidEmail) {
     const error = createError(400, 'Not a valid email address!')
     return next(error)
-  } else if (isAlreadyRegistered) {
+  } else if (await isAlreadyRegistered) {
     const error = createError(400, 'Email already exists')
     return next(error)
   } else {
     try {
-      service.create(username, email, password)
-      res.send({ success: true, message: 'Successfully created user' })
+      service.create(req)
+      res.status(200).json({ 'success': true, 'message' : 'Account created!'})
     } catch (error) {
       return next(error)
     }
