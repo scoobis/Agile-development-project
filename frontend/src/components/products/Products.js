@@ -6,14 +6,16 @@ const Products = () => {
 
     const [products, setProducts] = useState([
         { title: 'Äpple', description: 'Just a description', price: '70', stock: 50, imgSrc: 'apples.jpg', id: 1 },
-        { title: 'Äpple', description: 'Just a description', price: '70', stock: 65, imgSrc: 'apples.jpg', id: 2 }
+        { title: 'Äpple', description: 'Just a description', price: '70', stock: 65, imgSrc: 'apples.jpg', id: 2 },
+        { title: 'Äpple', description: 'Just a description', price: '70', stock: 65, imgSrc: 'apples.jpg', id: 3 },
+        { title: 'Äpple', description: 'Just a description', price: '70', stock: 65, imgSrc: 'apples.jpg', id: 4 }
     ])
 
     return (
         <Grid container spacing={2}>
             {products.map((product) => {
                 return (
-                    <Grid item xs={12} sm={6} lg={3}>
+                    <Grid item xs={12} sm={6} lg={3} key={product.id}>
                         <ProductCard
                             title={product.title}
                             description={product.description}
