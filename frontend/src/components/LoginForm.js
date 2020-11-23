@@ -88,7 +88,7 @@ function LoginForm () {
                 type='password'
                 required
                 fullWidth
-                value={password.value}
+                value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
             </Grid>
