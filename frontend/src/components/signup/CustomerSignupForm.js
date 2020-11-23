@@ -27,49 +27,55 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export default function CustomerSignupForm () {
-  const [inputs, setInputs] = useState({
-    name: '',
-    email: '',
-    password: ''
-  })
-  const [checked, setChecked] = useState(false)
-  const [errors, setErrors] = useState({
-    name: false,
-    email: false,
-    password: false,
-    checked: false
+  const [state, setState] = useState({
+    name: { value: '', hasError: false, helperText: '' },
+    email: { value: '', hasError: false, helperText: '' },
+    password: { value: '', hasError: false, helperText: '' }
   })
 
+  const [checked, setChecked] = useState(false)
   const [notice, setNotice] = useState({ isError: false, message: '' })
 
-  const { name, email, password } = inputs
+  const { name, email, password } = state
 
   const handleChange = (e) => {
-    setInputs({ ...inputs, [e.target.name]: e.target.value })
+    const name = e.target.name
+    const value = e.target.value
+
+    setState({
+      ...state,
+      [name]: { ...state[name], value: value, hasError: false }
+    })
   }
 
   const handleSubmit = (e) => {
     e.preventDefault()
 
-    setErrors({
-      name: !isValidName(name),
-      email: !isValidEmail(email),
-      password: !isValidPassword(password),
-      checked: !checked
+    setState({
+      ...state,
+      name: { ...name, hasError: !isValidName(name.value) },
+      email: { ...email, hasError: !isValidEmail(email.value) },
+      password: { ...password, hasError: !isValidPassword(password.value) }
     })
 
     if (hasValidCredentials()) {
-      saveUser({ name, email, password, role: Customer })
-        .then(result => result.error
-          ? setNotice({ isError: true, message: result.error })
-          : setNotice({ isError: false, message: result.message }))
+      saveUser({
+        name: name.value,
+        email: email.value,
+        password: password.value,
+        role: Customer
+      })
+        .then(res => setNotice({
+          message: res && res.data ? res.data.message : res && res.message ? res.message : '',
+          isError: res && res.status !== 200
+        }))
     }
   }
 
   const hasValidCredentials = () =>
-    isValidName(name) &&
-    isValidEmail(email) &&
-    isValidPassword(password) &&
+    !name.hasError &&
+    !email.hasError &&
+    !password.hasError &&
     checked
 
   const classes = useStyles()
@@ -78,15 +84,15 @@ export default function CustomerSignupForm () {
     <Container component='main' maxWidth='xs'>
       <div className={classes.paper}>
         <Typography component='h1' variant='h5'>
-          Registrera kundkonto
+           Registrera kundkonto
         </Typography>
         <Typography>
-          När du registrerar ett konto får du ta del av fördelar som att kunna spara din adress, se orderhistorik etc.
+           När du registrerar ett konto får du ta del av fördelar som att kunna spara din adress, se orderhistorik etc.
         </Typography>
 
         <form className={classes.form} onSubmit={handleSubmit}>
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12} sm={12}>
               <TextField
                 name='name'
                 label='Fullständigt namn'
@@ -94,10 +100,10 @@ export default function CustomerSignupForm () {
                 fullWidth
                 autoFocus
                 required
-                value={name}
+                value={name.value}
                 onChange={handleChange}
-                error={errors.name}
-                helperText={errors.name && 'Ogiltigt namn'}
+                error={name.hasError}
+                helperText={name.hasError && name.helperText}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -106,13 +112,13 @@ export default function CustomerSignupForm () {
                 label='E-post'
                 variant='outlined'
                 required
-                value={email}
+                value={email.value}
                 onChange={handleChange}
-                error={errors.email}
-                helperText={errors.email && 'Ogiltig e-post'}
+                error={email.hasError}
+                helperText={email.hasError && email.helperText}
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={12} sm={6}>
               <TextField
                 name='password'
                 label='Lösenord'
@@ -120,10 +126,10 @@ export default function CustomerSignupForm () {
                 type='password'
                 required
                 fullWidth
-                value={password}
+                value={password.value}
                 onChange={handleChange}
-                error={errors.password}
-                helperText={errors.password && 'Lösenordet är för svagt'}
+                error={password.hasError}
+                helperText={password.hasError && email.helperText}
               />
             </Grid>
             <Grid item xs={12}>
@@ -133,22 +139,19 @@ export default function CustomerSignupForm () {
                     <Checkbox
                       color='primary'
                       checked={checked}
-                      onChange={(e) => {
-                        setChecked(e.target.checked)
-                        setErrors({ ...errors, checked: !e.target.checked })
-                      }}
+                      onChange={(e) => { setChecked(e.target.checked) }}
                     />
                   }
-                  label={<Typography variant='body2'>Jag har läst och godkänner köpvillkoren.'</Typography>}
+                  label={<Typography variant='body2'>Jag har läst och godkänner villkoren för producenter</Typography>}
                 />
-                {errors.checked && (
-                  <FormHelperText>Villkoren måste godkännas.</FormHelperText>
+                {!checked && (
+                  <FormHelperText>Obligatoriskt</FormHelperText>
                 )}
               </FormControl>
             </Grid>
             <Grid item xs={12}>
               {notice.message && (
-                <Typography color={notice.isError && 'error'}>
+                <Typography color={notice.isError ? 'error' : 'secondary'}>
                   {notice.message}
                 </Typography>
               )}
@@ -167,7 +170,7 @@ export default function CustomerSignupForm () {
           <Grid container justify='center'>
             <Grid item>
               <Typography variant='body2'>
-            Är du redan kund? <Link href='#'><a>Logga in</a></Link>
+              Är du redan kund? <Link href='#'><a>Logga in</a></Link>
               </Typography>
             </Grid>
           </Grid>
