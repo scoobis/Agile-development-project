@@ -3,6 +3,7 @@ import { Button, Container, Grid, TextField, Typography } from '@material-ui/cor
 import { makeStyles } from '@material-ui/core/styles'
 import Link from 'next/link'
 import { login } from '../utils/api'
+import { isValidEmail, isValidPassword } from '../utils/user'
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -36,16 +37,24 @@ function LoginForm () {
   const handleSubmit = (e) => {
     e.preventDefault()
 
+    const validEmail = isValidEmail(email)
+    const validPassword = isValidPassword(password)
+
     if (!email && !password) {
       setMessage('Epost och lösenord är obligatoriskt')
     } else if (!email) {
       setMessage('E-post är obligatoriskt')
     } else if (!password) {
       setMessage('Lösenord är obligatoriskt')
+    } else if (!validEmail && !validPassword) {
+      setMessage('Ogiltig e-post och lösenord')
+    } else if (!validEmail) {
+      setMessage('Ogiltig e-post')
+    } else if (!validPassword) {
+      setMessage('Ogiltigt lösenord')
     } else {
       login({ email, password })
         .then(res => {
-          console.log(res)
           if (res.token) {
             setToken(res.token)
           } else if (res.message) {
