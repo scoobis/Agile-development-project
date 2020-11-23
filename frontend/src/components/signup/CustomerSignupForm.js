@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
-export default function ProducerSignupForm () {
+export default function CustomerSignupForm () {
   const [state, setState] = useState({
     name: { value: '', hasError: false, helperText: '' },
     email: { value: '', hasError: false, helperText: '' },
