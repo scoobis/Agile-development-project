@@ -170,7 +170,7 @@ export default function CustomerSignupForm () {
           <Grid container justify='center'>
             <Grid item>
               <Typography variant='body2'>
-              Är du redan kund? <Link href='#'><a>Logga in</a></Link>
+              Är du redan kund? <Link href='/logga-in'><a>Logga in</a></Link>
               </Typography>
             </Grid>
           </Grid>
