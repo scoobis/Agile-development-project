@@ -6,6 +6,7 @@ import theme from '../src/theme'
 import Header from '../src/components/layouts/Header/Header'
 import Footer from '../src/components/layouts/Footer'
 import Layout from '../src/components/layouts/Layout'
+import AuthProvider from '../src/context/AuthContext'
 
 export default function MyApp (props) {
   const { Component, pageProps } = props
@@ -27,11 +28,13 @@ export default function MyApp (props) {
       </Head>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <Header />
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
-        <Footer />
+        <AuthProvider>
+          <Header />
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+          <Footer />
+        </AuthProvider>
       </ThemeProvider>
     </>
   )
