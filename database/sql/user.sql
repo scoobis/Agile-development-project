@@ -4,6 +4,7 @@ CREATE TABLE user (
   email VARCHAR(60) NOT NULL,
   password VARCHAR(100) NOT NULL,
   full_name VARCHAR(40) NOT NULL,
+  phone_no INT(10),
   PRIMARY KEY (id),
   UNIQUE (email)
 );
