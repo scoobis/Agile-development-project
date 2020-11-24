@@ -1,6 +1,6 @@
 import axios from './axios-wrapper'
 
-export const saveUser = (data) => axios.post('/users', data)
+export const signup = (data) => axios.post('/signup', data)
   .then(response => response)
   .catch(err => err.response)
 

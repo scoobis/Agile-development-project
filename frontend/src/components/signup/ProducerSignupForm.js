@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { Button, TextField, FormControlLabel, Checkbox, Container, Grid, Typography, FormControl, FormHelperText } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { isValidName, isValidEmail, isValidPassword, isValidOrganizationNumber, isValidZipCode, isValidPhoneNumber } from '../../utils/user'
-import { saveUser } from '../../utils/api'
+import { signup } from '../../utils/api'
 import { Producer } from '../../utils/roles'
 
 const useStyles = makeStyles((theme) => ({
@@ -67,7 +67,7 @@ export default function ProducerSignupForm () {
     })
 
     if (hasValidCredentials()) {
-      saveUser({
+      signup({
         name: name.value,
         email: email.value,
         password: password.value,
