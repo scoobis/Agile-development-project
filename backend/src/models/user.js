@@ -1,4 +1,3 @@
-
 class user {
   constructor(email, password, name, role) {
     this.email = email
@@ -55,6 +54,16 @@ class user {
   }
   get role() {
     return this._role
+  }
+
+  /**
+   * @param {address} businessAddress
+   */
+  set businessAddress(businessAddress) {
+    this._businessAddress = businessAddress
+  }
+  get businessAddress() {
+    return this._businessAddress
   }
 }
 
