@@ -1,10 +1,16 @@
 import { useRouter } from 'next/router'
+import SpecificProduct from '../../src/components/products/specificProduct'
+import ProductContextProvider from '../../src/context/productContext/ProductContext'
 
 const Post = () => {
   const router = useRouter()
   const { specifikProdukt } = router.query
 
-  return <p>Post: {specifikProdukt}</p>
+  return (
+    <ProductContextProvider>
+      <SpecificProduct specifikProduktId={specifikProdukt} />
+    </ProductContextProvider>
+  )
 }
 
 export default Post

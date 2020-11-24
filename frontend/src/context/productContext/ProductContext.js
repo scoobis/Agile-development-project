@@ -3,6 +3,7 @@ import React, { createContext, useState } from 'react'
 export const ProductContext = createContext()
 
 const ProductContextProvider = (props) => {
+  // Get data from the api instead
   const [products, setProducts] = useState([
     { title: 'Äpple', description: 'Just a description', price: '70', stock: 50, imgSrc: 'apples.jpg', id: 1 },
     { title: 'Äpple', description: 'Just a description', price: '70', stock: 65, imgSrc: 'apples.jpg', id: 2 },
