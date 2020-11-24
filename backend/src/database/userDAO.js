@@ -37,16 +37,16 @@ userDAO.create = async (user) => {
  * @returns {object} user
  */
 userDAO.findByEmail = async (email) => {
-    let conn;
-    try {
-        conn = await pool.getConnection();
-        let [user] = await conn.query("SELECT * FROM user WHERE email=('" + email + "')")
-        return user
-    } catch (error) {
-        throw error
-    } finally {
-        if (conn) conn.release()
-    }
+  let conn;
+  try {
+    conn = await pool.getConnection();
+    let [user] = await conn.query("SELECT * FROM user WHERE email=('" + email + "')")
+    return user
+  } catch (error) {
+    throw error
+  } finally {
+    if (conn) conn.release()
+  }
 }
 
 /**
@@ -56,16 +56,29 @@ userDAO.findByEmail = async (email) => {
  * @returns {object} producer
  */
 userDAO.findProducerByOrgNumber = async (orgNumber) => {
-    let conn;
-    try {
-        conn = await pool.getConnection();
-        let [producer] = await conn.query("SELECT * FROM producer WHERE org_no=('" + orgNumber + "')")
-        return producer
-    } catch (error) {
-        throw error
-    } finally {
-        if (conn) conn.release()
-    }
+  let conn;
+  try {
+    conn = await pool.getConnection();
+    let [producer] = await conn.query("SELECT * FROM producer WHERE org_no=('" + orgNumber + "')")
+    return producer
+  } catch (error) {
+    throw error
+  } finally {
+    if (conn) conn.release()
+  }
+}
+
+userDAO.login = async (userToLogIn) => {
+  let conn;
+  try {
+    conn = await pool.getConnection();
+    let [user] = await conn.query("SELECT email, full_name, role, password FROM user WHERE email=('" + userToLogIn.email + "') AND password = ('" + userToLogIn.password + "')")
+    return user
+  } catch (error) {
+    throw error
+  } finally {
+    if (conn) conn.release()
+  }
 }
 
 module.exports = userDAO
