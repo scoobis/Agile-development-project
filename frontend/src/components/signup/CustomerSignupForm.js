@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { Button, TextField, FormControlLabel, Checkbox, Container, Grid, Typography, FormControl, FormHelperText } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { isValidName, isValidEmail, isValidPassword } from '../../utils/user'
-import { saveUser } from '../../utils/api'
+import { signup } from '../../utils/api'
 import { Customer } from '../../utils/roles'
 
 const useStyles = makeStyles((theme) => ({
@@ -59,7 +59,7 @@ export default function CustomerSignupForm () {
     })
 
     if (hasValidCredentials()) {
-      saveUser({
+      signup({
         name: name.value,
         email: email.value,
         password: password.value,
@@ -170,7 +170,7 @@ export default function CustomerSignupForm () {
           <Grid container justify='center'>
             <Grid item>
               <Typography variant='body2'>
-              Är du redan kund? <Link href='#'><a>Logga in</a></Link>
+              Är du redan kund? <Link href='/logga-in'><a>Logga in</a></Link>
               </Typography>
             </Grid>
           </Grid>

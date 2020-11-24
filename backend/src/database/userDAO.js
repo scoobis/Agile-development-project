@@ -38,4 +38,17 @@ userDAO.findByEmail = async (email) => {
     }
 }
 
+userDAO.login = async (userToLogIn) => {
+    let conn;
+    try {
+        conn = await pool.getConnection();
+        let [user] = await conn.query("SELECT email, full_name, role, password FROM user WHERE email=('" + userToLogIn.email + "') AND password = ('" + userToLogIn.password + "')")
+        return user
+    } catch (error) {
+        throw error
+    } finally {
+        if (conn) conn.release()
+    }
+}
+
 module.exports = userDAO
