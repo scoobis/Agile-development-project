@@ -25,4 +25,12 @@ CREATE TABLE user_address (
   PRIMARY KEY (user_id, address_id),
   FOREIGN KEY (user_id) REFERENCES user(id),
   FOREIGN KEY (address_id) REFERENCES address(id)
-)
+);
+
+-- PRODUCER --
+CREATE TABLE producer (
+  org_no INT NOT NULL,
+  user_id INT NOT NULL,
+  PRIMARY KEY (org_no),
+  FOREIGN KEY (user_id) REFERENCES user(id)
+);
