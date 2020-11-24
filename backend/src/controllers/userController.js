@@ -45,4 +45,10 @@ controller.create = async (req, res, next) => {
   }
 }
 
+controller.login = async (req, res, next) => { 
+  console.log(req.body.email)
+  console.log(req.body.password)
+}
+
+
 module.exports = controller
