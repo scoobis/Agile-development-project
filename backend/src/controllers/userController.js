@@ -10,10 +10,8 @@ controller.test = async (req, res, next) => {
 }
 
 controller.create = async (req, res, next) => {
-  console.log(req.body)
-  const { name, email, password, role, orgNumber, zip } = req.body
-
-  const phone = '0707070707' // Temporary
+  // User
+  const { name, email, password, role } = req.body
 
   if (!name && !email && !password) {
     const error = createError(400, 'No parameters entered!')
@@ -24,12 +22,7 @@ controller.create = async (req, res, next) => {
   const isValidName = service.isValidName(name)
   const isValidEmail = service.isValidEmail(email)
   const isAlreadyRegistered = service.isAlreadyRegistered(email)
-  const isValidOrganizationNumber = service.isValidOrganizationNumber(orgNumber)
-  const isValidPhoneNumber = service.isValidPhoneNumber(phone)
-  const isValidZipCode = service.isValidZipCode(zip)
-  const isOrgNumberAlreadyInUse = service.isOrgNumberAlreadyInUse(orgNumber)
 
-  // User
   if (!isValidPassword) {
     const error = createError(400, 'Password needs to be at least 6 characters long!')
     return next(error)
@@ -46,6 +39,14 @@ controller.create = async (req, res, next) => {
   
   // Producer
   if (role === 'producer') { //Create function/enum?
+
+    const { orgNumber, phone, zip } = req.body
+
+    const isValidOrganizationNumber = service.isValidOrganizationNumber(orgNumber)
+    const isValidPhoneNumber = service.isValidPhoneNumber(phone)
+    const isValidZipCode = service.isValidZipCode(zip)
+    const isOrgNumberAlreadyInUse = service.isOrgNumberAlreadyInUse(orgNumber)
+
     if (!isValidOrganizationNumber) {
       const error = createError(400, 'Not a valid organization number')
       return next(error)

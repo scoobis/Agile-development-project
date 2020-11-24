@@ -11,13 +11,17 @@ userDAO.create = async (user) => {
   let conn;
   try {
     conn = await pool.getConnection();
-    
-    const userId = await conn.query("INSERT INTO user (email, password, full_name) VALUES ('" + user.email + "', '" + user.password + "', '" + user.name + "')")
-    const addressId = await conn.query("INSERT INTO address (street_address, zip, city) VALUES ('" + user.businessAddress.streetAddress + "', '" + user.businessAddress.zip + "', '" + user.businessAddress.city + "')")
-    
-    conn.query("INSERT INTO user_address (user_id, address_id, type) VALUES ('" + userId.insertId + "', '" + addressId.insertId + "', '" + user.businessAddress.type + "')")
-    
-    conn.query("INSERT INTO producer (org_no, user_id) VALUES ('" + user.orgNumber + "', '" + userId.insertId + "')")
+
+    if (user.role === 'producer') { // Enum?
+      const userId = await conn.query("INSERT INTO user (email, password, full_name, phone_no) VALUES ('" + user.email + "', '" + user.password + "', '" + user.name + "', '" + user.phone + "')")
+      const addressId = await conn.query("INSERT INTO address (street_address, zip, city) VALUES ('" + user.businessAddress.streetAddress + "', '" + user.businessAddress.zip + "', '" + user.businessAddress.city + "')")
+      
+      conn.query("INSERT INTO user_address (user_id, address_id, type) VALUES ('" + userId.insertId + "', '" + addressId.insertId + "', '" + user.businessAddress.type + "')")
+      
+      conn.query("INSERT INTO producer (org_no, user_id) VALUES ('" + user.orgNumber + "', '" + userId.insertId + "')")
+    } else {
+      conn.query("INSERT INTO user (email, password, full_name) VALUES ('" + user.email + "', '" + user.password + "', '" + user.name + "')")
+    }
 
   } catch (error) {
     throw error

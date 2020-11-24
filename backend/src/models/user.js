@@ -57,6 +57,16 @@ class user {
   }
 
   /**
+   * @param {*} phone
+   */
+  set phone(phone) {
+    this._phone = phone
+  }
+  get phone() {
+    return this._phone
+  }
+
+  /**
    * @param {address} businessAddress
    */
   set businessAddress(businessAddress) {

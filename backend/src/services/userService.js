@@ -22,6 +22,7 @@ service.create = async (req, res, next) => {
     )
     userToRegister.businessAddress = addressToRegister
     userToRegister.orgNumber = req.body.orgNumber
+    userToRegister.phone = req.body.phone
   }
   
   await userDAO.create(userToRegister)
