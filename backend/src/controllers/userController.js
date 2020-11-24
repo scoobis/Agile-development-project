@@ -46,8 +46,8 @@ controller.create = async (req, res, next) => {
 }
 
 controller.login = async (req, res, next) => { 
-  console.log(req.body.email)
-  console.log(req.body.password)
+  const user = await service.login(req.body)
+  console.log(user.email)
 }
 
 

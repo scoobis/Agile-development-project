@@ -13,6 +13,11 @@ service.create = async (req, res, next) => {
    
 }
 
+service.login = async (req, res, next) => {
+  let user = await userDAO.login(req)
+  return user
+}
+
 // Placera funkionerna här under i delad mapp med frontend? Vad sa vi om det?
 /**
  * Checks if name is long enough
