@@ -52,13 +52,12 @@ function LoginForm () {
     } else {
       login({ email, password })
         .then(res => {
-          if (res.token) {
-            setTokenCookie(res.token)
+          if (res && res.data) {
+            setTokenCookie(res.data.token)
             setAuthenticated(true)
             setMessage('Got token!')
-          } else if (res.message) {
-            setMessage(res.message)
           }
+          console.log(res.data)
         })
     }
   }
