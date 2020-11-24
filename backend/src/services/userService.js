@@ -9,8 +9,6 @@ service.create = async (req, res, next) => {
         req.body.email, req.body.password, req.body.name, req.body.role
       )
       await userDAO.create(userToRegister)
-
-   
 }
 
 service.login = async (req, res, next) => {
