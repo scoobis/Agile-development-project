@@ -45,4 +45,23 @@ userDAO.findByEmail = async (email) => {
     }
 }
 
+/**
+ * Finds producer by organisation number
+ * 
+ * @param {*} orgNumber
+ * @returns {object} producer
+ */
+userDAO.findProducerByOrgNumber = async (orgNumber) => {
+    let conn;
+    try {
+        conn = await pool.getConnection();
+        let [producer] = await conn.query("SELECT * FROM producer WHERE org_no=('" + orgNumber + "')")
+        return producer
+    } catch (error) {
+        throw error
+    } finally {
+        if (conn) conn.release()
+    }
+}
+
 module.exports = userDAO
