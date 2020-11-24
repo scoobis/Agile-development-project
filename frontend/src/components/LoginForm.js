@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useContext } from 'react'
 import { Button, Container, Grid, TextField, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import Link from 'next/link'
 import { login } from '../utils/api'
 import { isValidEmail, isValidPassword } from '../utils/user'
+import { AuthContext } from '../context/AuthContext'
+import { setTokenCookie } from '../utils/auth-cookies'
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -26,13 +28,8 @@ function LoginForm () {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [message, setMessage] = useState('')
-  const [token, setToken] = useState('')
 
-  useEffect(() => {
-    if (token) {
-      setMessage('Successfully got token!')
-    }
-  }, [token])
+  const { setAuthenticated } = useContext(AuthContext)
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -56,7 +53,9 @@ function LoginForm () {
       login({ email, password })
         .then(res => {
           if (res.token) {
-            setToken(res.token)
+            setTokenCookie(res.token)
+            setAuthenticated(true)
+            setMessage('Got token!')
           } else if (res.message) {
             setMessage(res.message)
           }
