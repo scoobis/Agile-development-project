@@ -16,6 +16,7 @@ services:
 
 # Backend API
   backend:
+    env_file: ./backend/.env.dev
     build: 
       context: ./backend/
       target: development
@@ -35,8 +36,8 @@ services:
       # Todo: user for the application / dotenv files instead here
       MYSQL_ROOT_PASSWORD: root123
       MYSQL_DATABASE: dbtest
-      # MYSQL_USER: 
-      # MYSQL_PASSWORD: 
+      MYSQL_USER: expressuser
+      MYSQL_PASSWORD: expresspassword
     volumes:
       - ./database/sql:/docker-entrypoint-initdb.d
       - ./database/data:/var/lib/mysql
