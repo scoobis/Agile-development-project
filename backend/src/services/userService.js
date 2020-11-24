@@ -1,16 +1,30 @@
 const user = require('../models/user')
+const address = require('../models/address')
 const userDAO = require('../database/userDAO')
 
 const service = {}
 
-service.create = async (req, res, next) => {
+/**
+ * Creates a new user
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ */
+service.create = async (req, res, next) => {  
+  const userToRegister = new user(
+    req.body.email, req.body.password, req.body.name, req.body.role
+  )
 
-      const userToRegister = new user(
-        req.body.email, req.body.password, req.body.name, req.body.role
-      )
-      await userDAO.create(userToRegister)
+  if (req.body.role === 'producer') {
+    const addressToRegister = new address(
+      req.body.streetAddress, req.body.zip, req.body.city, 'business'
+    )
+    userToRegister.businessAddress = addressToRegister
+  }
+  
+  await userDAO.create(userToRegister)
 
-   
 }
 
 // Placera funkionerna här under i delad mapp med frontend? Vad sa vi om det?
