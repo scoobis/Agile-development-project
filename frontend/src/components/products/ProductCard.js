@@ -2,6 +2,7 @@ import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import { Card, CardActions, CardContent } from '@material-ui/core'
 import { Typography, Button } from '@material-ui/core'
+import Link from 'next/link'
 
 const ProductCard = (props) => {
   const useStyles = makeStyles({
@@ -22,26 +23,34 @@ const ProductCard = (props) => {
     img: {
       width: '300px',
     },
+    a: {
+      color: 'black',
+      textDecoration: 'none',
+    },
   })
 
   const classes = useStyles()
 
-  const { title, description, price, stock, imgSrc } = props
+  const { title, description, price, stock, imgSrc, id } = props
 
   return (
     <Card className={classes.root}>
       <CardContent>
-        <img className={classes.img} alt='Remy Sharp' src={imgSrc} />
-        <Typography variant='h4' component='h2'>
-          {title}
-        </Typography>
-        <Typography className={classes.pos} color='textSecondary'>
-          {description}
-        </Typography>
-        <Typography variant='h5'>{price} kr</Typography>
+        <Link href={`/produkter/${id}`}>
+          <a className={classes.a}>
+            <img className={classes.img} alt='Produkt bild' src={imgSrc} />
+            <Typography variant='h4' component='h2'>
+              {title}
+            </Typography>
+            <Typography className={classes.pos} color='textSecondary'>
+              {description}
+            </Typography>
+            <Typography variant='h5'>{price} kr</Typography>
+          </a>
+        </Link>
       </CardContent>
       <CardActions>
-        <Button variant='contained' color='primary'>
+        <Button variant='contained' color='primary' onClick={() => console.log('Add one to basket?')}>
           Köp
         </Button>
         <Typography className={classes.pos} color='textSecondary'>
