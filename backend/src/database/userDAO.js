@@ -16,7 +16,9 @@ userDAO.create = async (user) => {
     const addressId = await conn.query("INSERT INTO address (street_address, zip, city) VALUES ('" + user.businessAddress.streetAddress + "', '" + user.businessAddress.zip + "', '" + user.businessAddress.city + "')")
     
     conn.query("INSERT INTO user_address (user_id, address_id, type) VALUES ('" + userId.insertId + "', '" + addressId.insertId + "', '" + user.businessAddress.type + "')")
-  
+    
+    conn.query("INSERT INTO producer (org_no, user_id) VALUES ('" + user.orgNumber + "', '" + userId.insertId + "')")
+
   } catch (error) {
     throw error
   } finally {
