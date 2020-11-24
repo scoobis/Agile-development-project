@@ -65,6 +65,17 @@ class user {
   get businessAddress() {
     return this._businessAddress
   }
+
+  /**
+   * @param {string} orgNumber
+   */
+  set orgNumber(orgNumber) {
+    this._orgNumber = orgNumber
+  }
+  get orgNumber() {
+    return this._orgNumber
+  }
+  
 }
 
 module.exports = user
