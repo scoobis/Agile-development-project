@@ -1,5 +1,6 @@
 const service = require('../services/userService')
 const createError = require('http-errors')
+const jwt = require('jsonwebtoken')
 
 const controller = {}
 
@@ -44,5 +45,14 @@ controller.create = async (req, res, next) => {
     }
   }
 }
+
+controller.login = async (req, res, next) => { 
+  const user = await service.login(req.body)
+
+const token = jwt.sign({ email: user.email, password: user.password }, 'shhhhh', { expiresIn: '1h' });
+res.json({ 'email': user.email, 'password': user.password, 'token': token, 'message' : 'User found!'})
+
+}
+
 
 module.exports = controller
