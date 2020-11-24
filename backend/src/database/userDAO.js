@@ -42,7 +42,7 @@ userDAO.login = async (userToLogIn) => {
     let conn;
     try {
         conn = await pool.getConnection();
-        let [user] = await conn.query("SELECT email, full_name, password FROM user WHERE email=('" + userToLogIn.email + "') AND password = ('" + userToLogIn.password + "')")
+        let [user] = await conn.query("SELECT email, full_name, role, password FROM user WHERE email=('" + userToLogIn.email + "') AND password = ('" + userToLogIn.password + "')")
         return user
     } catch (error) {
         throw error
