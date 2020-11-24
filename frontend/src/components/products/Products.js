@@ -1,14 +1,11 @@
-import React, { useState } from 'react'
+import React, { useContext } from 'react'
 import { Grid } from '@material-ui/core'
 import ProductCard from './ProductCard'
+import { ProductContext } from '../../context/productContext/ProductContext'
 
 const Products = () => {
-  const [products, setProducts] = useState([
-    { title: 'Äpple', description: 'Just a description', price: '70', stock: 50, imgSrc: 'apples.jpg', id: 1 },
-    { title: 'Äpple', description: 'Just a description', price: '70', stock: 65, imgSrc: 'apples.jpg', id: 2 },
-    { title: 'Äpple', description: 'Just a description', price: '70', stock: 65, imgSrc: 'apples.jpg', id: 3 },
-    { title: 'Äpple', description: 'Just a description', price: '70', stock: 65, imgSrc: 'apples.jpg', id: 4 },
-  ])
+  const { products } = useContext(ProductContext)
+  console.log(products)
 
   return (
     <Grid container spacing={2}>
