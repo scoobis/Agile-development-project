@@ -16,6 +16,7 @@ services:
 
 # Backend API
   backend:
+    env_file: ./backend/.env
     build: 
       context: ./backend/
       target: development
