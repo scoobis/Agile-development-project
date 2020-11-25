@@ -2,10 +2,8 @@ import React, { useState, useContext } from 'react'
 import { Button, Container, Grid, TextField, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import Link from 'next/link'
-import { login } from '../utils/api'
 import { isValidEmail, isValidPassword } from '../utils/user'
 import { AuthContext } from '../context/AuthContext'
-import { setTokenCookie } from '../utils/auth-cookies'
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -29,7 +27,7 @@ function LoginForm () {
   const [password, setPassword] = useState('')
   const [message, setMessage] = useState('')
 
-  const { setAuthenticated } = useContext(AuthContext)
+  const { authenticate } = useContext(AuthContext)
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -50,14 +48,10 @@ function LoginForm () {
     } else if (!validPassword) {
       setMessage('Ogiltigt lösenord')
     } else {
-      login({ email, password })
-        .then(res => {
-          if (res && res.data) {
-            setTokenCookie(res.data.token)
-            setAuthenticated(true)
-            setMessage('Got token!')
-          }
-          console.log(res.data)
+      authenticate({ email, password })
+        .then(response => {
+          response.status !== 200 &&
+          setMessage(response.data.message)
         })
     }
   }
