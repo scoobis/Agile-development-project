@@ -88,7 +88,7 @@ userDAO.login = async (userToLogIn) => {
   let conn;
   try {
     conn = await pool.getConnection();
-    let [user] = await conn.query("SELECT * FROM user WHERE email=('" + userToLogIn.email + "') AND password = ('" + userToLogIn.password + "')")   
+    let [user] = await conn.query("SELECT * FROM user WHERE email=('" + userToLogIn.email + "') AND password = ('" + userToLogIn.password + "')")
     return user
   } catch (error) {
     throw error
@@ -109,8 +109,9 @@ userDAO.getRoleByUserId = async (userId) => {
     let [producer] = await conn.query("SELECT * FROM producer WHERE user_id=('" + userId + "')")
     
     let role = 'customer'
-    if (producer === 'object') {
-      user.role = 'producer'
+    
+    if (producer) {
+      role = 'producer'
     }
 
     return role

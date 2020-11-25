@@ -41,8 +41,10 @@ service.createProducer = async (req, res, next) => {
 
 service.login = async (req, res, next) => {
   let user = await userDAO.login(req)
-  let role = await userDAO.getRoleByUserId(user.id)
-  user.role = role
+  if (user) {
+    let role = await userDAO.getRoleByUserId(user.id)
+    user.role = role
+  }
   return user
 }
 
