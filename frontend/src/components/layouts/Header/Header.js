@@ -1,12 +1,16 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import { AuthContext } from '../../../context/AuthContext'
+import Link from 'next/link'
+import Router from 'next/router'
+
 import { makeStyles } from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import IconButton from '@material-ui/core/IconButton'
 import AccountCircle from '@material-ui/icons/AccountCircle'
 import LocalMallOutlinedIcon from '@material-ui/icons/LocalMallOutlined'
-import Link from 'next/link'
 import SearchBar from '../../SearchBar'
+import Button from '@material-ui/core/Button'
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -26,6 +30,12 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Header () {
   const classes = useStyles()
+  const { signout, user } = useContext(AuthContext)
+
+  const handleSignout = () => {
+    Router.push('/')
+    signout()
+  }
 
   return (
     <div className={classes.grow}>
@@ -52,6 +62,9 @@ export default function Header () {
 
               </a>
             </Link>
+            {user.isAuthenticated && (
+              <Button onClick={handleSignout}>Logga ut</Button>
+            )}
             <IconButton
               edge='end'
               onClick={() => console.log('Clicked cart button!')}
