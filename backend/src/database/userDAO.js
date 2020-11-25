@@ -3,29 +3,42 @@ const pool = require('./databaseConnection')
 const userDAO = {}
 
 /**
- * Registers a new user
+ * Registers a new customer
  * 
  * @param {user} user 
  */
-userDAO.create = async (user, address) => {
+userDAO.createCustomer = async (user) => {
   let conn;
   try {
     conn = await pool.getConnection();
-    // If producer
-    if (user.role === 'producer') { // Enum?
-      const userResponse = await conn.query("INSERT INTO user (email, password, full_name, phone_no) VALUES ('" + user.email + "', '" + user.password + "', '" + user.name + "', '" + user.phone + "')")
-      const userId = userResponse.insertId
+    conn.query("INSERT INTO user (email, password, full_name) VALUES ('" + user.email + "', '" + user.password + "', '" + user.name + "')")   
+  } catch (error) {
+    throw error
+  } finally {
+    if (conn) conn.release()
+  }
+}
+
+/**
+ * Registers a new producer
+ * 
+ * @param {producer} user 
+ */
+userDAO.createProducer = async (user, address) => {
+  let conn;
+  try {
+    console.log(user.orgNumber)
+    conn = await pool.getConnection();
+    const userResponse = await conn.query("INSERT INTO user (email, password, full_name, phone_no) VALUES ('" + user.email + "', '" + user.password + "', '" + user.name + "', '" + user.phone + "')")
+    const userId = userResponse.insertId
       
-      const addressResponse = await conn.query("INSERT INTO address (street_address, zip, city) VALUES ('" + address.streetAddress + "', '" + address.zip + "', '" + address.city + "')")      
-      const addressId = addressResponse.insertId
+    const addressResponse = await conn.query("INSERT INTO address (street_address, zip, city) VALUES ('" + address.streetAddress + "', '" + address.zip + "', '" + address.city + "')")      
+    const addressId = addressResponse.insertId
       
-      conn.query("INSERT INTO user_address (user_id, address_id, type) VALUES ('" + userId + "', '" + addressId + "', '" + address.type + "')")      
+    conn.query("INSERT INTO user_address (user_id, address_id, type) VALUES ('" + userId + "', '" + addressId + "', '" + address.type + "')")      
       
-      conn.query("INSERT INTO producer (org_no, user_id) VALUES ('" + user.orgNumber + "', '" + userId + "')")
-    // Else customer
-    } else {
-      conn.query("INSERT INTO user (email, password, full_name) VALUES ('" + user.email + "', '" + user.password + "', '" + user.name + "')")
-    }
+    conn.query("INSERT INTO producer (org_no, user_id) VALUES ('" + user.orgNumber + "', '" + userId + "')")
+
   } catch (error) {
     throw error
   } finally {

@@ -13,8 +13,13 @@ controller.test = async (req, res, next) => {
 
 controller.create = async (req, res, next) => {
   try {
-    service.create(req)
-    res.status(200).json({ 'success': true, 'message' : 'Account created!'})
+    if (req.body.role === 'producer') {
+      service.createProducer(req)
+      res.status(200).json({ 'success': true, 'message' : 'Account created!'})
+    } else {
+      service.createCustomer(req)
+      res.status(200).json({ 'success': true, 'message' : 'Account created!'})
+    }
   } catch (error) {
     return next(error)
   } 
