@@ -1,4 +1,5 @@
 const user = require('../models/user')
+const producer = require('../models/producer')
 const address = require('../models/address')
 const userDAO = require('../database/userDAO')
 
@@ -12,22 +13,26 @@ const service = {}
  * @param {*} next 
  */
 service.create = async (req, res, next) => {  
-  // User
-  const userToRegister = new user(
-    req.body.email, req.body.password, req.body.name, req.body.role
-  )
-
-  // Producer
+  let userToRegister
   let addressToRegister
-  if (req.body.role === 'producer') { // Enum?
-    addressToRegister = new address(
-      req.body.streetAddress, req.body.zip, req.body.city, 'business' // Enum?
-    )
-    userToRegister.orgNumber = req.body.orgNumber
-    userToRegister.phone = req.body.phone
-  }
   
-  await userDAO.create(userToRegister, addressToRegister)
+  if (req.body.role === 'customer') {
+    userToRegister = new user(
+      req.body.email, req.body.password, req.body.name
+    )
+
+    await userDAO.createCustomer(userToRegister)
+
+  } else {
+    userToRegister = new producer(
+      req.body.email, req.body.password, req.body.name, req.body.phone, req.body.orgNumber
+    )
+    addressToRegister = new address(
+      req.body.streetAddress, req.body.zip, req.body.city, 'business'
+    )
+
+    await userDAO.createProducer(userToRegister, addressToRegister)
+  }
 
 }
 
