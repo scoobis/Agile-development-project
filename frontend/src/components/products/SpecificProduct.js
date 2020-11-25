@@ -13,7 +13,7 @@ const SpecificProduct = (props) => {
     container: { boxShadow: '0 1px 1px 1px black' },
   })
 
-  // TODO: Better solutions?
+  // TODO: get data from api instead
   const { products } = useContext(ProductContext)
   const { specifikProduktId } = props
   const product = products.find((x) => x.id === parseInt(specifikProduktId))
@@ -22,7 +22,6 @@ const SpecificProduct = (props) => {
   // TODO: Problem when reloading page!
 
   const classes = useStyles()
-
   return (
     <Container className={classes.container}>
       <Grid container spacing={2}>
@@ -37,7 +36,7 @@ const SpecificProduct = (props) => {
         <Grid item xs={7}>
           <img className={classes.img} alt='Produkt bild' src={`/${imgSrc}`} />
         </Grid>
-        <Grid xs={5}>
+        <Grid item xs={5}>
           <SpecificProductCard />
         </Grid>
       </Grid>
