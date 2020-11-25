@@ -73,6 +73,7 @@ export default function ProducerSignupForm () {
         password: password.value,
         role: Producer,
         orgNumber: orgNumber.value,
+        phone: phone.value,
         streetAddress: streetAddress.value,
         zip: zip.value,
         city: city.value

@@ -1,18 +1,40 @@
 const user = require('../models/user')
+const address = require('../models/address')
 const userDAO = require('../database/userDAO')
 
 const service = {}
 
-service.create = async (req, res, next) => {
+/**
+ * Creates a new user
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ */
+service.create = async (req, res, next) => {  
+  // User
+  const userToRegister = new user(
+    req.body.email, req.body.password, req.body.name, req.body.role
+  )
 
-      const userToRegister = new user(
-        req.body.email, req.body.password, req.body.name, req.body.role
-      )
-      await userDAO.create(userToRegister)
+  // Producer
+  let addressToRegister
+  if (req.body.role === 'producer') { // Enum?
+    addressToRegister = new address(
+      req.body.streetAddress, req.body.zip, req.body.city, 'business' // Enum?
+    )
+    userToRegister.orgNumber = req.body.orgNumber
+    userToRegister.phone = req.body.phone
+  }
+  
+  await userDAO.create(userToRegister, addressToRegister)
+
 }
 
 service.login = async (req, res, next) => {
   let user = await userDAO.login(req)
+  let role = await userDAO.getRoleByUserId(user.id)
+  user.role = role
   return user
 }
 
@@ -51,6 +73,50 @@ service.isValidEmail = (email) =>
 service.isAlreadyRegistered = async (email) => {
   let user = await userDAO.findByEmail(email)
   if (typeof user == 'object') {
+    return true
+  } else {
+    return false
+  }
+}
+
+/**
+ * Checks if organization number is valid 
+ * 
+ * @param {*} num 
+ */
+service.isValidOrganizationNumber = (num) => {
+  let n = num
+
+  if (typeof num === 'string') {
+    n = num.replace(/\D/g, '')
+  }
+
+  return n.length === 10
+}
+
+/**
+ * Checks if zip code is valid
+ * 
+ * @param {*} code 
+ */
+service.isValidZipCode = (code) => code.length === 5
+
+/**
+ * Checks if phone number is valid
+ * 
+ * @param {*} number 
+ */
+service.isValidPhoneNumber = number => number.length === 10
+
+/**
+ * Checks if the provided organisation number is already in use.
+ * 
+ * @param {*} orgNumber - Email address.
+ * @returns {boolean} - True if already in use/False if not
+ */
+service.isOrgNumberAlreadyInUse = async (orgNumber) => {
+  let producer = await userDAO.getProducerByOrgNumber(orgNumber)
+  if (typeof producer == 'object') {
     return true
   } else {
     return false

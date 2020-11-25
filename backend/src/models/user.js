@@ -1,4 +1,3 @@
-
 class user {
   constructor(email, password, name, role) {
     this.email = email
@@ -56,6 +55,27 @@ class user {
   get role() {
     return this._role
   }
+
+  /**
+   * @param {*} phone
+   */
+  set phone(phone) {
+    this._phone = phone
+  }
+  get phone() {
+    return this._phone
+  }
+
+  /**
+   * @param {string} orgNumber
+   */
+  set orgNumber(orgNumber) {
+    this._orgNumber = orgNumber
+  }
+  get orgNumber() {
+    return this._orgNumber
+  }
+  
 }
 
 module.exports = user
