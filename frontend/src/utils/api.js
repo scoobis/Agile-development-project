@@ -1,6 +1,6 @@
 import axios, { setAuthToken } from './axios-wrapper'
 
-export const signup = (data) => axios.post('/signup', data)
+export const signup = (data) => axios.post('/user/register', data)
   .then(response => response)
   .catch(err => err.response)
 
