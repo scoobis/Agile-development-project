@@ -4,7 +4,7 @@ export const signup = (data) => axios.post('/user/register', data)
   .then(response => response)
   .catch(err => err.response)
 
-export const login = (user) => axios.post('/login', user)
+export const login = (user) => axios.post('/user/login', user)
   .then(response => {
     if (response.status === 200) {
       setAuthToken(response.data.token)
