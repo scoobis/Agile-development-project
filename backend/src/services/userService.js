@@ -12,10 +12,12 @@ const service = {}
  * @param {*} next 
  */
 service.create = async (req, res, next) => {  
+  // User
   const userToRegister = new user(
     req.body.email, req.body.password, req.body.name, req.body.role
   )
 
+  // Producer
   if (req.body.role === 'producer') { // Enum?
     const addressToRegister = new address(
       req.body.streetAddress, req.body.zip, req.body.city, 'business' // Enum?
@@ -31,6 +33,8 @@ service.create = async (req, res, next) => {
 
 service.login = async (req, res, next) => {
   let user = await userDAO.login(req)
+  let role = await userDAO.getRoleByUserId(user.id)
+  user.role = role
   return user
 }
 
@@ -111,7 +115,7 @@ service.isValidPhoneNumber = number => number.length === 10
  * @returns {boolean} - True if already in use/False if not
  */
 service.isOrgNumberAlreadyInUse = async (orgNumber) => {
-  let producer = await userDAO.findProducerByOrgNumber(orgNumber)
+  let producer = await userDAO.getProducerByOrgNumber(orgNumber)
   if (typeof producer == 'object') {
     return true
   } else {

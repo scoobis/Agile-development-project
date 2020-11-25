@@ -55,7 +55,7 @@ userDAO.findByEmail = async (email) => {
  * @param {*} orgNumber
  * @returns {object} producer
  */
-userDAO.findProducerByOrgNumber = async (orgNumber) => {
+userDAO.getProducerByOrgNumber = async (orgNumber) => {
   let conn;
   try {
     conn = await pool.getConnection();
@@ -72,17 +72,32 @@ userDAO.login = async (userToLogIn) => {
   let conn;
   try {
     conn = await pool.getConnection();
-    let [user] = await conn.query("SELECT * FROM user WHERE email=('" + userToLogIn.email + "') AND password = ('" + userToLogIn.password + "')")
-    let [producer] = await conn.query("SELECT * FROM producer WHERE user_id=('" + user.id + "')")
+    let [user] = await conn.query("SELECT * FROM user WHERE email=('" + userToLogIn.email + "') AND password = ('" + userToLogIn.password + "')")   
+    return user
+  } catch (error) {
+    throw error
+  } finally {
+    if (conn) conn.release()
+  }
+}
 
+/**
+ * Returns the role of a user
+ * 
+ * @param {integer} userId 
+ */
+userDAO.getRoleByUserId = async (userId) => {
+  let conn;
+  try {
+    conn = await pool.getConnection();
+    let [producer] = await conn.query("SELECT * FROM producer WHERE user_id=('" + userId + "')")
+    
+    let role = 'customer'
     if (producer === 'object') {
       user.role = 'producer'
-    } else {
-      user.role = 'customer'
     }
 
-    return user
-
+    return role
   } catch (error) {
     throw error
   } finally {
