@@ -1,9 +1,13 @@
 class user {
-  constructor(email, password, name, role) {
+  constructor(email, password, name) {
     this.email = email
     this.password = password
     this.name = name
-    this.role = role
+    this._role = 'customer'
+  }
+
+  get role() {
+    return this._role
   }
   
   /**
@@ -44,16 +48,6 @@ class user {
   }
   get name() {
     return this._name
-  }
-  
-  /**
-   * @param {roles} role
-   */
-  set role(role) {
-    this._role = role
-  }
-  get role() {
-    return this._role
   }
 
   /**
