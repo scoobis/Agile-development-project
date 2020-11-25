@@ -67,16 +67,6 @@ class user {
   }
 
   /**
-   * @param {address} businessAddress
-   */
-  set businessAddress(businessAddress) {
-    this._businessAddress = businessAddress
-  }
-  get businessAddress() {
-    return this._businessAddress
-  }
-
-  /**
    * @param {string} orgNumber
    */
   set orgNumber(orgNumber) {

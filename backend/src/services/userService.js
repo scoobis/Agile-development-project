@@ -18,16 +18,16 @@ service.create = async (req, res, next) => {
   )
 
   // Producer
+  let addressToRegister
   if (req.body.role === 'producer') { // Enum?
-    const addressToRegister = new address(
+    addressToRegister = new address(
       req.body.streetAddress, req.body.zip, req.body.city, 'business' // Enum?
     )
-    userToRegister.businessAddress = addressToRegister
     userToRegister.orgNumber = req.body.orgNumber
     userToRegister.phone = req.body.phone
   }
   
-  await userDAO.create(userToRegister)
+  await userDAO.create(userToRegister, addressToRegister)
 
 }
 
