@@ -17,17 +17,17 @@ app.use(express.urlencoded({ extended: true }))
 
 app.use(headers)
 
-// Routes
-//app.use('/', require('./routes/userRouter'))
+// Root routes
+//app.use('/', require('./routes/WHICHROUTER?'))
 app.use('/user', require('./routes/userRouter'))
-//app.use('/login', require('./routes/userRouter'))
+
+// Fall back to 404
 app.use('*', (req, res, next) => next(createError(404)))
 
+// Error Handling
 app.use((err, req, res, next) => {
   res.status(err.status).send({ message: `${err.message}` })
 })
-
-
 
 const port = process.env.PORT || 5001
 app.listen(port, () => console.log(`Listening on port ${port}...`))
