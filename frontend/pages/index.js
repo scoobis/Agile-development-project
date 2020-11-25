@@ -13,6 +13,7 @@ export default function Home () {
       <Typography>
         Registrera dig som kund <Link href='/registrera'><a>här</a></Link>
       </Typography>
+      <Typography><Link href='/logga-in'>Logga in</Link></Typography>
     </Container>
   )
 }

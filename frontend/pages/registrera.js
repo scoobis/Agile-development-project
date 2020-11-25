@@ -1,11 +1,14 @@
 import React from 'react'
 import CustomerSignupForm from '../src/components/signup/CustomerSignupForm'
+import useAuth from '../src/utils/useAuth'
 
 function BecomeCustomer () {
-  return (
-    <div>
-      <CustomerSignupForm />
-    </div>
+  const { user } = useAuth()
+
+  return !user.isAuthenticated ? (
+    <CustomerSignupForm />
+  ) : (
+    <p>Du är redan registrerad.</p>
   )
 }
 

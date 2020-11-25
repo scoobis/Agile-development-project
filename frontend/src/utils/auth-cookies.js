@@ -1,17 +1,23 @@
-const TOKEN_NAME = 'token'
+const COOKIE_NAME = 'user'
 const MAX_AGE = 60 * 60 * 2
 
-export const setTokenCookie = (value) => {
+export const setUserCookie = (value) => {
   const date = new Date()
   date.setTime(date.getTime() + (MAX_AGE * 1000))
-  document.cookie = `${TOKEN_NAME}=${value}; expires=${date.toUTCString()}'; HttpOnly; Secure`
+  document.cookie = `${COOKIE_NAME}=${JSON.stringify(value)}; expires=${date.toUTCString()}';`
 }
 
-export const getTokenCookie = () => {
+export const getUserCookie = () => {
   const cookie = {}
   document.cookie.split(';').forEach((el) => {
     const [k, v] = el.split('=')
     cookie[k.trim()] = v
   })
-  return cookie[TOKEN_NAME]
+  return cookie[COOKIE_NAME] && JSON.parse(cookie[COOKIE_NAME])
+}
+
+export const removeUserCookie = () => {
+  if (getUserCookie()) {
+    document.cookie = `${COOKIE_NAME}=; expires=Thu, 01 Jan 1970 00:00:00 GMT;`
+  }
 }
