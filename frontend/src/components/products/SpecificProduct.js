@@ -2,6 +2,7 @@ import React, { useContext } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import { Container, Typography, Grid } from '@material-ui/core'
 import { ProductContext } from '../../context/productContext/ProductContext'
+import SpecificProductCard from './SpecificProductCard'
 
 const SpecificProduct = (props) => {
   const useStyles = makeStyles({
@@ -33,10 +34,11 @@ const SpecificProduct = (props) => {
             {description}
           </Typography>
         </Grid>
-        <Grid item cs={12}>
-          <Grid item xs={4}>
-            <img className={classes.img} alt='Produkt bild' src={`/${imgSrc}`} />
-          </Grid>
+        <Grid item xs={7}>
+          <img className={classes.img} alt='Produkt bild' src={`/${imgSrc}`} />
+        </Grid>
+        <Grid xs={5}>
+          <SpecificProductCard />
         </Grid>
       </Grid>
     </Container>
