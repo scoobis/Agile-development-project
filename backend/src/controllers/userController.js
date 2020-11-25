@@ -4,9 +4,10 @@ const jwt = require('jsonwebtoken')
 
 const controller = {}
 
+// only a testing route for /users/
 controller.test = async (req, res, next) => {
   try {
-    res.status(200).json({message: 'blslsls'})
+    res.status(200).json({message: 'You reached /users/'})
   } catch (err) { next(err) }
 }
 
