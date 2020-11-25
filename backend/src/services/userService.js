@@ -6,35 +6,38 @@ const userDAO = require('../database/userDAO')
 const service = {}
 
 /**
- * Creates a new user
+ * Creates a new customer
  * 
  * @param {*} req 
  * @param {*} res 
  * @param {*} next 
  */
-service.create = async (req, res, next) => {  
-  let userToRegister
-  let addressToRegister
+service.createCustomer = async (req, res, next) => {  
+  const userToRegister = new user(
+    req.body.email, req.body.password, req.body.name
+  )
   
-  if (req.body.role === 'customer') {
-    userToRegister = new user(
-      req.body.email, req.body.password, req.body.name
-    )
-
-    await userDAO.createCustomer(userToRegister)
-
-  } else {
-    userToRegister = new producer(
-      req.body.email, req.body.password, req.body.name, req.body.phone, req.body.orgNumber
-    )
-    addressToRegister = new address(
-      req.body.streetAddress, req.body.zip, req.body.city, 'business'
-    )
-
-    await userDAO.createProducer(userToRegister, addressToRegister)
-  }
-
+  await userDAO.createCustomer(userToRegister)
 }
+
+/**
+ * Creates a new producer
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ */
+service.createProducer = async (req, res, next) => {  
+  const userToRegister = new producer(
+    req.body.email, req.body.password, req.body.name, req.body.phone, req.body.orgNumber
+  )
+  const addressToRegister = new address(
+    req.body.streetAddress, req.body.zip, req.body.city, 'business'
+  )
+
+  await userDAO.createProducer(userToRegister, addressToRegister)
+}
+
 
 service.login = async (req, res, next) => {
   let user = await userDAO.login(req)
