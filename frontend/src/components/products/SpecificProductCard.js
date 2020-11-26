@@ -1,22 +1,17 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Card, CardActions, CardContent } from '@material-ui/core'
 import { Typography, Button, Grid, TextField } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import PickAmount from './PickAmount'
+import SelectOption from './SelectOption'
 
 const SpecificProductCard = (props) => {
-  const options = ['Röda', 'Gröna']
-
-  const [option, setOption] = useState([options])
-
-  const handleChange = (event) => {
-    setOption(event.target.value)
-  }
-
   const useStyles = makeStyles({
     root: { backgroundColor: '#d4d4d4' },
     filed1: { height: '100px' },
   })
+
+  const { stock } = props
 
   const classes = useStyles()
 
@@ -31,16 +26,10 @@ const SpecificProductCard = (props) => {
             <Typography variant='body1'>ry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when took</Typography>
           </Grid>
           <Grid item xs={4}>
-            <TextField select value={option} onChange={handleChange} SelectProps={{ native: true }} helperText='Välj ett alternativ'>
-              {options.map((option) => (
-                <option key={option} value={option}>
-                  {option}
-                </option>
-              ))}
-            </TextField>
+            <SelectOption />
           </Grid>
           <Grid item xs={8}>
-            <PickAmount />
+            <PickAmount stock={stock} />
           </Grid>
         </Grid>
       </CardContent>

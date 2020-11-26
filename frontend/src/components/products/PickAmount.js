@@ -1,25 +1,25 @@
 import React, { useState } from 'react'
-import Button from '@material-ui/core/Button'
+import { Button, TextField } from '@material-ui/core'
 import ButtonGroup from '@material-ui/core/ButtonGroup'
 
-const PickAmount = () => {
+const PickAmount = (props) => {
+  const { stock } = props
+
   const [counter, setCounter] = useState(1)
 
   const handleIncrement = () => {
-    setCounter(counter + 1)
+    stock > counter ? setCounter(counter + 1) : setCounter(counter)
   }
 
   const handleDecrement = () => {
     counter >= 2 ? setCounter(counter - 1) : setCounter(1)
   }
 
-  //TODO: välj ett antal
-
   return (
     <ButtonGroup size='small' aria-label='small outlined button group'>
-      <Button onClick={handleIncrement}>+</Button>
-      <Button disabled>{counter}</Button>
       <Button onClick={handleDecrement}>-</Button>
+      <Button disabled>{counter}</Button>
+      <Button onClick={handleIncrement}>+</Button>
     </ButtonGroup>
   )
 }
