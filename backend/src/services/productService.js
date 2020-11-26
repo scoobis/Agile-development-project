@@ -1,3 +1,6 @@
+const product = require('../models/product')
+const productDAO = require('../database/productDAO')
+
 const service = {}
 
 /**
