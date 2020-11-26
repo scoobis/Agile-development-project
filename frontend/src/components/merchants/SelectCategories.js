@@ -56,7 +56,7 @@ export default function MultipleSelect () {
       <FormControl className={classes.formControl}>
         <InputLabel>Kategorier</InputLabel>
         <Select
-          open
+          // open
           multiple
           value={personName}
           onChange={handleChange}
