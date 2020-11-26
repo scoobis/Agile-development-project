@@ -1,29 +1,29 @@
 import { Container, Typography } from '@material-ui/core'
 import Link from 'next/link'
 
-export default function Home() {
+export default function Home () {
   return (
     <Container maxWidth='sm'>
-      <Typography>Hello from Home!</Typography>
+      <Typography>Välkommen!</Typography>
       <Typography>
-        Registrera dig som producent{' '}
         <Link href='/bli-producent'>
-          <a>här</a>
+          <a>Registrera dig som producent</a>
         </Link>
       </Typography>
       <Typography>
-        Registrera dig som kund{' '}
         <Link href='/registrera'>
-          <a>här</a>
+          <a>Registrera dig som kund</a>
         </Link>
       </Typography>
       <Typography>
-        See all produkter{' '}
         <Link href='/produkter'>
-          <a>här</a>
+          <a>See all produkter</a>
         </Link>
       </Typography>
       <Typography><Link href='/logga-in'>Logga in</Link></Typography>
+      <Typography>
+        <Link href='/merchants'>Producenter</Link>
+      </Typography>
     </Container>
   )
 }
