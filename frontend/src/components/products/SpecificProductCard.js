@@ -18,6 +18,8 @@ const SpecificProductCard = (props) => {
     filed1: { height: '100px' },
   })
 
+  const { stock } = props
+
   const classes = useStyles()
 
   return (
@@ -40,7 +42,7 @@ const SpecificProductCard = (props) => {
             </TextField>
           </Grid>
           <Grid item xs={8}>
-            <PickAmount />
+            <PickAmount stock={stock} />
           </Grid>
         </Grid>
       </CardContent>

@@ -17,7 +17,7 @@ const SpecificProduct = (props) => {
   const { products } = useContext(ProductContext)
   const { specifikProduktId } = props
   const product = products.find((x) => x.id === parseInt(specifikProduktId))
-  const { imgSrc, title, description } = product
+  const { imgSrc, title, description, stock } = product
 
   // TODO: Problem when reloading page!
 
@@ -37,7 +37,7 @@ const SpecificProduct = (props) => {
           <img className={classes.img} alt='Produkt bild' src={`/${imgSrc}`} />
         </Grid>
         <Grid item xs={5}>
-          <SpecificProductCard />
+          <SpecificProductCard stock={stock} />
         </Grid>
       </Grid>
     </Container>
