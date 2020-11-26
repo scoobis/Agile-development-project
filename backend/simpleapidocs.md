@@ -20,6 +20,11 @@
 | ---- | ------ | -------- |
 | - | GET | /product/{id} |
 | - | GET | /products |
-| - | POST | /product |
+| Y | POST | /product |
 | - | PUT | /product/{id} |
 | - | DELETE | /product/{id} |
+
+## Categories
+| Done | Method | Endpoint |
+| ---- | ------ | -------- |
+| - | GET | /products |

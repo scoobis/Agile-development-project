@@ -12,6 +12,7 @@ const service = {}
  */
 service.create = async (req, res, next) => {  
   const newProduct = new product(
+    1234567897,  //req.body.orgNumber
     req.body.name,
     req.body.desc,
     req.body.price,
@@ -19,9 +20,9 @@ service.create = async (req, res, next) => {
     req.body.inStock
   )
   
-  const categoryId = req.body.categoryId // One or more? Add to product model?
+  const categoryId = 1 // req.body.categoryId // One or more? Add to product model?
 
-  await productDAO.createCustomer(newProduct, categoryId)
+  await productDAO.create(newProduct, categoryId)
 }
 
 module.exports = service

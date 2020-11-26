@@ -1,5 +1,6 @@
 class product {
-  constructor(name, desc, price, unit, inStock) {
+  constructor(orgNumber, name, desc, price, unit, inStock) {
+    this.orgNumber = orgNumber
     this.name = name
     this.desc = desc
     this.price = price
@@ -65,6 +66,16 @@ class product {
   }
   get inStock() {
     return this._inStock
+  }
+
+  /**
+   * @param {string} orgNumber
+   */
+  set orgNumber(orgNumber) {
+    this._orgNumber = orgNumber
+  }
+  get orgNumber() {
+    return this._orgNumber
   }
 
 }
