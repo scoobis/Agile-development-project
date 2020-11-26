@@ -12,7 +12,7 @@ const service = {}
  */
 service.create = async (req, res, next) => {  
   const newProduct = new product(
-    1234567897,  //req.body.orgNumber
+    1234567897,  //(req.body.orgNumber)  Tillfälligt hårdkodad för att matcha testproducent i databasen
     req.body.name,
     req.body.desc,
     req.body.price,
@@ -20,7 +20,7 @@ service.create = async (req, res, next) => {
     req.body.inStock
   )
   
-  const categoryId = 1 // req.body.categoryId // One or more? Add to product model?
+  const categoryId = 1 // (req.body.categoryId) Tillfälligt hårdkodad för att matcha testkategori i databasen // One or more? Add to product model?
 
   await productDAO.create(newProduct, categoryId)
 }
