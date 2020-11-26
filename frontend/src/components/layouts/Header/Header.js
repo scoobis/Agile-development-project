@@ -59,7 +59,6 @@ export default function Header () {
                 >
                   <AccountCircle />
                 </IconButton>
-
               </a>
             </Link>
             {user.isAuthenticated && (
