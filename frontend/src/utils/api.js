@@ -13,3 +13,7 @@ export const login = (user) => axios.post('/user/login', user)
     return response
   })
   .catch(err => err.response)
+
+export const addProduct = product => axios.post('/product', product)
+  .then(response => response.data)
+  .catch(err => err.response)

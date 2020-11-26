@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Button, Container, Grid, TextField, Typography } from '@material-ui/core'
 // import SelectCategories from './SelectCategories'
+import { addProduct } from '../../utils/api'
 
 function AddProductForm () {
   const [state, setState] = useState({
@@ -14,17 +15,15 @@ function AddProductForm () {
       quantity: '',
       categories: []
     },
-    errors: {}
+    errors: {},
+    message: ''
   })
 
-  const handleSubmit = (data) => {
-    // const productToAdd = {
-    //   ...state.product,
-    //   id: Math.random(1, 1000),
-    //   created_at: new Date()
-    // }
+  const handleSubmit = (e) => {
+    e.preventDefault()
 
-    // createProduct(data)
+    addProduct(state.product)
+      .then(response => setState({ ...state, message: response.message }))
   }
 
   const handleChange = e => {
@@ -41,6 +40,7 @@ function AddProductForm () {
       : e.target.value
 
     setState({
+      ...state,
       product: { ...state.product, [e.target.name]: value },
       errors: { ...state.errors }
     })
@@ -66,6 +66,11 @@ function AddProductForm () {
   return (
     <Container>
       <Typography>Lägg till produkt</Typography>
+
+      {state.message && (
+        <Typography color='secondary'>{state.message}</Typography>
+      )}
+
       <form onSubmit={handleSubmit} onChange={handleChange} onInvalid={handleError}>
         <Grid container spacing={2}>
           <Grid item xs={12}>

@@ -11,6 +11,9 @@ function ProducerDashboard () {
     <Container>
       <Grid container spacing={3}>
         <Grid item xs={12}>
+          <Typography>
+            Producenter
+          </Typography>
           <Typography variant='h5'>
             Välkommen {user.user.name}
           </Typography>
