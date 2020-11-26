@@ -12,4 +12,13 @@ controller.create = async (req, res, next) => {
   } 
 }
 
+controller.getAll = async (req, res, next) => {
+  try {
+    await service.getAll()
+    res.status(200).json({ 'success': true, 'message' : 'Here should all products return as some type collection?.'})
+  } catch (error) {
+    return next(error)
+  } 
+}
+
 module.exports = controller

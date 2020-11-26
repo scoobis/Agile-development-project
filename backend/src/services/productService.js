@@ -25,4 +25,8 @@ service.create = async (req, res, next) => {
   await productDAO.create(newProduct, categoryId)
 }
 
+service.getAll = async (req, res, next) => {  
+  return "Hello, here all products will return."
+}
+
 module.exports = service
