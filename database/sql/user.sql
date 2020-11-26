@@ -9,6 +9,11 @@ CREATE TABLE user (
   UNIQUE (email)
 );
 
+INSERT INTO user (email, password, full_name, phone_no) 
+VALUES
+  ('prod@mail.com', 'prodprod', 'Prod', '1234567897');
+
+
 -- ADDRESS --
 CREATE TABLE address (
   id INT NOT NULL AUTO_INCREMENT,
@@ -17,6 +22,10 @@ CREATE TABLE address (
   city VARCHAR(40),
   PRIMARY KEY (id)
 );
+
+INSERT INTO address (street_address, zip, city) 
+VALUES
+  ('Prodstreet 1', '12345', 'Prodcity');
 
 -- USER_ADDRESS --
 CREATE TABLE user_address (
@@ -28,6 +37,10 @@ CREATE TABLE user_address (
   FOREIGN KEY (address_id) REFERENCES address(id)
 );
 
+INSERT INTO user_address (user_id, address_id, type) 
+VALUES
+  ('1', '1', 'business');
+
 -- PRODUCER --
 CREATE TABLE producer (
   org_no VARCHAR(10) NOT NULL,
@@ -36,12 +49,16 @@ CREATE TABLE producer (
   FOREIGN KEY (user_id) REFERENCES user(id)
 );
 
+INSERT INTO producer (org_no, user_id) 
+VALUES
+  ('1234567897', '1');
+
 -- PRODUCT --
 CREATE TABLE product (
   id INT NOT NULL AUTO_INCREMENT,
   producer_org_no VARCHAR(10) NOT NULL,
   name VARCHAR(100) NOT NULL,
-  description VARCHAR(500) NOT NULL,
+  description VARCHAR(500),
   price VARCHAR(10) NOT NULL,
   unit VARCHAR(20) NOT NULL,
   in_stock VARCHAR(10) NOT NULL,
@@ -57,6 +74,8 @@ CREATE TABLE category (
   description VARCHAR(200) NOT NULL,
   PRIMARY KEY (id)
 );
+
+INSERT INTO category (name, description) VALUES ('allt', 'vad som helst');
 
 -- PRODUCT_CATEGORY --
 CREATE TABLE product_category (
