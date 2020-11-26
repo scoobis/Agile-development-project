@@ -12,4 +12,14 @@ controller.create = async (req, res, next) => {
   } 
 }
 
+controller.getAll = async (req, res, next) => {
+  try {
+    let result = await service.getAll()
+    res.status(200).json(result)
+    
+  } catch (error) {
+    return next(error)
+  } 
+}
+
 module.exports = controller
