@@ -24,4 +24,26 @@ productDAO.create = async (product, categoryId) => {
   }
 }
 
+/**
+ * Gets all products
+ * 
+ */
+productDAO.getAll = async () => {
+  let conn;
+  try {
+    conn = await pool.getConnection();
+    // await conn.query(
+    //   // 'SELECT id, producer_org_no, name, description, price, unit, in_stock FROM product;'
+    // )
+
+    
+  // conn.query("INSERT INTO product_category (product_id, category_id) VALUES ('" + productId + "', '" + categoryId + "')")
+
+  } catch (error) {
+    throw error
+  } finally {
+    if (conn) conn.release()
+  }
+}
+
 module.exports = productDAO
