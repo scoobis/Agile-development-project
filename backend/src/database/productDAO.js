@@ -32,15 +32,13 @@ productDAO.getAll = async () => {
   let conn
   try {
     conn = await pool.getConnection()
-    // await conn.query(
-    //   // 'SELECT id, producer_org_no, name, description, price, unit, in_stock FROM product'
-    // )
-
-    
-  // conn.query("INSERT INTO product_category (product_id, category_id) VALUES ('" + productId + "', '" + categoryId + "')")
+    // Todo: Limit this for X amount of rows.
+    let rows = await conn.query('SELECT * FROM product')
+    return rows  
 
   } catch (error) {
     throw error
+
   } finally {
     if (conn) conn.release()
   }

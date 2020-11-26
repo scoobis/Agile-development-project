@@ -26,7 +26,8 @@ service.create = async (req, res, next) => {
 }
 
 service.getAll = async (req, res, next) => {  
-  return "Hello, here all products will return."
+  // Todo: Format them specifically?
+  return productDAO.getAll()
 }
 
 module.exports = service

@@ -14,8 +14,9 @@ controller.create = async (req, res, next) => {
 
 controller.getAll = async (req, res, next) => {
   try {
-    await service.getAll()
-    res.status(200).json({ 'success': true, 'message' : 'Here should all products return as some type collection?.'})
+    let result = await service.getAll()
+    res.status(200).json(result)
+    
   } catch (error) {
     return next(error)
   } 
