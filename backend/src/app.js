@@ -20,6 +20,7 @@ app.use(headers)
 // Root routes
 //app.use('/', require('./routes/WHICHROUTER?'))
 app.use('/user', require('./routes/userRouter'))
+app.use('/product', require('./routes/productRouter'))
 
 // Fall back to 404
 app.use('*', (req, res, next) => next(createError(404)))
