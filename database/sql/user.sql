@@ -4,7 +4,7 @@ CREATE TABLE user (
   email VARCHAR(60) NOT NULL,
   password VARCHAR(100) NOT NULL,
   full_name VARCHAR(40) NOT NULL,
-  phone_no INT(10),
+  phone_no VARCHAR(10),
   PRIMARY KEY (id),
   UNIQUE (email)
 );
@@ -30,8 +30,39 @@ CREATE TABLE user_address (
 
 -- PRODUCER --
 CREATE TABLE producer (
-  org_no INT NOT NULL,
+  org_no VARCHAR(10) NOT NULL,
   user_id INT NOT NULL,
   PRIMARY KEY (org_no),
   FOREIGN KEY (user_id) REFERENCES user(id)
+);
+
+-- PRODUCT --
+CREATE TABLE product (
+  id INT NOT NULL AUTO_INCREMENT,
+  producer_org_no VARCHAR(10) NOT NULL,
+  name VARCHAR(100) NOT NULL,
+  description VARCHAR(500) NOT NULL,
+  price VARCHAR(10) NOT NULL,
+  unit VARCHAR(20) NOT NULL,
+  in_stock VARCHAR(10) NOT NULL,
+  PRIMARY KEY (id),
+  FOREIGN KEY (producer_org_no) REFERENCES producer(org_no)
+);
+
+-- CATEGORY --
+CREATE TABLE category (
+  id INT NOT NULL AUTO_INCREMENT,
+  parent_id INT,
+  name VARCHAR(100) NOT NULL,
+  description VARCHAR(200) NOT NULL,
+  PRIMARY KEY (id)
+);
+
+-- PRODUCT_CATEGORY --
+CREATE TABLE product_category (
+  product_id INT NOT NULL,
+  category_id INT NOT NULL,
+  PRIMARY KEY (product_id, category_id),
+  FOREIGN KEY (product_id) REFERENCES product(id),
+  FOREIGN KEY (category_id) REFERENCES category(id)
 );

@@ -13,6 +13,8 @@ const PickAmount = () => {
     counter >= 2 ? setCounter(counter - 1) : setCounter(1)
   }
 
+  //TODO: välj ett antal
+
   return (
     <ButtonGroup size='small' aria-label='small outlined button group'>
       <Button onClick={handleIncrement}>+</Button>
