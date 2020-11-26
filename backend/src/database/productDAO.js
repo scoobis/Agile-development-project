@@ -8,9 +8,9 @@ const productDAO = {}
  * @param {product} product
  */
 productDAO.create = async (product, categoryId) => {
-  let conn;
+  let conn
   try {
-    conn = await pool.getConnection();
+    conn = await pool.getConnection()
     
     const productResponse = await conn.query("INSERT INTO product (producer_org_no, name, description, price, unit, in_stock) VALUES ('" + product.orgNumber + "', '" + product.name + "', '" + product.desc + "', '" + product.price + "', '" + product.unit + "', '" + product.inStock + "')")
     const productId = productResponse.insertId
@@ -29,11 +29,11 @@ productDAO.create = async (product, categoryId) => {
  * 
  */
 productDAO.getAll = async () => {
-  let conn;
+  let conn
   try {
-    conn = await pool.getConnection();
+    conn = await pool.getConnection()
     // await conn.query(
-    //   // 'SELECT id, producer_org_no, name, description, price, unit, in_stock FROM product;'
+    //   // 'SELECT id, producer_org_no, name, description, price, unit, in_stock FROM product'
     // )
 
     
