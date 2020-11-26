@@ -60,4 +60,9 @@ validate.producer = async (req, res, next) => {
   next()
 }
 
+validate.product = async (req, res, next) => {
+  console.log('VALIDATION TO BE ADDED?')
+  next()
+}
+
 module.exports = validate
