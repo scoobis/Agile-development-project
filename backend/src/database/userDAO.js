@@ -1,4 +1,5 @@
 const pool = require('./databaseConnection')
+const bcrypt = require('bcrypt')
 
 const userDAO = {}
 
@@ -11,7 +12,8 @@ userDAO.createCustomer = async (user) => {
   let conn
   try {
     conn = await pool.getConnection()
-    conn.query("INSERT INTO user (email, password, full_name) VALUES ('" + user.email + "', '" + user.password + "', '" + user.name + "')")   
+    let password = await bcrypt.hash(user.password, 8)
+    await conn.query("INSERT INTO user (email, password, full_name) VALUES ('" + user.email + "', '" + password + "', '" + user.name + "')")   
   } catch (error) {
     throw error
   } finally {
@@ -35,9 +37,9 @@ userDAO.createProducer = async (user, address) => {
     const addressResponse = await conn.query("INSERT INTO address (street_address, zip, city) VALUES ('" + address.streetAddress + "', '" + address.zip + "', '" + address.city + "')")      
     const addressId = addressResponse.insertId
       
-    conn.query("INSERT INTO user_address (user_id, address_id, type) VALUES ('" + userId + "', '" + addressId + "', '" + address.type + "')")      
+    await conn.query("INSERT INTO user_address (user_id, address_id, type) VALUES ('" + userId + "', '" + addressId + "', '" + address.type + "')")      
       
-    conn.query("INSERT INTO producer (org_no, user_id) VALUES ('" + user.orgNumber + "', '" + userId + "')")
+    await conn.query("INSERT INTO producer (org_no, user_id) VALUES ('" + user.orgNumber + "', '" + userId + "')")
 
   } catch (error) {
     throw error
@@ -88,8 +90,11 @@ userDAO.login = async (userToLogIn) => {
   let conn
   try {
     conn = await pool.getConnection()
-    let [user] = await conn.query("SELECT * FROM user WHERE email=('" + userToLogIn.email + "') AND password = ('" + userToLogIn.password + "')")
-    return user
+    let [user] = await conn.query("SELECT * FROM user WHERE email=('" + userToLogIn.email + "')")
+    let userFound = await bcrypt.compare(userToLogIn.password, user.password)
+    if (userFound){
+      return user
+    }
   } catch (error) {
     throw error
   } finally {
