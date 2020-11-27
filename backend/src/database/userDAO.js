@@ -31,7 +31,8 @@ userDAO.createProducer = async (user, address) => {
   try {
     console.log(user.orgNumber)
     conn = await pool.getConnection()
-    const userResponse = await conn.query("INSERT INTO user (email, password, full_name, phone_no) VALUES ('" + user.email + "', '" + user.password + "', '" + user.name + "', '" + user.phone + "')")
+    let password = await bcrypt.hash(user.password, 8)
+    const userResponse = await conn.query("INSERT INTO user (email, password, full_name, phone_no) VALUES ('" + user.email + "', '" + password + "', '" + user.name + "', '" + user.phone + "')")
     const userId = userResponse.insertId
       
     const addressResponse = await conn.query("INSERT INTO address (street_address, zip, city) VALUES ('" + address.streetAddress + "', '" + address.zip + "', '" + address.city + "')")      
