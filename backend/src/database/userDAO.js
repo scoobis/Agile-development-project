@@ -92,10 +92,14 @@ userDAO.login = async (userToLogIn) => {
   try {
     conn = await pool.getConnection()
     let [user] = await conn.query("SELECT * FROM user WHERE email=('" + userToLogIn.email + "')")
-    let userFound = await bcrypt.compare(userToLogIn.password, user.password)
-    if (userFound){
-      return user
+    console.log(userDAO)
+    if (typeof user != 'undefined') {
+      let userFound = await bcrypt.compare(userToLogIn.password, user.password)
+      if (userFound){
+        return user
+      }
     }
+    
   } catch (error) {
     throw error
   } finally {
