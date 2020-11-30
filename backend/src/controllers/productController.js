@@ -1,5 +1,5 @@
-const product = require("../models/product")
 const service = require('../services/productService')
+const createError = require('http-errors')
 
 const controller = {}
 
@@ -10,6 +10,19 @@ controller.create = async (req, res, next) => {
   } catch (error) {
     return next(error)
   } 
+}
+
+controller.get = async (req, res, next) => {
+  try {
+    const result = await service.get(req)
+    if (result) {
+      res.status(200).json(result)
+    } else {
+      throw new createError(400, 'Product does not exist')
+    }
+  } catch (error) {
+    return next(error)
+  }
 }
 
 controller.getAll = async (req, res, next) => {
