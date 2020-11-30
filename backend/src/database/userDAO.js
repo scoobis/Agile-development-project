@@ -132,4 +132,22 @@ userDAO.getRoleByUserId = async (userId) => {
   }
 }
 
+/**
+ * Gets a producer by user id
+ * 
+ * @param {integer} userId 
+ */
+userDAO.getProducerByUserId = async (userId) => {
+  let conn
+  try {
+    conn = await pool.getConnection()
+    let [producer] = await conn.query("SELECT * FROM producer WHERE user_id=('" + userId + "')")
+    return producer
+  } catch (error) {
+    throw error
+  } finally {
+    if (conn) conn.release()
+  }
+}
+
 module.exports = userDAO

@@ -25,9 +25,20 @@ service.create = async (req, res, next) => {
   await productDAO.create(newProduct, categoryId)
 }
 
+service.get = async (req, res, next) => {
+  const productId = await req.params.id
+  return await productDAO.get(productId)
+}
+
 service.getAll = async (req, res, next) => {  
   // Todo: Format them specifically?
   return productDAO.getAll()
+}
+
+service.getAllFromProducer = async (req, res, next) => {  
+  const orgNumber = await req.params.org_no
+  // Todo: Format them specifically?
+  return productDAO.getAllByOrgNumber(orgNumber)
 }
 
 module.exports = service

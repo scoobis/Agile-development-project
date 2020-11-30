@@ -2,6 +2,7 @@ const user = require('../models/user')
 const producer = require('../models/producer')
 const address = require('../models/address')
 const userDAO = require('../database/userDAO')
+const productDAO = require('../database/productDAO')
 
 const service = {}
 
@@ -42,8 +43,14 @@ service.createProducer = async (req, res, next) => {
 service.login = async (req, res, next) => {
   let user = await userDAO.login(req)
   if (user) {
-    let role = await userDAO.getRoleByUserId(user.id)
-    user.role = role
+    let producer = await userDAO.getProducerByUserId(user.id)
+    if (producer) {
+      user.role = 'producer'
+      user.orgNumber = producer.org_no
+    } else {
+      user.role = 'customer'
+      user.orgNumber = null
+    }
   }
   return user
 }
