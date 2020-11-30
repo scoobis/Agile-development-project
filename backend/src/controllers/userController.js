@@ -15,10 +15,10 @@ controller.create = async (req, res, next) => {
   try {
     if (req.body.role === 'producer') {
       service.createProducer(req)
-      res.status(200).json({ 'success': true, 'message' : 'Account created!'})
+      res.status(200).json({ 'success': true, 'message': 'Account created!' })
     } else {
       service.createCustomer(req)
-      res.status(200).json({ 'success': true, 'message' : 'Account created!'})
+      res.status(200).json({ 'success': true, 'message': 'Account created!' })
     }
   } catch (error) {
     return next(error)
@@ -28,17 +28,7 @@ controller.create = async (req, res, next) => {
 controller.login = async (req, res, next) => {
   try {
     if (user) {
-      const token = jwt.sign(
-        { 
-          email: user.email, 
-          password: user.password 
-        }, 
-        'shhhhh', 
-        { 
-          expiresIn: '1h' 
-        }
-      )
-      
+      const token = jwt.sign({ email: user.email, password: user.password }, 'shhhhh', { expiresIn: '1h' })
       res.status(200).json({ 
           'email': user.email, 
           'name': user.full_name, 
@@ -46,8 +36,8 @@ controller.login = async (req, res, next) => {
           'orgNumber': user.orgNumber, 
           'token': token, 
           'message': 'User found!' 
-        })
-        
+        }
+      )
     } else {
       throw new createError(400, "User does not exist!")
     }
