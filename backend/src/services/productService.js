@@ -35,4 +35,10 @@ service.getAll = async (req, res, next) => {
   return productDAO.getAll()
 }
 
+service.getAllFromProducer = async (req, res, next) => {  
+  const orgNumber = await req.params.org_no
+  // Todo: Format them specifically?
+  return productDAO.getAllByOrgNumber(orgNumber)
+}
+
 module.exports = service
