@@ -1,6 +1,6 @@
 import React from 'react'
 import Products from '../src/components/products/Products'
-import ProductContextProvider from '../src/context/productContext/ProductContext'
+import ProductContextProvider from '../src/context/ProductContext'
 
 function ProductsPage() {
   return (

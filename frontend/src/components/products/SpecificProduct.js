@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import { Container, Typography, Grid } from '@material-ui/core'
-import { ProductContext } from '../../context/productContext/ProductContext'
+import { ProductContext } from '../../context/ProductContext'
 import SpecificProductCard from './SpecificProductCard'
 
 const SpecificProduct = (props) => {
