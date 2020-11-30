@@ -23,25 +23,25 @@ const SpecificProduct = (props) => {
     })
   }, [])
 
-  const { imgSrc, title, description, in_stock, price } = product
+  const { imgSrc, name, description, in_stock, price, unit } = product
 
   const classes = useStyles()
   return (
     <Container className={classes.container}>
       <Grid container spacing={2}>
         <Grid item xs={12}>
-          <Typography variant='h3'>{title}</Typography>
-        </Grid>
-        <Grid item xs={12}>
-          <Typography className={classes.pos} variant='h6' color='textSecondary'>
-            {description}
-          </Typography>
+          <Typography variant='h3'>{name}</Typography>
         </Grid>
         <Grid item xs={7}>
           <img className={classes.img} alt='Produkt bild' src={`/${imgSrc}`} />
         </Grid>
         <Grid item xs={5}>
-          <SpecificProductCard in_stock={in_stock} price={price} />
+          <SpecificProductCard in_stock={in_stock} price={price} name={name} unit={unit} />
+        </Grid>
+        <Grid item xs={12}>
+          <Typography className={classes.pos} variant='h6' color='textSecondary'>
+            {description}
+          </Typography>
         </Grid>
       </Grid>
     </Container>
