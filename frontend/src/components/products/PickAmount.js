@@ -18,7 +18,7 @@ const PickAmount = (props) => {
   return (
     <ButtonGroup size='medium' fullWidth={true}>
       <Button onClick={handleDecrement}>-</Button>
-      <Button style={{ fontSize: '18px' }} disabled>
+      <Button style={{ fontSize: '16px' }} disabled>
         {counter}
       </Button>
       <Button onClick={handleIncrement}>+</Button>

@@ -11,6 +11,7 @@ const SpecificProduct = (props) => {
       width: '500px',
     },
     container: { boxShadow: '0 1px 1px 1px black' },
+    gridContainer: { paddingTop: '40px' },
   })
 
   const [product, setProduct] = useState({})
@@ -28,10 +29,7 @@ const SpecificProduct = (props) => {
   const classes = useStyles()
   return (
     <Container className={classes.container}>
-      <Grid container spacing={2}>
-        <Grid item xs={12}>
-          <Typography variant='h3'>{name}</Typography>
-        </Grid>
+      <Grid className={classes.gridContainer} container spacing={24}>
         <Grid item xs={7}>
           <img className={classes.img} alt='Produkt bild' src={`/${imgSrc}`} />
         </Grid>

@@ -30,8 +30,9 @@ const SpecificProductCard = (props) => {
             <Typography className={classes.bold} variant='h4'>
               {price} SEK/{unit}
             </Typography>
+            <br />
+            <br />
           </Grid>
-          <hr />
           {/*
           <Grid item xs={12}>
             <SelectOption />
@@ -44,6 +45,9 @@ const SpecificProductCard = (props) => {
             <Button size='large' fullWidth={true} variant='contained' color='primary' onClick={() => console.log('Add one to basket?')}>
               Lägg i kundvagn
             </Button>
+          </Grid>
+          <Grid item xs={12}>
+            <Typography variant='caption'>I lager: {in_stock}</Typography>
           </Grid>
         </Grid>
       </CardContent>
