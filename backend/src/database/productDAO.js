@@ -25,6 +25,24 @@ productDAO.create = async (product, categoryId) => {
 }
 
 /**
+ * Gets a product by its id
+ * 
+ * @param {} productId 
+ */
+productDAO.get = async (productId) => {
+  let conn
+  try {
+    conn = await pool.getConnection()
+    let [row] = await conn.query("SELECT * FROM product WHERE id=('" + productId + "')")
+    return row
+  } catch (error) {
+    throw error
+  } finally {
+    if (conn) conn.release()
+  }
+}
+
+/**
  * Gets all products
  * 
  */
