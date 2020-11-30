@@ -13,21 +13,24 @@ export const login = (user) =>
       if (response.status === 200) {
         setAuthToken(response.data.token)
       }
-
       return response
     })
     .catch((err) => err.response)
 
-export const addProduct = (product) =>
+export const addProduct = product =>
   axios
-    .post('/product')
-    .then((response) => response.data)
-    .catch((err) => err.response)
+    .post('/product', product)
+    .then(response => response.data)
+    .catch(err => err.response)
+
+export const getProductsByProducer = orgNumber =>
+  axios
+    .get(`/products/${orgNumber}`)
+    .then(response => response.data)
+    .catch(err => err.response)
 
 export const getAllProducts = () =>
   axios
     .get('/products')
-    .then((response) => {
-      return response.data
-    })
-    .catch((err) => err.response)
+    .then(response => response.data)
+    .catch(err => err.response)

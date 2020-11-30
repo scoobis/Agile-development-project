@@ -28,7 +28,8 @@ const AuthProvider = props => {
           name: response.data.name,
           email: response.data.email,
           role: response.data.role,
-          token: response.data.token
+          token: response.data.token,
+          orgNumber: response.data.orgNumber || null
         }
 
         setUser({ ...user, isAuthenticated: true, user: userToSave })

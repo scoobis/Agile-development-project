@@ -3,8 +3,10 @@ import { Box, Button, Container, Grid, TextField, Typography } from '@material-u
 import MultipleSelect from './MultipleSelect'
 import { addProduct } from '../../utils/api'
 import UploadImages from './UploadImages'
+import useAuth from '../../utils/useAuth'
 
 function AddProductForm () {
+  const { user } = useAuth()
   const [state, setState] = useState({
     product: {
       name: '',
@@ -13,7 +15,7 @@ function AddProductForm () {
       price: '',
       unit: '',
       salePrice: '',
-      quantity: '',
+      inStock: '',
       categories: []
     },
     errors: {},
@@ -42,7 +44,7 @@ function AddProductForm () {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    addProduct(state.product)
+    addProduct({ product: state.product, orgNumber: user.user.orgNumber })
       .then(response => setState({ ...state, message: response.message }))
   }
 
@@ -78,8 +80,6 @@ function AddProductForm () {
 
   return (
     <Container>
-      <Typography>Lägg till produkt</Typography>
-
       {state.message && (
         <Typography color='secondary'>{state.message}</Typography>
       )}
@@ -189,16 +189,16 @@ function AddProductForm () {
           <Grid item xs={12}>
             <TextField
               placeholder='Antal i lager'
-              name='quantity'
+              name='inStock'
               label='Antal i lager'
-              value={state.product.quantity}
+              value={state.product.inStock}
               type='number'
               variant='outlined'
               margin='normal'
               InputLabelProps={{
                 shrink: true
               }}
-              error={!!state.errors.quantity}
+              error={!!state.errors.inStock}
               inputProps={{
                 minLength: 1,
                 maxLength: 9999999
