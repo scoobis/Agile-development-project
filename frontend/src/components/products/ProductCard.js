@@ -34,10 +34,10 @@ const ProductCard = (props) => {
   const { title, description, price, stock, imgSrc, id } = props
 
   return (
-    <Card className={classes.root}>
-      <CardContent>
-        <Link href={`/produkter/${id}`}>
+    <Card className={classes.root}>¨
+            <Link href={`/produkter/${id}`}>
           <a className={classes.a}>
+      <CardContent>
             <img className={classes.img} alt='Produkt bild' src={imgSrc} />
             <Typography variant='h4' component='h2'>
               {title}
@@ -46,8 +46,6 @@ const ProductCard = (props) => {
               {description}
             </Typography>
             <Typography variant='h5'>{price} kr</Typography>
-          </a>
-        </Link>
       </CardContent>
       <CardActions>
         <Button variant='contained' color='primary' onClick={() => console.log('Add one to basket?')}>
@@ -57,6 +55,8 @@ const ProductCard = (props) => {
           {Math.ceil(stock / 10) * 10}+ i lager
         </Typography>
       </CardActions>
+      </a>
+        </Link>
     </Card>
   )
 }
