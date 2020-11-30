@@ -1,9 +1,8 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import { Container, Typography, Grid } from '@material-ui/core'
-import { ProductContext } from '../../context/ProductContext'
 import SpecificProductCard from './SpecificProductCard'
-
+import { getOneProduct } from '../../utils/api'
 const SpecificProduct = (props) => {
   const useStyles = makeStyles({
     img: {
@@ -13,13 +12,16 @@ const SpecificProduct = (props) => {
     container: { boxShadow: '0 1px 1px 1px black' },
   })
 
-  // TODO: get data from api instead
-  const { products } = useContext(ProductContext)
-  const { specifikProduktId } = props
-  const product = products.find((x) => x.id === parseInt(specifikProduktId))
-  const { imgSrc, title, description, stock } = product
+  const [product, setProduct] = useState({})
 
-  // TODO: Problem when reloading page!
+  const { specifikProduktId } = props
+  useEffect(() => {
+    getOneProduct(specifikProduktId).then((response) => {
+      setProduct(response)
+    })
+  }, [])
+
+  const { imgSrc, title, description, stock } = product
 
   const classes = useStyles()
   return (
