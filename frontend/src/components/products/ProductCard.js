@@ -31,32 +31,36 @@ const ProductCard = (props) => {
 
   const classes = useStyles()
 
-  const { title, description, price, stock, imgSrc, id } = props
+  const { name, description, price, in_stock, imgSrc, id, unit } = props
+
+  console.log(unit)
 
   return (
-    <Card className={classes.root}>¨
-            <Link href={`/produkter/${id}`}>
-          <a className={classes.a}>
-      <CardContent>
+    <Card className={classes.root}>
+      <Link href={`/produkter/${id}`}>
+        <a className={classes.a}>
+          <CardContent>
             <img className={classes.img} alt='Produkt bild' src={imgSrc} />
             <Typography variant='h4' component='h2'>
-              {title}
+              {name}
             </Typography>
             <Typography className={classes.pos} color='textSecondary'>
               {description}
             </Typography>
-            <Typography variant='h5'>{price} kr</Typography>
-      </CardContent>
-      <CardActions>
-        <Button variant='contained' color='primary' onClick={() => console.log('Add one to basket?')}>
-          Köp
-        </Button>
-        <Typography className={classes.pos} color='textSecondary'>
-          {Math.ceil(stock / 10) * 10}+ i lager
-        </Typography>
-      </CardActions>
-      </a>
-        </Link>
+            <Typography variant='h5'>
+              {price} kr / {unit}
+            </Typography>
+          </CardContent>
+          <CardActions>
+            <Button variant='contained' color='primary' onClick={() => console.log('Add one to basket?')}>
+              Köp
+            </Button>
+            <Typography className={classes.pos} color='textSecondary'>
+              {Math.ceil(in_stock / 10) * 10}+ i lager
+            </Typography>
+          </CardActions>
+        </a>
+      </Link>
     </Card>
   )
 }

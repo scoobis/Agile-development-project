@@ -9,7 +9,8 @@ const ProductContextProvider = (props) => {
 
   useEffect(() => {
     getAllProducts().then((response) => {
-      setProducts([...products, ...response])
+      setProducts([...response])
+      console.log(products)
     })
   }, [])
 

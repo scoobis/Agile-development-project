@@ -12,12 +12,13 @@ const Products = () => {
         return (
           <Grid item xs={12} sm={6} lg={3} key={product.id}>
             <ProductCard
-              title={product.title}
+              name={product.name}
               description={product.description}
               price={product.price}
-              stock={product.stock}
-              imgSrc={product.imgSrc}
+              in_stock={product.in_stock}
+              imgSrc={product.imgSrc} // Needs image
               id={product.id}
+              unit={product.unit}
             />
           </Grid>
         )
