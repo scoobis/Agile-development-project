@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { Button, Container, Grid, TextField, Typography } from '@material-ui/core'
-// import SelectCategories from './SelectCategories'
+import { Box, Button, Container, Grid, TextField, Typography } from '@material-ui/core'
+import MultipleSelect from './MultipleSelect'
 import { addProduct } from '../../utils/api'
 
 function AddProductForm () {
@@ -19,9 +19,18 @@ function AddProductForm () {
     message: ''
   })
 
+  const handleCategoryChange = categories => {
+    setState({
+      ...state,
+      product: {
+        ...state.product,
+        categories: categories
+      }
+    })
+  }
+
   const handleSubmit = (e) => {
     e.preventDefault()
-
     addProduct(state.product)
       .then(response => setState({ ...state, message: response.message }))
   }
@@ -56,13 +65,6 @@ function AddProductForm () {
     })
   }
 
-  // const setCategories = categories => {
-  //   setState({
-  //     ...state,
-  //     product: { ...state.product, categories: categories }
-  //   })
-  // }
-
   return (
     <Container>
       <Typography>Lägg till produkt</Typography>
@@ -71,7 +73,7 @@ function AddProductForm () {
         <Typography color='secondary'>{state.message}</Typography>
       )}
 
-      <form onSubmit={handleSubmit} onChange={handleChange} onInvalid={handleError}>
+      <form onSubmit={handleSubmit} onInvalid={handleError}>
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <TextField
@@ -91,6 +93,7 @@ function AddProductForm () {
               }}
               error={!!state.errors.name}
               fullWidth
+              onChange={handleChange}
             />
           </Grid>
           <Grid item xs={12}>
@@ -107,6 +110,7 @@ function AddProductForm () {
               multiline
               rows={4}
               fullWidth
+              onChange={handleChange}
             />
           </Grid>
           <Grid item xs={12}>
@@ -122,6 +126,7 @@ function AddProductForm () {
                 shrink: true
               }}
               fullWidth
+              onChange={handleChange}
             />
           </Grid>
           <Grid item xs={12} sm={6} md={4}>
@@ -143,6 +148,7 @@ function AddProductForm () {
               }}
               required
               fullWidth
+              onChange={handleChange}
             />
           </Grid>
           <Grid item xs={12} sm={6} md={4}>
@@ -158,6 +164,7 @@ function AddProductForm () {
               }}
               variant='outlined'
               fullWidth
+              onChange={handleChange}
             />
           </Grid>
           <Grid item xs={12} sm={6} md={4}>
@@ -178,6 +185,7 @@ function AddProductForm () {
               required
               error={!!state.errors.unit}
               fullWidth
+              onChange={handleChange}
             />
           </Grid>
           <Grid item xs={12}>
@@ -199,11 +207,15 @@ function AddProductForm () {
               }}
               required
               fullWidth
+              onChange={handleChange}
             />
           </Grid>
-          {/* <Grid item xs={12}>
-            <SelectCategories onChange={setCategories} />
-          </Grid> */}
+          <Grid item xs={12}>
+            <Typography variant='h5' style={{ marginBottom: '20px' }}>Kategorier</Typography>
+            <Box style={{ maxHeight: '200px', overflow: 'auto' }}>
+              <MultipleSelect checked={state.product.categories} setChecked={handleCategoryChange} />
+            </Box>
+          </Grid>
           <Grid item xs={12}>
             <Button
               type='submit'
