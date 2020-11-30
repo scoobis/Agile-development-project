@@ -59,12 +59,15 @@ CREATE TABLE product (
   producer_org_no VARCHAR(10) NOT NULL,
   name VARCHAR(100) NOT NULL,
   description VARCHAR(500),
-  price VARCHAR(10) NOT NULL,
+  price DOUBLE NOT NULL,
   unit VARCHAR(20) NOT NULL,
-  in_stock VARCHAR(10) NOT NULL,
+  in_stock INT NOT NULL,
   PRIMARY KEY (id),
   FOREIGN KEY (producer_org_no) REFERENCES producer(org_no)
 );
+INSERT INTO product (producer_org_no, name, description, price, unit, in_stock) 
+VALUES
+  ('1234567897', 'Name', 'Description', 55, 'kg', 25);
 
 -- CATEGORY --
 CREATE TABLE category (
