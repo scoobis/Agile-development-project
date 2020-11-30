@@ -11,7 +11,7 @@ const SpecificProductCard = (props) => {
     filed1: { height: '100px' },
   })
 
-  const { stock } = props
+  const { in_stock, price } = props
 
   const classes = useStyles()
 
@@ -20,7 +20,7 @@ const SpecificProductCard = (props) => {
       <CardContent>
         <Grid container spacing={1}>
           <Grid xs={3} item className={classes.filed1}>
-            <Typography variant='h4'>120:-</Typography>
+            <Typography variant='h4'>{price}:-</Typography>
           </Grid>
           <Grid xs={9} item>
             <Typography variant='body1'>ry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when took</Typography>
@@ -29,7 +29,7 @@ const SpecificProductCard = (props) => {
             <SelectOption />
           </Grid>
           <Grid item xs={8}>
-            <PickAmount stock={stock} />
+            <PickAmount in_stock={in_stock} />
           </Grid>
         </Grid>
       </CardContent>

@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import { Container, Typography, Grid } from '@material-ui/core'
 import SpecificProductCard from './SpecificProductCard'
 import { getOneProduct } from '../../utils/api'
+
 const SpecificProduct = (props) => {
   const useStyles = makeStyles({
     img: {
@@ -14,6 +15,7 @@ const SpecificProduct = (props) => {
 
   const [product, setProduct] = useState({})
 
+  // TODO: get id does not work when reloading
   const { specifikProduktId } = props
   useEffect(() => {
     getOneProduct(specifikProduktId).then((response) => {
@@ -21,7 +23,7 @@ const SpecificProduct = (props) => {
     })
   }, [])
 
-  const { imgSrc, title, description, stock } = product
+  const { imgSrc, title, description, in_stock, price } = product
 
   const classes = useStyles()
   return (
@@ -39,7 +41,7 @@ const SpecificProduct = (props) => {
           <img className={classes.img} alt='Produkt bild' src={`/${imgSrc}`} />
         </Grid>
         <Grid item xs={5}>
-          <SpecificProductCard stock={stock} />
+          <SpecificProductCard in_stock={in_stock} price={price} />
         </Grid>
       </Grid>
     </Container>
