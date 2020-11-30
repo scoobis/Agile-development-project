@@ -77,7 +77,7 @@ userDAO.getProducerByOrgNumber = async (orgNumber) => {
   let conn
   try {
     conn = await pool.getConnection()
-    let [producer] = await conn.query("SELECT * FROM producer WHERE org_no=('" + orgNumber + "')")
+    let [producer] = await conn.query(`SELECT * FROM producer WHERE org_no=('${orgNumber}')`)
     return producer
   } catch (error) {
     throw error
