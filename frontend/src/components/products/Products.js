@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import { Grid } from '@material-ui/core'
 import ProductCard from './ProductCard'
-import { ProductContext } from '../../context/productContext/ProductContext'
+import { ProductContext } from '../../context/ProductContext'
 
 const Products = () => {
   const { products } = useContext(ProductContext)
