@@ -59,7 +59,7 @@ CREATE TABLE product (
   producer_org_no VARCHAR(10) NOT NULL,
   name VARCHAR(100) NOT NULL,
   description VARCHAR(500),
-  price DOUBLE NOT NULL,
+  price INT NOT NULL,
   unit VARCHAR(20) NOT NULL,
   in_stock INT NOT NULL,
   PRIMARY KEY (id),

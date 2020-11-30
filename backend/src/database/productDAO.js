@@ -4,19 +4,22 @@ const productDAO = {}
 
 /**
  * Registers a new product
- * 
+ *
  * @param {product} product
  */
 productDAO.create = async (product, categoryId) => {
   let conn
   try {
     conn = await pool.getConnection()
-    
-    const productResponse = await conn.query("INSERT INTO product (producer_org_no, name, description, price, unit, in_stock) VALUES ('" + product.orgNumber + "', '" + product.name + "', '" + product.desc + "', '" + product.price + "', '" + product.unit + "', '" + product.inStock + "')")
-    const productId = productResponse.insertId
-    
-    await conn.query("INSERT INTO product_category (product_id, category_id) VALUES ('" + productId + "', '" + categoryId + "')")
 
+    const { orgNumber, name, desc, price, unit, inStock } = product
+
+    const productResponse = await conn.query(
+      `INSERT INTO product (producer_org_no, name, description, price, unit, in_stock) VALUES ('${orgNumber}', '${name}', '${desc}', ${price}, '${unit}', ${inStock})`
+    )
+    const productId = productResponse.insertId
+
+    await conn.query(`INSERT INTO product_category (product_id, category_id) VALUES ('${productId}', '${categoryId}')`)
   } catch (error) {
     throw error
   } finally {
@@ -26,14 +29,14 @@ productDAO.create = async (product, categoryId) => {
 
 /**
  * Gets a product by its id
- * 
- * @param {} productId 
+ *
+ * @param {} productId
  */
 productDAO.get = async (productId) => {
   let conn
   try {
     conn = await pool.getConnection()
-    let [row] = await conn.query("SELECT * FROM product WHERE id=('" + productId + "')")
+    let [row] = await conn.query(`SELECT * FROM product WHERE id=('${productId}')`)
     return row
   } catch (error) {
     throw error
@@ -44,14 +47,14 @@ productDAO.get = async (productId) => {
 
 /**
  * Gets all products
- * 
+ *
  */
 productDAO.getAll = async () => {
   let conn
   try {
     conn = await pool.getConnection()
     // Todo: Limit this for X amount of rows.
-    let rows = await conn.query("SELECT * FROM product")
+    let rows = await conn.query('SELECT * FROM product')
     return rows
   } catch (error) {
     throw error
@@ -62,14 +65,14 @@ productDAO.getAll = async () => {
 
 /**
  * Gets all products from a specific producer
- * 
+ *
  */
 productDAO.getAllByOrgNumber = async (orgNumber) => {
   let conn
   try {
     conn = await pool.getConnection()
     // Todo: Limit this for X amount of rows.
-    let rows = await conn.query("SELECT * FROM product WHERE producer_org_no=('" + orgNumber + "')")
+    let rows = await conn.query(`SELECT * FROM product WHERE producer_org_no=('${orgNumber}')`)
     return rows
   } catch (error) {
     throw error
