@@ -86,7 +86,7 @@ export default function MyProducts ({ products, onProductRemoval }) {
                       title={`Vill du ta bort ${product.name}?`}
                       content='Den här åtgärden går inte att ångra.'
                       name={product.name}
-                      isConfirmed={(shouldRemove => shouldRemove && handleRemoveProduct(product.id))}
+                      isConfirmed={(shouldRemove => shouldRemove ? handleRemoveProduct(product.id) : setShowModal(''))}
                     />
                   )}
                 </StyledTableCell>
