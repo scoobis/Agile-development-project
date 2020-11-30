@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import AddProductForm from './AddProductForm'
 import useAuth from '../../utils/useAuth'
 import MyProducts from './MyProducts'
-import { getProductsByProducer } from '../../utils/api'
+import { getProductsByProducer, removeProduct } from '../../utils/api'
 
 function ProducerDashboard () {
   const { user } = useAuth()
@@ -13,6 +13,13 @@ function ProducerDashboard () {
   const OPTIONS = {
     ADD_PRODUCT: 'ADD_PRODUCT',
     VIEW_PRODUCTS: 'VIEW_PRODUCTS'
+  }
+
+  const removeProduct = (id) => {
+    // removeProduct(id)
+    //   .then(response => response.status === 200 && (
+    setProducts(products.filter(product => product.id !== id))
+    // ))
   }
 
   const renderActiveComponent = () => {
@@ -29,7 +36,7 @@ function ProducerDashboard () {
         return (
           <>
             {getActiveComponentHeading('Mina produkter')}
-            <MyProducts products={products} />
+            <MyProducts products={products} onProductRemoval={removeProduct} />
           </>
         )
       default:
