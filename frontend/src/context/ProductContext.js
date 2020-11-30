@@ -1,15 +1,17 @@
-import React, { createContext, useState } from 'react'
+import React, { createContext, useState, useEffect } from 'react'
+import { getAllProducts } from '../utils/api'
 
 export const ProductContext = createContext()
 
 const ProductContextProvider = (props) => {
   // Get data from the api instead
-  const [products, setProducts] = useState([
-    { title: 'Äpple', description: 'Just a description', price: '70', stock: 50, imgSrc: 'apples.jpg', id: 1 },
-    { title: 'Äpple', description: 'Just a description', price: '70', stock: 65, imgSrc: 'apples.jpg', id: 2 },
-    { title: 'Äpple', description: 'Just a description', price: '70', stock: 65, imgSrc: 'apples.jpg', id: 3 },
-    { title: 'Äpple', description: 'Just a description', price: '70', stock: 65, imgSrc: 'apples.jpg', id: 4 },
-  ])
+  const [products, setProducts] = useState([])
+
+  useEffect(() => {
+    getAllProducts().then((response) => {
+      setProducts([...products, ...response])
+    })
+  }, [])
 
   return <ProductContext.Provider value={{ products }}>{props.children}</ProductContext.Provider>
 }
