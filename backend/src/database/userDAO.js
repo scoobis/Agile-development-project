@@ -139,7 +139,7 @@ userDAO.getProducerByUserId = async (userId) => {
   let conn
   try {
     conn = await pool.getConnection()
-    let [producer] = await conn.query("SELECT * FROM producer WHERE user_id=('" + userId + "')")
+    let [producer] = await conn.query(`SELECT * FROM producer WHERE user_id=('${userId}')`)
     return producer
   } catch (error) {
     throw error
