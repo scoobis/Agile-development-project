@@ -80,8 +80,6 @@ function AddProductForm () {
 
   return (
     <Container>
-      <Typography>Lägg till produkt</Typography>
-
       {state.message && (
         <Typography color='secondary'>{state.message}</Typography>
       )}

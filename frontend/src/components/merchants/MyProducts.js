@@ -36,7 +36,6 @@ const useStyles = makeStyles({
 })
 
 export default function MyProducts ({ products }) {
-  console.log(products)
   const classes = useStyles()
 
   return (
