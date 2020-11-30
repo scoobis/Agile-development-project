@@ -8,7 +8,7 @@ const Post = () => {
 
   return (
     <ProductContextProvider>
-      <SpecificProduct specifikProduktId={specifikProdukt} />
+      <SpecificProduct productId={specifikProdukt} />
     </ProductContextProvider>
   )
 }

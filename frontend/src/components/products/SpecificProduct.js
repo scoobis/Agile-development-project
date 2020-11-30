@@ -16,13 +16,12 @@ const SpecificProduct = (props) => {
 
   const [product, setProduct] = useState({})
 
-  // TODO: get id does not work when reloading
-  const { specifikProduktId } = props
+  const { productId } = props
   useEffect(() => {
-    getOneProduct(specifikProduktId).then((response) => {
+    getOneProduct(productId).then((response) => {
       setProduct(response)
     })
-  }, [])
+  }, [props])
 
   const { imgSrc, name, description, in_stock, price, unit } = product
 
