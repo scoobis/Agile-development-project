@@ -58,7 +58,7 @@ userDAO.findByEmail = async (email) => {
   let conn
   try {
     conn = await pool.getConnection()
-    let [user] = await conn.query("SELECT * FROM user WHERE email=('" + email + "')")
+    let [user] = await conn.query(`SELECT * FROM user WHERE email=('${email}')`)
     return user
   } catch (error) {
     throw error
