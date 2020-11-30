@@ -1,11 +1,31 @@
-import { Button, ButtonGroup, Container, Grid, Typography } from '@material-ui/core'
+import { Container, Grid, MenuItem, MenuList, Typography } from '@material-ui/core'
 import React, { useState } from 'react'
 import AddProductForm from './AddProductForm'
 import useAuth from '../../utils/useAuth'
+import MyProducts from './MyProducts'
+import { getProductsByProducer } from '../../utils/api'
 
 function ProducerDashboard () {
-  const [showAddProductForm, setShowAddProductForm] = useState(false)
   const { user } = useAuth()
+  const [products, setProducts] = useState([])
+  const [activeComponent, setActiveComponent] = useState('')
+
+  const OPTIONS = {
+    ADD_PRODUCT: 'ADD_PRODUCT',
+    VIEW_PRODUCTS: 'VIEW_PRODUCTS'
+  }
+
+  const renderActiveComponent = () => {
+    switch (activeComponent) {
+      case OPTIONS.ADD_PRODUCT:
+        return <AddProductForm />
+      case OPTIONS.VIEW_PRODUCTS:
+        products.length === 0 && getProductsByProducer(user.user.orgNumber).then(setProducts)
+        return <MyProducts products={products} />
+      default:
+        break
+    }
+  }
 
   return (
     <Container>
@@ -19,20 +39,13 @@ function ProducerDashboard () {
           </Typography>
         </Grid>
         <Grid item xs={12} lg={4}>
-          <ButtonGroup orientation='vertical'>
-            <Button onClick={() => setShowAddProductForm(!showAddProductForm)}>
-            Lägg till produkt
-            </Button>
-            <Button>
-            Mina produkter
-            </Button>
-
-          </ButtonGroup>
+          <MenuList>
+            <MenuItem onClick={() => setActiveComponent(OPTIONS.ADD_PRODUCT)}>Lägg till produkt</MenuItem>
+            <MenuItem onClick={() => setActiveComponent(OPTIONS.VIEW_PRODUCTS)}>Mina produkter</MenuItem>
+          </MenuList>
         </Grid>
         <Grid item xs={12} lg={8}>
-          {showAddProductForm && (
-            <AddProductForm />
-          )}
+          {activeComponent && renderActiveComponent()}
         </Grid>
       </Grid>
     </Container>
