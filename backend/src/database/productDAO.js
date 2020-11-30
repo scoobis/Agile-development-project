@@ -51,12 +51,28 @@ productDAO.getAll = async () => {
   try {
     conn = await pool.getConnection()
     // Todo: Limit this for X amount of rows.
-    let rows = await conn.query('SELECT * FROM product')
-    return rows  
-
+    let rows = await conn.query("SELECT * FROM product")
+    return rows
   } catch (error) {
     throw error
+  } finally {
+    if (conn) conn.release()
+  }
+}
 
+/**
+ * Gets all products from a specific producer
+ * 
+ */
+productDAO.getAllByOrgNumber = async (orgNumber) => {
+  let conn
+  try {
+    conn = await pool.getConnection()
+    // Todo: Limit this for X amount of rows.
+    let rows = await conn.query("SELECT * FROM product WHERE producer_org_no=('" + orgNumber + "')")
+    return rows
+  } catch (error) {
+    throw error
   } finally {
     if (conn) conn.release()
   }
