@@ -44,7 +44,7 @@ function AddProductForm () {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    addProduct({ product: state.product, orgNumber: user.user.orgNumber })
+    addProduct({ ...state.product, orgNumber: user.user.orgNumber })
       .then(response => setState({ ...state, message: response.message }))
   }
 
