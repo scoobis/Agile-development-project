@@ -2,13 +2,14 @@ import React, { useState } from 'react'
 import { Box, Button, Container, Grid, TextField, Typography } from '@material-ui/core'
 import MultipleSelect from './MultipleSelect'
 import { addProduct } from '../../utils/api'
+import UploadImages from './UploadImages'
 
 function AddProductForm () {
   const [state, setState] = useState({
     product: {
       name: '',
       description: '',
-      imageSrc: '',
+      images: [],
       price: '',
       unit: '',
       salePrice: '',
@@ -25,6 +26,16 @@ function AddProductForm () {
       product: {
         ...state.product,
         categories: categories
+      }
+    })
+  }
+
+  const handleImageChange = images => {
+    setState({
+      ...state,
+      product: {
+        ...state.product,
+        images: images
       }
     })
   }
@@ -114,20 +125,7 @@ function AddProductForm () {
             />
           </Grid>
           <Grid item xs={12}>
-            <TextField
-              placeholder='Bild URL'
-              name='imageSrc'
-              label='Bild URL'
-              type='url'
-              value={state.product.imageSrc}
-              variant='outlined'
-              margin='normal'
-              InputLabelProps={{
-                shrink: true
-              }}
-              fullWidth
-              onChange={handleChange}
-            />
+            <UploadImages images={state.product.images} setImages={handleImageChange} />
           </Grid>
           <Grid item xs={12} sm={6} md={4}>
             <TextField
