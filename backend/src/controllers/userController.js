@@ -27,6 +27,7 @@ controller.create = async (req, res, next) => {
 
 controller.login = async (req, res, next) => {
   try {
+    const user = await service.login(req.body)
     if (user) {
       const token = jwt.sign({ email: user.email, password: user.password }, 'shhhhh', { expiresIn: '1h' })
       res.status(200).json({ 
