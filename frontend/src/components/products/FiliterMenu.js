@@ -39,7 +39,7 @@ const FilterMenu = (props) => {
       <FormControl variant='outlined' className={classes.formControl}>
         <InputLabel>Ketegori</InputLabel>
         <Select native value={category} onChange={handleChangeCategory}>
-          <option aria-label='None' value='' />
+          <option aria-label='None' value={-1} />
           {availableCategories.map((category) => {
             return (
               <option key={category.id} value={category.id}>
