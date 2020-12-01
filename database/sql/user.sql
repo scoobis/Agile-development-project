@@ -78,7 +78,12 @@ CREATE TABLE category (
   PRIMARY KEY (id)
 );
 
-INSERT INTO category (name, description) VALUES ('allt', 'vad som helst');
+
+INSERT INTO category (name, description, parent_id) 
+VALUES 
+  ('Grönsaker', 'Färska grönsaker', NULL), ('Frukter', 'Färska frukter', NULL), ('Mejeri', 'Variation av mejeriprodukter', NULL), ('Mjölk', 'Variation av mjölk', 3);
+  
+
 
 -- PRODUCT_CATEGORY --
 CREATE TABLE product_category (
