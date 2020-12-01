@@ -58,7 +58,7 @@ CREATE TABLE product (
   id INT NOT NULL AUTO_INCREMENT,
   producer_org_no VARCHAR(10) NOT NULL,
   name VARCHAR(100) NOT NULL,
-  description VARCHAR(500),
+  description TEXT,
   price INT NOT NULL,
   unit VARCHAR(20) NOT NULL,
   in_stock INT NOT NULL,
