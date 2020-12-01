@@ -52,6 +52,16 @@ controller.getAllFromProducer = async (req, res, next) => {
   }
 }
 
+
+controller.getAllCategories = async (req, res, next) => {
+  try {
+    const result = await service.getAllCategories()
+    res.status(200).json(result)
+    } catch (error) {
+    return next(error)
+  }
+}
+
 controller.delete = async (req, res, next) => {
   try {
     service.delete(req)

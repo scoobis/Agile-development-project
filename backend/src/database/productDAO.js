@@ -132,4 +132,30 @@ productDAO.delete = async (productId) => {
   }
 }
 
+productDAO.getAllCategories = async () => {
+  let conn
+  try {
+    conn = await pool.getConnection()
+    let categories = await conn.query('SELECT name, id FROM category WHERE parent_id IS NULL')
+    return categories
+  } catch (error) {
+    throw error
+  } finally {
+    if (conn) conn.release()
+  }
+}
+
+productDAO.getAllSubCategories = async () => {
+  let conn
+  try {
+    conn = await pool.getConnection()
+    let subcategories = await conn.query('SELECT name, id, parent_id FROM category WHERE parent_id IS NOT NULL')
+    return subcategories
+  } catch (error) {
+    throw error
+  } finally {
+    if (conn) conn.release()
+  }
+}
+
 module.exports = productDAO
