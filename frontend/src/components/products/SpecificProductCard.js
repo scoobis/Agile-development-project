@@ -25,7 +25,7 @@ const SpecificProductCard = (props) => {
           <Grid xs={12} item>
             <Typography variant='body1'>Some short deescription?</Typography>
           </Grid>
-          <Grid xs={12}>
+          <Grid item xs={12}>
             <Typography className={classes.bold} variant='h4'>
               {price} SEK/{unit}
             </Typography>

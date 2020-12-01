@@ -28,7 +28,7 @@ const SpecificProduct = (props) => {
   const classes = useStyles()
   return (
     <Container className={classes.container}>
-      <Grid className={classes.gridContainer} container spacing={24}>
+      <Grid className={classes.gridContainer} container spacing={2}>
         <Grid item xs={7}>
           <img className={classes.img} alt='Produkt bild' src={`/${imgSrc}`} />
         </Grid>
