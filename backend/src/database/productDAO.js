@@ -15,6 +15,7 @@ productDAO.create = async (product, categoryId) => {
 
     const { orgNumber, name, desc, price, unit, inStock } = product
 
+    // TODO: Fix Transaction.
     const productResponse = await conn.query(
       `INSERT INTO product (producer_org_no, name, description, price, unit, in_stock) 
       VALUES ('${orgNumber}', '${name}', '${desc}', ${price}, '${unit}', ${inStock})`
@@ -23,7 +24,7 @@ productDAO.create = async (product, categoryId) => {
 
     await conn.query(`INSERT INTO product_category (product_id, category_id) VALUES ('${productId}', '${categoryId}')`)
   } catch (error) {
-    return error
+    throw error
   } finally {
     if (conn) conn.release()
   }
@@ -41,7 +42,7 @@ productDAO.update = async (product, categoryId) => {
     conn = await pool.getConnection()
 
     const { id, orgNumber, name, desc, price, unit, inStock } = product
-
+    // TODO: Fix Transaction.
     await conn.query(
       `UPDATE product 
       SET producer_org_no='${orgNumber}', name='${name}', description='${desc}', price=${price}, unit='${unit}', in_stock=${inStock} 
@@ -54,7 +55,7 @@ productDAO.update = async (product, categoryId) => {
       WHERE product_id=${id}`
     )
   } catch (error) {
-    return error
+    throw error
   } finally {
     if (conn) conn.release()
   }
@@ -72,7 +73,7 @@ productDAO.get = async (productId) => {
     const [row] = await conn.query(`SELECT * FROM product WHERE id=('${productId}')`)
     return row
   } catch (error) {
-    return error
+    throw error
   } finally {
     if (conn) conn.release()
   }
@@ -90,7 +91,7 @@ productDAO.getAll = async () => {
     const rows = await conn.query('SELECT * FROM product')
     return rows
   } catch (error) {
-    return error
+    throw error
   } finally {
     if (conn) conn.release()
   }
@@ -109,7 +110,7 @@ productDAO.getAllByOrgNumber = async (orgNumber) => {
     const rows = await conn.query(`SELECT * FROM product WHERE producer_org_no=('${orgNumber}')`)
     return rows
   } catch (error) {
-    return error
+    throw error
   } finally {
     if (conn) conn.release()
   }
@@ -126,7 +127,7 @@ productDAO.delete = async (productId) => {
     conn = await pool.getConnection()
     await conn.query(`DELETE FROM product WHERE id=${productId}`)
   } catch (error) {
-    return error
+    throw error
   } finally {
     if (conn) conn.release()
   }

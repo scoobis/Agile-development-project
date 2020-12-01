@@ -5,7 +5,7 @@ const controller = {}
 
 controller.create = async (req, res, next) => {
   try {
-    service.create(req)
+    await service.create(req)
     res.status(200).json({ success: true, message: 'Product added!' })
   } catch (error) {
     return next(error)
@@ -14,7 +14,7 @@ controller.create = async (req, res, next) => {
 
 controller.update = async (req, res, next) => {
   try {
-    service.update(req)
+    await service.update(req)
     res.status(200).json({ success: true, message: 'Product updated!' })
   } catch (error) {
     return next(error)
