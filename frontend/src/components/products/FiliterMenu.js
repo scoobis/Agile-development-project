@@ -10,20 +10,25 @@ const useStyles = makeStyles((theme) => ({
   },
   formControl: {
     margin: theme.spacing(1),
-    minWidth: 220,
+    minWidth: 250,
   },
 }))
 
 const FilterMenu = () => {
   const classes = useStyles()
-  const [category, setCategory] = useState('')
   const [open, setOpen] = useState(false)
 
+  const [category, setCategory] = useState('')
+  const [availableCategories, setAvailableCategories] = useState([{}])
+
   useEffect(() => {
-    getAllCategories().then((response) => {})
+    getAllCategories().then((response) => {
+      setAvailableCategories([...response])
+      console.log(availableCategories)
+    })
   }, [])
 
-  const handleChange = (event) => {
+  const handleChangeCategory = (event) => {
     setCategory(event.target.value)
   }
 
@@ -32,18 +37,21 @@ const FilterMenu = () => {
 
   return (
     <Grid item xs={12}>
-      <Button className={classes.button} onClick={handleOpen}>
-        Välj Ketegori
-      </Button>
-      <FormControl className={classes.formControl}>
-        <InputLabel>Ketegori</InputLabel>
-        <Select open={open} onClose={handleClose} onOpen={handleOpen} value={category} onChange={handleChange}>
-          <MenuItem value=''>
-            <em>Ingen</em>
-          </MenuItem>
-          <MenuItem value={10}>Ten</MenuItem>
-          <MenuItem value={20}>Twenty</MenuItem>
-          <MenuItem value={30}>Thirty</MenuItem>
+      <FormControl variant='outlined' className={classes.formControl}>
+        <InputLabel htmlFor='filled-age-native-simple'>Ketegori</InputLabel>
+        <Select
+          native
+          value={category}
+          onChange={handleChangeCategory}
+          inputProps={{
+            name: 'age',
+            id: 'filled-age-native-simple',
+          }}
+        >
+          <option aria-label='None' value='' />
+          {availableCategories.map((category) => {
+            return <option value={category.id}>{category.name}</option>
+          })}
         </Select>
       </FormControl>
     </Grid>
