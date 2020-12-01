@@ -52,4 +52,13 @@ controller.getAllFromProducer = async (req, res, next) => {
   }
 }
 
+controller.delete = async (req, res, next) => {
+  try {
+    service.delete(req)
+    res.status(200).json({ success: true, message: 'Product deleted!' })
+  } catch (error) {
+    return next(error)
+  }
+}
+
 module.exports = controller
