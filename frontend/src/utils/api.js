@@ -17,25 +17,32 @@ export const login = (user) =>
     })
     .catch((err) => err.response)
 
-export const addProduct = product =>
+export const addProduct = (product) =>
   axios
     .post('/product', product)
-    .then(response => response.data)
-    .catch(err => err.response)
+    .then((response) => response.data)
+    .catch((err) => err.response)
 
-export const getProductsByProducer = orgNumber =>
+export const getProductsByProducer = (orgNumber) =>
   axios
     .get(`/products/${orgNumber}`)
-    .then(response => response.data)
-    .catch(err => err.response)
+    .then((response) => response.data)
+    .catch((err) => err.response)
 
 export const getAllProducts = () =>
   axios
     .get('/products')
-    .then(response => response.data)
-    .catch(err => err.response)
+    .then((response) => response.data)
+    .catch((err) => err.response)
 
-export const removeProduct = id =>
-  axios.delete('/product', id)
-    .then(response => response.data)
-    .catch(err => err.response)
+export const getOneProduct = (id) =>
+  axios
+    .get(`/product/${id}`)
+    .then((response) => response.data)
+    .catch((err) => err.response)
+
+export const removeProduct = (id) =>
+  axios
+    .delete('/product', id)
+    .then((response) => response.data)
+    .catch((err) => err.response)

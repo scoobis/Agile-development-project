@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router'
 import SpecificProduct from '../../src/components/products/specificProduct'
-import ProductContextProvider from '../../src/context/productContext/ProductContext'
+import ProductContextProvider from '../../src/context/ProductContext'
 
 const Post = () => {
   const router = useRouter()
@@ -8,7 +8,7 @@ const Post = () => {
 
   return (
     <ProductContextProvider>
-      <SpecificProduct specifikProduktId={specifikProdukt} />
+      <SpecificProduct productId={specifikProdukt} />
     </ProductContextProvider>
   )
 }

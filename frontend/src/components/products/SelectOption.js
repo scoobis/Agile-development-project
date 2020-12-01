@@ -11,7 +11,7 @@ const SelectOption = () => {
   }
 
   return (
-    <TextField select value={option} onChange={handleChange} SelectProps={{ native: true }} helperText='Välj ett alternativ'>
+    <TextField fullWidth={true} select value={option} onChange={handleChange} SelectProps={{ native: true }} helperText='Välj ett alternativ'>
       {options.map((option) => (
         <option key={option} value={option}>
           {option}
