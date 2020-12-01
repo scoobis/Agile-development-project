@@ -1,6 +1,5 @@
 const Product = require('../models/product')
 const productDAO = require('../database/productDAO')
-const userDAO = require('../database/userDAO')
 
 const service = {}
 
@@ -44,37 +43,35 @@ service.getAllFromProducer = async (req, res, next) => {
 }
 
 service.getAllCategories = async (req, res, next) => {
-  let categories = await productDAO.getAllCategories()
-  let subcategories = await service.getAllSubCategories()
+  const categories = await productDAO.getAllCategories()
+  const subcategories = await service.getAllSubCategories()
 
-  categories.forEach(async function(currentCategory) {
-    subcategories.forEach(async function(currentSubCategory) {
-      if (currentCategory.id == currentSubCategory.parent_id) {
-        if (!currentCategory.hasOwnProperty('children')) {
-          let children = []
+  categories.forEach(async function (currentCategory) {
+    subcategories.forEach(async function (currentSubCategory) {
+      if (currentCategory.id === currentSubCategory.parent_id) {
+        if (!Object.prototype.hasOwnProperty.call(currentCategory, 'children')) {
+          const children = []
           currentCategory.children = children
           currentCategory.children.push(currentSubCategory)
         } else {
           currentCategory.children.push(currentSubCategory)
         }
       }
+    })
   })
-})
 
   categories.forEach(async function (currentCategory) {
-
-    if (currentCategory.hasOwnProperty('children')){
-      subcategories.forEach(async function(currentSubCategory) {
-        currentCategory.children.forEach(async function(current) {
-          if (current.id == currentSubCategory.parent_id) {
-            if (!current.hasOwnProperty('children')) {
-              let children = []
+    if (Object.prototype.hasOwnProperty.call(currentCategory, 'children')) {
+      subcategories.forEach(async function (currentSubCategory) {
+        currentCategory.children.forEach(async function (current) {
+          if (current.id === currentSubCategory.parent_id) {
+            if (!Object.prototype.hasOwnProperty.call(current, 'children')) {
+              const children = []
               current.children = children
               current.children.push(currentSubCategory)
             } else {
               current.children.push(currentSubCategory)
             }
-
           }
         })
       })
@@ -82,15 +79,14 @@ service.getAllCategories = async (req, res, next) => {
   })
 
   categories.forEach(async function (currentCategory) {
-
-    if (currentCategory.hasOwnProperty('children')){
-      subcategories.forEach(async function(currentSubCategory) {
-        currentCategory.children.forEach(async function(current) {
-          if (current.hasOwnProperty('children')) {
+    if (Object.prototype.hasOwnProperty.call(currentCategory, 'children')) {
+      subcategories.forEach(async function (currentSubCategory) {
+        currentCategory.children.forEach(async function (current) {
+          if (Object.prototype.hasOwnProperty.call(current, 'children')) {
             current.children.forEach(async function (current2) {
-              if (current2.id ==currentSubCategory.parent_id) {
-                if (!current2.hasOwnProperty('children')) {
-                  let children = []
+              if (current2.id === currentSubCategory.parent_id) {
+                if (!Object.prototype.hasOwnProperty.call(current2, 'children')) {
+                  const children = []
                   current2.children = children
                   current2.children.push(currentSubCategory)
                 } else {
@@ -104,12 +100,11 @@ service.getAllCategories = async (req, res, next) => {
     }
   })
 
-
   return categories
 }
 
 service.getAllSubCategories = async (req, res, next) => {
-  let subcategories = await productDAO.getAllSubCategories()
+  const subcategories = await productDAO.getAllSubCategories()
   return subcategories
 }
 
