@@ -21,7 +21,7 @@ productDAO.create = async (product, categoryId) => {
 
     await conn.query(`INSERT INTO product_category (product_id, category_id) VALUES ('${productId}', '${categoryId}')`)
   } catch (error) {
-    throw error
+    return error
   } finally {
     if (conn) conn.release()
   }
@@ -36,10 +36,10 @@ productDAO.get = async (productId) => {
   let conn
   try {
     conn = await pool.getConnection()
-    let [row] = await conn.query(`SELECT * FROM product WHERE id=('${productId}')`)
+    const [row] = await conn.query(`SELECT * FROM product WHERE id=('${productId}')`)
     return row
   } catch (error) {
-    throw error
+    return error
   } finally {
     if (conn) conn.release()
   }
@@ -54,10 +54,10 @@ productDAO.getAll = async () => {
   try {
     conn = await pool.getConnection()
     // Todo: Limit this for X amount of rows.
-    let rows = await conn.query('SELECT * FROM product')
+    const rows = await conn.query('SELECT * FROM product')
     return rows
   } catch (error) {
-    throw error
+    return error
   } finally {
     if (conn) conn.release()
   }
@@ -72,10 +72,10 @@ productDAO.getAllByOrgNumber = async (orgNumber) => {
   try {
     conn = await pool.getConnection()
     // Todo: Limit this for X amount of rows.
-    let rows = await conn.query(`SELECT * FROM product WHERE producer_org_no=('${orgNumber}')`)
+    const rows = await conn.query(`SELECT * FROM product WHERE producer_org_no=('${orgNumber}')`)
     return rows
   } catch (error) {
-    throw error
+    return error
   } finally {
     if (conn) conn.release()
   }
