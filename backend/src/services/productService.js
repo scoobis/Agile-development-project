@@ -74,6 +74,18 @@ service.getAllFromProducer = async (req, res, next) => {
 }
 
 /**
+ * Deletes a product
+ *
+ * @param {*} req
+ * @param {*} res
+ * @param {*} next
+ */
+service.delete = async (req, res, next) => {
+  const productId = await req.params.id
+  await productDAO.delete(productId)
+}
+
+/**
  * Creates and returns a Product object out of the request data
  *
  * @param {*} req

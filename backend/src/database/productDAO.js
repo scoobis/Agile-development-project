@@ -5,7 +5,8 @@ const productDAO = {}
 /**
  * Registers a new product
  *
- * @param {product} product
+ * @param {} product
+ * @param {} categoryId
  */
 productDAO.create = async (product, categoryId) => {
   let conn
@@ -98,6 +99,7 @@ productDAO.getAll = async () => {
 /**
  * Gets all products from a specific producer
  *
+ * @param {} orgNumber
  */
 productDAO.getAllByOrgNumber = async (orgNumber) => {
   let conn
@@ -106,6 +108,23 @@ productDAO.getAllByOrgNumber = async (orgNumber) => {
     // Todo: Limit this for X amount of rows.
     const rows = await conn.query(`SELECT * FROM product WHERE producer_org_no=('${orgNumber}')`)
     return rows
+  } catch (error) {
+    return error
+  } finally {
+    if (conn) conn.release()
+  }
+}
+
+/**
+ * Deletes a product
+ *
+ * @param {} productId
+ */
+productDAO.delete = async (productId) => {
+  let conn
+  try {
+    conn = await pool.getConnection()
+    await conn.query(`DELETE FROM product WHERE id=${productId}`)
   } catch (error) {
     return error
   } finally {
