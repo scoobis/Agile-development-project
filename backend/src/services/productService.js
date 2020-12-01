@@ -28,7 +28,7 @@ service.create = async (req, res, next) => {
 service.update = async (req, res, next) => {
   const updatedProduct = await service.getProductFromRequest(req)
 
-  updatedProduct.id = await req.param.id
+  updatedProduct.id = await req.params.id
 
   const categoryId = 1 // (req.body.categoryId) Tillfälligt hårdkodad för att matcha testkategori i databasen // One or more? Add to product model?
 
