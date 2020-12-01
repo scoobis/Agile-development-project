@@ -54,6 +54,8 @@ service.getAllCategories = async (req, res, next) => {
           let children = []
           currentCategory.children = children
           currentCategory.children.push(currentSubCategory)
+        } else {
+          currentCategory.children.push(currentSubCategory)
         }
       }
   })
