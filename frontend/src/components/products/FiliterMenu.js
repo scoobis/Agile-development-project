@@ -14,8 +14,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const FilterMenu = () => {
+const FilterMenu = (props) => {
   const classes = useStyles()
+  const { filterProducts } = props
 
   const [category, setCategory] = useState('')
   const [availableCategories, setAvailableCategories] = useState([{}])
@@ -27,7 +28,9 @@ const FilterMenu = () => {
   }, [])
 
   const handleChangeCategory = (event) => {
-    setCategory(event.target.value)
+    const { value } = event.target
+    setCategory(value)
+    filterProducts(parseInt(value))
   }
 
   // TODO: why does availableCategories map twice????

@@ -11,18 +11,20 @@ const Products = () => {
     getAllProducts().then((response) => {
       setProducts([...response])
     })
-  }, [])
+  }, [filterProducts])
 
   // TODO: Add for child filtering
   const filterProducts = (id) => {
-    products.filter(() => products.id === id)
+    // Needs new data in order to prevent previous filtered products that can not be fetched
+    getAllProducts().then((response) => {
+      setProducts(response.filter((product) => product.id === id))
+      // TODO: product.id should be category id instead
+    })
   }
-
-  useEffect(() => {})
 
   return (
     <Grid container spacing={2}>
-      <FilterMenu />
+      <FilterMenu filterProducts={filterProducts} />
       {products.map((product) => {
         return (
           <Grid item xs={12} sm={6} lg={3} key={product.id}>
