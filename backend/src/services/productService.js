@@ -60,6 +60,51 @@ service.getAllCategories = async (req, res, next) => {
       }
   })
 })
+
+  categories.forEach(async function (currentCategory) {
+
+    if (currentCategory.hasOwnProperty('children')){
+      subcategories.forEach(async function(currentSubCategory) {
+        currentCategory.children.forEach(async function(current) {
+          if (current.id == currentSubCategory.parent_id) {
+            if (!current.hasOwnProperty('children')) {
+              let children = []
+              current.children = children
+              current.children.push(currentSubCategory)
+            } else {
+              current.children.push(currentSubCategory)
+            }
+
+          }
+        })
+      })
+    }
+  })
+
+  categories.forEach(async function (currentCategory) {
+
+    if (currentCategory.hasOwnProperty('children')){
+      subcategories.forEach(async function(currentSubCategory) {
+        currentCategory.children.forEach(async function(current) {
+          if (current.hasOwnProperty('children')) {
+            current.children.forEach(async function (current2) {
+              if (current2.id ==currentSubCategory.parent_id) {
+                if (!current2.hasOwnProperty('children')) {
+                  let children = []
+                  current2.children = children
+                  current2.children.push(currentSubCategory)
+                } else {
+                  current2.children.push(currentSubCategory)
+                }
+              }
+            })
+          }
+        })
+      })
+    }
+  })
+
+
   return categories
 }
 
