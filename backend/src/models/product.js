@@ -1,5 +1,5 @@
 class product {
-  constructor(orgNumber, name, desc, price, unit, inStock) {
+  constructor (orgNumber, name, desc, price, unit, inStock) {
     this.orgNumber = orgNumber
     this.name = name
     this.desc = desc
@@ -11,73 +11,79 @@ class product {
   /**
    * @param {any} id
    */
-  set id(id) {
+  set id (id) {
     this._id = id
   }
-  get id() {
+
+  get id () {
     return this._id
   }
 
   /**
    * @param {any} name
    */
-  set name(name) {
+  set name (name) {
     this._name = name
   }
-  get name() {
+
+  get name () {
     return this._name
   }
 
   /**
    * @param {any} desc
    */
-  set desc(desc) {
+  set desc (desc) {
     this._desc = desc
   }
-  get desc() {
+
+  get desc () {
     return this._desc
   }
 
   /**
    * @param {any} price
    */
-  set price(price) {
+  set price (price) {
     this._price = price
   }
-  get price() {
+
+  get price () {
     return this._price
   }
 
   /**
    * @param {any} unit
    */
-  set unit(unit) {
+  set unit (unit) {
     this._unit = unit
   }
-  get unit() {
+
+  get unit () {
     return this._unit
   }
 
   /**
    * @param {any} inStock
    */
-  set inStock(inStock) {
+  set inStock (inStock) {
     this._inStock = inStock
   }
-  get inStock() {
+
+  get inStock () {
     return this._inStock
   }
 
   /**
    * @param {string} orgNumber
    */
-  set orgNumber(orgNumber) {
+  set orgNumber (orgNumber) {
     this._orgNumber = orgNumber
   }
-  get orgNumber() {
+
+  get orgNumber () {
     return this._orgNumber
   }
-
 }
 
 module.exports = product
