@@ -44,4 +44,13 @@ controller.getAllFromProducer = async (req, res, next) => {
   }
 }
 
+controller.getAllCategories = async (req, res, next) => {
+  try {
+    const result = await service.getAllCategories()
+    res.status(200).json(result)
+  } catch (error) {
+    return next(error)
+  }
+}
+
 module.exports = controller

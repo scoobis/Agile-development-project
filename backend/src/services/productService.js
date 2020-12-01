@@ -1,5 +1,6 @@
 const Product = require('../models/product')
 const productDAO = require('../database/productDAO')
+const userDAO = require('../database/userDAO')
 
 const service = {}
 
@@ -40,6 +41,29 @@ service.getAllFromProducer = async (req, res, next) => {
   const orgNumber = await req.params.org_no
   // Todo: Format them specifically?
   return productDAO.getAllByOrgNumber(orgNumber)
+}
+
+service.getAllCategories = async (req, res, next) => {
+  let categories = await productDAO.getAllCategories()
+  let subcategories = await service.getAllSubCategories()
+
+  categories.forEach(async function(currentCategory) {
+    subcategories.forEach(async function(currentSubCategory) {
+      if (currentCategory.id == currentSubCategory.parent_id) {
+        if (!currentCategory.hasOwnProperty('children')) {
+          let children = []
+          currentCategory.children = children
+          currentCategory.children.push(currentSubCategory)
+        }
+      }
+  })
+})
+  return categories
+}
+
+service.getAllSubCategories = async (req, res, next) => {
+  let subcategories = await productDAO.getAllSubCategories()
+  return subcategories
 }
 
 module.exports = service
