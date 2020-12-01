@@ -46,3 +46,9 @@ export const removeProduct = (id) =>
     .delete('/product', id)
     .then((response) => response.data)
     .catch((err) => err.response)
+
+export const getAllCategories = () =>
+  axios
+    .get('/products/categories')
+    .then((response) => response.data)
+    .catch((err) => err.response)
