@@ -25,6 +25,15 @@ controller.get = async (req, res, next) => {
   }
 }
 
+controller.update = async (req, res, next) => {
+  try {
+    service.update(req)
+    res.status(200).json({ 'success': true, 'message' : 'Product updated!'})
+  } catch (error) {
+    return next(error)
+  } 
+}
+
 controller.getAll = async (req, res, next) => {
   try {
     const result = await service.getAll()
