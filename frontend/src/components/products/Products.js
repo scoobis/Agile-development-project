@@ -1,11 +1,24 @@
-import React, { useContext } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Grid } from '@material-ui/core'
 import ProductCard from './ProductCard'
-import { ProductContext } from '../../context/ProductContext'
 import FilterMenu from './FiliterMenu'
+import { getAllProducts } from '../../utils/api'
 
 const Products = () => {
-  const { products } = useContext(ProductContext)
+  const [products, setProducts] = useState([])
+
+  useEffect(() => {
+    getAllProducts().then((response) => {
+      setProducts([...response])
+    })
+  }, [])
+
+  // TODO: Add for child filtering
+  const filterProducts = (id) => {
+    products.filter(() => products.id === id)
+  }
+
+  useEffect(() => {})
 
   return (
     <Grid container spacing={2}>

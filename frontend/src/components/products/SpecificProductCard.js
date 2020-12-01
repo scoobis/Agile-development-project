@@ -3,7 +3,6 @@ import { Card, CardContent } from '@material-ui/core'
 import { Typography, Button, Grid } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import PickAmount from './PickAmount'
-import SelectOption from './SelectOption'
 
 const SpecificProductCard = (props) => {
   const useStyles = makeStyles({
