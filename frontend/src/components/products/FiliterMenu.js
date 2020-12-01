@@ -18,17 +18,14 @@ const FilterMenu = () => {
   const [category, setCategory] = useState('')
   const [open, setOpen] = useState(false)
 
+  const [allCategories, setAllCategories] = useState([{}])
+
   const handleChange = (event) => {
     setCategory(event.target.value)
   }
 
-  const handleClose = () => {
-    setOpen(false)
-  }
-
-  const handleOpen = () => {
-    setOpen(true)
-  }
+  const handleClose = () => setOpen(false)
+  const handleOpen = () => setOpen(true)
 
   return (
     <Grid item xs={12}>
