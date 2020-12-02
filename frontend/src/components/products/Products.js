@@ -14,6 +14,7 @@ const Products = () => {
   }, [])
 
   const filterProducts = (id) => {
+    console.log(id)
     // Needs new data in order to prevent previous filtered products that can not be fetched
     getAllProducts().then((response) => {
       setProducts(response.filter((product) => product.id === id || id === -1))

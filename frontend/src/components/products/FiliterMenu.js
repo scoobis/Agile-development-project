@@ -22,6 +22,7 @@ const FilterMenu = (props) => {
 
   const [categoryId, setCategoryId] = useState('')
   const [subCategoryId, setSubCategoryId] = useState('')
+  const [secondSubCategoryId, setSecondSubCategoryId] = useState('')
   const [availableCategories, setAvailableCategories] = useState([{}])
   const [hasSubCategory, setHasSubCategory] = useState({
     cat1: false,
@@ -34,6 +35,8 @@ const FilterMenu = (props) => {
 
   const handleChangeCategory = (e) => {
     setCategoryId(e.target.value)
+    setSubCategoryId('')
+    setSecondSubCategoryId('')
     filterProducts(parseInt(e.target.value))
 
     // Check if category has children (sub category)
@@ -43,6 +46,7 @@ const FilterMenu = (props) => {
 
   const handleChangeSubCategory = (e) => {
     setSubCategoryId(e.target.value)
+    setSecondSubCategoryId('')
     filterProducts(parseInt(e.target.value))
 
     // Check if sub category has children (sub category)
@@ -58,8 +62,9 @@ const FilterMenu = (props) => {
     return test.children.find((x) => parseInt(subCategoryId) === x.id).children
   }
 
-  const remove = () => {
-    console.log('sss')
+  const handleSecondCategory = (e) => {
+    filterProducts(parseInt(e.target.value))
+    setSecondSubCategoryId(e.target.value)
   }
 
   // TODO: why does availableCategories map twice????
@@ -102,8 +107,8 @@ const FilterMenu = (props) => {
         <InputLabel shrink className={!hasSubCategory.cat2 ? classes.dissabledText : ''}>
           {hasSubCategory.cat2 ? 'Välj Sub-Ketegori' : 'Ingen Sub-Kategori'}
         </InputLabel>
-        <Select value={subCategoryId} disabled={!hasSubCategory.cat2} onChange={remove} native>
-          <option aria-label='None' value={-1}>
+        <Select value={secondSubCategoryId} disabled={!hasSubCategory.cat2} onChange={handleSecondCategory} native>
+          <option aria-label='None' value={subCategoryId}>
             Alla
           </option>
           {hasSubCategory.cat2
