@@ -24,16 +24,13 @@ const FilterMenu = (props) => {
   const [availableCategories, setAvailableCategories] = useState([{}])
 
   useEffect(() => {
-    getAllCategories().then((response) => {
-      setAvailableCategories([...response])
-    })
+    getAllCategories().then((response) => setAvailableCategories([...response]))
   }, [])
 
-  const handleChangeCategory = (event) => {
-    const { value } = event.target
-    setCategoryId(value)
-
-    filterProducts(parseInt(value))
+  const handleChangeCategory = (e) => {
+    setCategoryId(e.target.value)
+    filterProducts(parseInt(e.target.value))
+    console.log(categoryId)
   }
 
   const hasSubCategory = () => {
@@ -41,11 +38,11 @@ const FilterMenu = (props) => {
     return test && test.children
   }
 
-  const handleChangeSubCategory = (event) => {
-    setSubCategoryId(event.target.value)
+  const handleChangeSubCategory = (e) => {
+    setSubCategoryId(e.target.value)
   }
 
-  const test = () => availableCategories.find((x) => parseInt(categoryId) === x.id)
+  const subCat = () => availableCategories.find((x) => parseInt(categoryId) === x.id)
 
   // TODO: why does availableCategories map twice????
   return (
@@ -65,11 +62,11 @@ const FilterMenu = (props) => {
       </FormControl>
 
       <FormControl variant='outlined' className={classes.formControl}>
-        <InputLabel className={!hasSubCategory() ? classes.dissabledText : ''}>Sub Ketegori</InputLabel>
+        <InputLabel className={!hasSubCategory() ? classes.dissabledText : ''}>{hasSubCategory() ? 'Välj Sub-Ketegori' : 'Ingen Sub-Kategori'}</InputLabel>
         <Select native value={subCategoryId} disabled={!hasSubCategory()} onChange={handleChangeSubCategory}>
           <option aria-label='None' value={-1} />
           {hasSubCategory()
-            ? test().children.map((category) => {
+            ? subCat().children.map((category) => {
                 return (
                   <option key={category.id} value={category.id}>
                     {category.name}
