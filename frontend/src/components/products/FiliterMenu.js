@@ -35,6 +35,8 @@ const FilterMenu = (props) => {
   const handleChangeCategory = (e) => {
     setCategoryId(e.target.value)
     filterProducts(parseInt(e.target.value))
+
+    // Check if category has children (sub category)
     const test = availableCategories.find((x) => parseInt(e.target.value) === x.id)
     test && test.children ? setHasSubCategory({ cat1: true, cat2: false }) : setHasSubCategory({ cat1: false, cat2: false })
   }
@@ -42,24 +44,18 @@ const FilterMenu = (props) => {
   const handleChangeSubCategory = (e) => {
     setSubCategoryId(e.target.value)
     filterProducts(parseInt(e.target.value))
-    let test = subCat(1)
+
+    // Check if sub category has children (sub category)
+    let test = getSubCategory()
     test = test.children.find((x) => parseInt(e.target.value) === x.id)
     test && test.children ? setHasSubCategory({ cat1: hasSubCategory.cat1, cat2: true }) : setHasSubCategory({ cat1: hasSubCategory.cat1, cat2: false })
   }
 
-  const subCat = (number) => {
-    if (number === 1) return availableCategories.find((x) => parseInt(categoryId) === x.id)
-  }
+  const getSubCategory = () => availableCategories.find((x) => parseInt(categoryId) === x.id)
 
-  const subCat2 = () => {
+  const getSubCategory2 = () => {
     let test = availableCategories.find((x) => parseInt(categoryId) === x.id)
-    return test && test.children ? test.children.find((x) => parseInt(subCategoryId) === x.id).children : [{ id: 0, name: '.' }]
-  }
-
-  const test = () => {
-    let test = subCat(1)
-    if (test && test.children) test = test.children.find((x) => parseInt(subCategoryId) === x.id)
-    return test && test.children
+    return test.children.find((x) => parseInt(subCategoryId) === x.id).children
   }
 
   const remove = () => {
@@ -91,7 +87,7 @@ const FilterMenu = (props) => {
         <Select value={subCategoryId} disabled={!hasSubCategory.cat1} onChange={handleChangeSubCategory} native>
           <option value={categoryId}>Alla</option>
           {hasSubCategory.cat1
-            ? subCat(1).children.map((category) => {
+            ? getSubCategory().children.map((category) => {
                 return (
                   <option key={category.id} value={category.id}>
                     {category.name}
@@ -110,8 +106,8 @@ const FilterMenu = (props) => {
           <option aria-label='None' value={-1}>
             Alla
           </option>
-          {test()
-            ? subCat2().map((category) => {
+          {hasSubCategory.cat2
+            ? getSubCategory2().map((category) => {
                 return (
                   <option key={category.id} value={category.id}>
                     {category.name}
