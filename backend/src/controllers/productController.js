@@ -52,7 +52,6 @@ controller.getAllFromProducer = async (req, res, next) => {
   }
 }
 
-
 controller.getAllCategories = async (req, res, next) => {
   try {
     const result = await service.getAllCategories()
@@ -64,7 +63,7 @@ controller.getAllCategories = async (req, res, next) => {
 
 controller.delete = async (req, res, next) => {
   try {
-    service.delete(req)
+    await service.delete(req)
     res.status(200).json({ success: true, message: 'Product deleted!' })
   } catch (error) {
     return next(error)
