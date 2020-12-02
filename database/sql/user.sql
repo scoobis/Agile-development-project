@@ -92,3 +92,17 @@ CREATE TABLE product_category (
   FOREIGN KEY (product_id) REFERENCES product(id) ON DELETE CASCADE,
   FOREIGN KEY (category_id) REFERENCES category(id) ON DELETE CASCADE
 );
+
+-- PRODUCT_IMAGE --
+CREATE TABLE product_image (
+  id INT NOT NULL AUTO_INCREMENT,
+  product_id INT NOT NULL,
+  image_name VARCHAR(255) NOT NULL,
+  alt_text VARCHAR(100) NOT NULL,
+  PRIMARY KEY(id),
+  FOREIGN KEY (product_id) REFERENCES product(id) ON DELETE CASCADE
+);
+
+INSERT INTO product_image (product_id, image_name, alt_text)
+VALUES
+  (1,'test.jpg', 'Image of a test.jpg')
