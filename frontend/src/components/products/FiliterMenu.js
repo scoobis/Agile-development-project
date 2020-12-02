@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Grid, FormControl, InputLabel, Select } from '@material-ui/core'
+import { Grid, FormControl, InputLabel, Select, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { getAllCategories } from '../../utils/api'
 
@@ -13,6 +13,7 @@ const useStyles = makeStyles((theme) => ({
     minWidth: 250,
   },
   dissabledText: { color: 'red' },
+  border: { borderBottom: '2px solid #a6a6a6' },
 }))
 
 const FilterMenu = (props) => {
@@ -47,7 +48,8 @@ const FilterMenu = (props) => {
 
   // TODO: why does availableCategories map twice????
   return (
-    <Grid item xs={12}>
+    <Grid item xs={12} className={classes.border}>
+      <Typography variant='body2'>Välj Kategorier</Typography>
       <FormControl variant='outlined' className={classes.formControl}>
         <InputLabel>Ketegori</InputLabel>
         <Select native value={categoryId} onChange={handleChangeCategory}>
