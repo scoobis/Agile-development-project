@@ -1,26 +1,39 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Box, Button, Container, Grid, TextField, Typography } from '@material-ui/core'
 import MultipleSelect from './MultipleSelect'
-import { addProduct } from '../../utils/api'
+import { addProduct, getCategories } from '../../utils/api'
 import UploadImages from './UploadImages'
 import useAuth from '../../utils/useAuth'
 
+const INITIAL_STATE = {
+  product: {
+    name: '',
+    description: '',
+    images: [],
+    price: '',
+    unit: '',
+    salePrice: '',
+    inStock: '',
+    categories: []
+  },
+  errors: {},
+  message: ''
+}
+
 function AddProductForm () {
   const { user } = useAuth()
-  const [state, setState] = useState({
-    product: {
-      name: '',
-      description: '',
-      images: [],
-      price: '',
-      unit: '',
-      salePrice: '',
-      inStock: '',
-      categories: []
-    },
-    errors: {},
-    message: ''
-  })
+  const [state, setState] = useState(INITIAL_STATE)
+  const [categories, setCategories] = useState([])
+
+  useEffect(() => {
+    getCategories().then(categories => {
+      const result = JSON.parse(JSON.stringify(categories)
+        .replace(/"name":/g, '"label":')
+        .replace(/"id":/g, '"value":'))
+
+      setCategories(result)
+    })
+  }, [])
 
   const handleCategoryChange = categories => {
     setState({
@@ -45,7 +58,13 @@ function AddProductForm () {
   const handleSubmit = (e) => {
     e.preventDefault()
     addProduct({ ...state.product, orgNumber: user.user.orgNumber })
-      .then(response => setState({ ...state, message: response.message }))
+      .then(response => {
+        if (response.success) {
+          setState({ ...INITIAL_STATE, message: response.message })
+        } else {
+          setState({ ...state, message: response.message })
+        }
+      })
   }
 
   const handleChange = e => {
@@ -80,10 +99,6 @@ function AddProductForm () {
 
   return (
     <Container>
-      {state.message && (
-        <Typography color='secondary'>{state.message}</Typography>
-      )}
-
       <form onSubmit={handleSubmit} onInvalid={handleError}>
         <Grid container spacing={2}>
           <Grid item xs={12}>
@@ -211,7 +226,7 @@ function AddProductForm () {
           <Grid item xs={12}>
             <Typography variant='h5' style={{ marginBottom: '20px' }}>Kategorier</Typography>
             <Box style={{ maxHeight: '200px', overflow: 'auto' }}>
-              <MultipleSelect checked={state.product.categories} setChecked={handleCategoryChange} />
+              <MultipleSelect options={categories} checked={state.product.categories} onChecked={handleCategoryChange} />
             </Box>
           </Grid>
           <Grid item xs={12}>
@@ -226,6 +241,9 @@ function AddProductForm () {
           </Grid>
         </Grid>
       </form>
+      {state.message && (
+        <Typography style={{ marginTop: '20px' }}>{state.message}</Typography>
+      )}
     </Container>
   )
 }
