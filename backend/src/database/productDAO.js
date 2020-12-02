@@ -1,4 +1,5 @@
 const pool = require('./databaseConnection')
+const createError = require('http-errors')
 
 const productDAO = {}
 
@@ -22,9 +23,9 @@ productDAO.create = async (product, categoryId) => {
     )
     const productId = productResponse.insertId
 
-    await conn.query(`INSERT INTO product_category (product_id, category_id) VALUES ('${productId}', '${categoryId}')`)
-  } catch (error) {
-    throw error
+    await conn.query(
+      'INSERT INTO product_category value (?, ?)', [productId, categoryId]
+    )
   } finally {
     if (conn) conn.release()
   }
@@ -43,19 +44,39 @@ productDAO.update = async (product, categoryId) => {
 
     const { id, orgNumber, name, desc, price, unit, inStock } = product
     // TODO: Fix Transaction.
-    await conn.query(
-      `UPDATE product 
-      SET producer_org_no='${orgNumber}', name='${name}', description='${desc}', price=${price}, unit='${unit}', in_stock=${inStock} 
-      WHERE id=${id}`
+
+    const result = await conn.query(
+      'UPDATE product SET producer_org_no=?, name=?, description=?, price=?, unit=?, in_stock=? WHERE id=?',
+      [orgNumber, name, desc, price, unit, inStock, id]
     )
 
-    await conn.query(
-      `UPDATE product_category 
-      SET category_id=${categoryId} 
-      WHERE product_id=${id}`
-    )
-  } catch (error) {
-    throw error
+    if (result.affectedRows) {
+      // If exists, else INSERT
+      await conn.query(
+        'UPDATE product_category SET category_id=? WHERE product_id=?', [categoryId, id]
+      )
+    } else {
+      throw createError(400, 'Product not found!')
+    }
+  } finally {
+    if (conn) conn.release()
+  }
+}
+
+/**
+ * Deletes a product
+ *
+ * @param {} productId
+ */
+productDAO.delete = async (productId) => {
+  let conn
+  try {
+    conn = await pool.getConnection()
+    const result = await conn.query('DELETE FROM product WHERE id=?', [productId])
+
+    if (!result.affectedRows) {
+      throw createError(400, 'Product not found!')
+    }
   } finally {
     if (conn) conn.release()
   }
@@ -70,10 +91,8 @@ productDAO.get = async (productId) => {
   let conn
   try {
     conn = await pool.getConnection()
-    const [row] = await conn.query(`SELECT * FROM product WHERE id=('${productId}')`)
+    const [row] = await conn.query('SELECT * FROM product WHERE id=?', [productId])
     return row
-  } catch (error) {
-    throw error
   } finally {
     if (conn) conn.release()
   }
@@ -90,8 +109,6 @@ productDAO.getAll = async () => {
     // Todo: Limit this for X amount of rows.
     const rows = await conn.query('SELECT * FROM product')
     return rows
-  } catch (error) {
-    throw error
   } finally {
     if (conn) conn.release()
   }
@@ -107,27 +124,8 @@ productDAO.getAllByOrgNumber = async (orgNumber) => {
   try {
     conn = await pool.getConnection()
     // Todo: Limit this for X amount of rows.
-    const rows = await conn.query(`SELECT * FROM product WHERE producer_org_no=('${orgNumber}')`)
+    const rows = await conn.query('SELECT * FROM product WHERE producer_org_no=?', [orgNumber])
     return rows
-  } catch (error) {
-    throw error
-  } finally {
-    if (conn) conn.release()
-  }
-}
-
-/**
- * Deletes a product
- *
- * @param {} productId
- */
-productDAO.delete = async (productId) => {
-  let conn
-  try {
-    conn = await pool.getConnection()
-    await conn.query(`DELETE FROM product WHERE id=${productId}`)
-  } catch (error) {
-    throw error
   } finally {
     if (conn) conn.release()
   }
@@ -137,10 +135,8 @@ productDAO.getAllCategories = async () => {
   let conn
   try {
     conn = await pool.getConnection()
-    let categories = await conn.query('SELECT name, id FROM category WHERE parent_id IS NULL')
+    const categories = await conn.query('SELECT name, id FROM category WHERE parent_id IS NULL')
     return categories
-  } catch (error) {
-    throw error
   } finally {
     if (conn) conn.release()
   }
@@ -150,10 +146,8 @@ productDAO.getAllSubCategories = async () => {
   let conn
   try {
     conn = await pool.getConnection()
-    let subcategories = await conn.query('SELECT name, id, parent_id FROM category WHERE parent_id IS NOT NULL')
+    const subcategories = await conn.query('SELECT name, id, parent_id FROM category WHERE parent_id IS NOT NULL')
     return subcategories
-  } catch (error) {
-    throw error
   } finally {
     if (conn) conn.release()
   }

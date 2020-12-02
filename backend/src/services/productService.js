@@ -36,6 +36,18 @@ service.update = async (req, res, next) => {
 }
 
 /**
+ * Deletes a product
+ *
+ * @param {*} req
+ * @param {*} res
+ * @param {*} next
+ */
+service.delete = async (req, res, next) => {
+  const productId = await req.params.id
+  await productDAO.delete(productId)
+}
+
+/**
  * Gets one product
  *
  * @param {*} req
@@ -72,7 +84,6 @@ service.getAllFromProducer = async (req, res, next) => {
   // Todo: Format them specifically?
   return productDAO.getAllByOrgNumber(orgNumber)
 }
-
 
 service.getAllCategories = async (req, res, next) => {
   const categories = await productDAO.getAllCategories()
@@ -138,18 +149,6 @@ service.getAllCategories = async (req, res, next) => {
 service.getAllSubCategories = async (req, res, next) => {
   const subcategories = await productDAO.getAllSubCategories()
   return subcategories
-}
-
-/**
- * Deletes a product
- *
- * @param {*} req
- * @param {*} res
- * @param {*} next
- */
-service.delete = async (req, res, next) => {
-  const productId = await req.params.id
-  await productDAO.delete(productId)
 }
 
 /**

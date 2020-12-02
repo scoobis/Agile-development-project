@@ -18,7 +18,7 @@ app.use(express.urlencoded({ extended: true }))
 app.use(headers)
 
 // Root routes
-//app.use('/', require('./routes/WHICHROUTER?'))
+// app.use('/', require('./routes/WHICHROUTER?'))
 app.use('/user', require('./routes/userRouter'))
 app.use('/product', require('./routes/productRouter'))
 app.use('/products', require('./routes/productsRouter'))
@@ -28,7 +28,12 @@ app.use('*', (req, res, next) => next(createError(404)))
 
 // Error Handling
 app.use((err, req, res, next) => {
-  res.status(err.status).send({ message: `${err.message}` })
+  let responseError = err
+  if (!createError.isHttpError(err)) {
+    console.error(err)
+    responseError = createError(500)
+  }
+  res.status(responseError.status).send({ message: `${responseError.message}` })
 })
 
 const port = process.env.PORT || 5001

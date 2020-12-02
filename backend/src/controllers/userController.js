@@ -9,9 +9,7 @@ controller.test = async (req, res, next) => {
   try {
     res.status(200).json({message: 'You reached /users/'})
   } catch (error) { 
-    console.error(error)
-    // TODO: Fix better than 500?
-    return next(createError(500))
+    return next(error)
   }
 }
 
@@ -25,9 +23,7 @@ controller.create = async (req, res, next) => {
       res.status(200).json({ 'success': true, 'message': 'Account created!' })
     }
   } catch (error) {
-    console.error(error)
-    // TODO: Fix better than 500?
-    return next(createError(500))
+    return next(error)
   } 
 }
 
@@ -49,9 +45,7 @@ controller.login = async (req, res, next) => {
       throw new createError(400, "User does not exist!")
     }
   } catch (error) {
-    console.error(error)
-    // TODO: Fix better than 500?
-    return next(createError(500))
+    return next(error)
   }
 }
 
