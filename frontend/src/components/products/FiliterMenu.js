@@ -19,10 +19,8 @@ const FilterMenu = (props) => {
   const classes = useStyles()
   const { filterProducts } = props
 
-  const [category, setCategory] = useState('')
+  const [categoryId, setCategoryId] = useState('')
   const [availableCategories, setAvailableCategories] = useState([{}])
-
-  const [disableSubCategory, setDisableSubCategory] = useState(true)
 
   useEffect(() => {
     getAllCategories().then((response) => {
@@ -32,13 +30,12 @@ const FilterMenu = (props) => {
 
   const handleChangeCategory = (event) => {
     const { value } = event.target
-    setCategory(value)
+    setCategoryId(value)
 
     filterProducts(parseInt(value))
-    console.log(availableCategories[value].children.length)
-
-    parseInt(value) === -1 ? setDisableSubCategory(true) : setDisableSubCategory(false)
   }
+
+  const hasSubCategory = () => availableCategories[categoryId] && availableCategories[categoryId].children
 
   const handleChangeSubCategory = (event) => {}
 
@@ -47,7 +44,7 @@ const FilterMenu = (props) => {
     <Grid item xs={12}>
       <FormControl variant='outlined' className={classes.formControl}>
         <InputLabel>Ketegori</InputLabel>
-        <Select native value={category} onChange={handleChangeCategory}>
+        <Select native value={categoryId} onChange={handleChangeCategory}>
           <option aria-label='None' value={-1} />
           {availableCategories.map((category) => {
             return (
@@ -60,17 +57,18 @@ const FilterMenu = (props) => {
       </FormControl>
 
       <FormControl variant='outlined' className={classes.formControl}>
-        <InputLabel className={classes.dissabledText}>Sub Ketegori</InputLabel>
-        <Select disabled={disableSubCategory} native value={category} onChange={handleChangeSubCategory}>
+        <InputLabel className={!hasSubCategory() ? classes.dissabledText : ''}>Sub Ketegori</InputLabel>
+        <Select disabled={!hasSubCategory()} native onChange={handleChangeSubCategory}>
           <option aria-label='None' value={-1} />
-          {availableCategories.map((category) => {
-            // availableCategories[value].children.length >= 1 ? availableCategories[value].children.length : inga kategorier
-            return (
-              <option key={category.id} value={category.id}>
-                {category.name}
-              </option>
-            )
-          })}
+          {hasSubCategory()
+            ? availableCategories[categoryId].children.map((category) => {
+                return (
+                  <option key={category.id} value={category.id}>
+                    {category.name}
+                  </option>
+                )
+              })
+            : null}
         </Select>
       </FormControl>
     </Grid>
