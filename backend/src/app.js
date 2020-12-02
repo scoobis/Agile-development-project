@@ -28,7 +28,12 @@ app.use('*', (req, res, next) => next(createError(404)))
 
 // Error Handling
 app.use((err, req, res, next) => {
-  res.status(err.status).send({ message: `${err.message}` })
+  let responseError = err
+  if (!createError.isHttpError(err)) {
+    console.error(err) 
+    responseErr = createError(500)
+  }
+  res.status(responseError.status).send({ message: `${responseError.message}` })
 })
 
 const port = process.env.PORT || 5001

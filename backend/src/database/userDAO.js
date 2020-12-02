@@ -91,7 +91,7 @@ userDAO.login = async (userToLogIn) => {
   try {
     conn = await pool.getConnection()
     let user = await userDAO.findByEmail(userToLogIn.email)
-    console.log(userDAO)
+    // console.log(userDAO)
     if (typeof user != 'undefined') {
       let userFound = await bcrypt.compare(userToLogIn.password, user.password)
       if (userFound) {
