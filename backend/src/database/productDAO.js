@@ -91,7 +91,7 @@ productDAO.get = async (productId) => {
   let conn
   try {
     conn = await pool.getConnection()
-    const [row] = await conn.query(`SELECT * FROM product WHERE id=('${productId}')`)
+    const [row] = await conn.query('SELECT * FROM product WHERE id=?', [productId])
     return row
   } finally {
     if (conn) conn.release()
@@ -124,7 +124,7 @@ productDAO.getAllByOrgNumber = async (orgNumber) => {
   try {
     conn = await pool.getConnection()
     // Todo: Limit this for X amount of rows.
-    const rows = await conn.query(`SELECT * FROM product WHERE producer_org_no=('${orgNumber}')`)
+    const rows = await conn.query('SELECT * FROM product WHERE producer_org_no=?', [orgNumber])
     return rows
   } finally {
     if (conn) conn.release()
