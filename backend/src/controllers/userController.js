@@ -8,7 +8,9 @@ const controller = {}
 controller.test = async (req, res, next) => {
   try {
     res.status(200).json({message: 'You reached /users/'})
-  } catch (err) { next(err) }
+  } catch (error) { 
+    return next(error)
+  }
 }
 
 controller.create = async (req, res, next) => {

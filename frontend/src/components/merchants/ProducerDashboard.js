@@ -15,11 +15,11 @@ function ProducerDashboard () {
     VIEW_PRODUCTS: 'VIEW_PRODUCTS'
   }
 
-  const removeProduct = (id) => {
-    // removeProduct(id)
-    //   .then(response => response.status === 200 && (
-    setProducts(products.filter(product => product.id !== id))
-    // ))
+  const handleRemoveProduct = (id) => {
+    removeProduct(id)
+      .then(response => response.success && (
+        setProducts(products.filter(product => product.id !== id))
+      )).catch(console.log)
   }
 
   const renderActiveComponent = () => {
@@ -32,11 +32,11 @@ function ProducerDashboard () {
           </>
         )
       case OPTIONS.VIEW_PRODUCTS:
-        products.length === 0 && getProductsByProducer(user.user.orgNumber).then(setProducts)
+        getProductsByProducer(user.user.orgNumber).then(setProducts)
         return (
           <>
             {getActiveComponentHeading('Mina produkter')}
-            <MyProducts products={products} onProductRemoval={removeProduct} />
+            <MyProducts products={products} onProductRemoval={handleRemoveProduct} />
           </>
         )
       default:

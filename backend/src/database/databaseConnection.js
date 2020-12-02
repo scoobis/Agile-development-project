@@ -1,5 +1,4 @@
-
-var mariadb = require('mariadb')
+const mariadb = require('mariadb')
 
 const pool = mariadb.createPool({
   host: process.env.DB_HOST,
@@ -9,13 +8,13 @@ const pool = mariadb.createPool({
   connectionLimit: 10
 })
 
-//From https://dev.to/probablyrealrob/getting-started-with-mariadb-using-docker-and-node-js-3djg
+// From https://dev.to/probablyrealrob/getting-started-with-mariadb-using-docker-and-node-js-3djg
 module.exports = {
-  getConnection: function() {
-    return new Promise(function(resolve, reject) {
-      pool.getConnection().then(function(connection) {
+  getConnection: function () {
+    return new Promise(function (resolve, reject) {
+      pool.getConnection().then(function (connection) {
         resolve(connection)
-      }).catch(function(error) {
+      }).catch(function (error) {
         reject(error)
       })
     })

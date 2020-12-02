@@ -48,54 +48,52 @@ export default function MyProducts ({ products, onProductRemoval }) {
   }
 
   return (
-    <>
-      <TableContainer component={Paper}>
-        <Table className={classes.table} aria-label='customized table'>
-          <TableHead>
-            <TableRow>
-              <StyledTableCell>Namn</StyledTableCell>
-              <StyledTableCell align='right'>Pris</StyledTableCell>
-              <StyledTableCell align='right'>Rabatterat pris</StyledTableCell>
-              <StyledTableCell align='right'>Enhet</StyledTableCell>
-              <StyledTableCell align='right'>Antal i lager</StyledTableCell>
-              <StyledTableCell align='right'>Kategorier</StyledTableCell>
-              <StyledTableCell align='right'>Tumnagel</StyledTableCell>
-              <StyledTableCell align='right' />
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {products.map((product) => (
-              <StyledTableRow key={product.id}>
-                <StyledTableCell component='th' scope='row'>
-                  {product.name}
-                </StyledTableCell>
-                <StyledTableCell align='right'>{product.price} kr</StyledTableCell>
-                <StyledTableCell align='right'>{product.salePrice || ''}</StyledTableCell>
-                <StyledTableCell align='right'>{product.unit}</StyledTableCell>
-                <StyledTableCell align='right'>{product.in_stock} st</StyledTableCell>
-                <StyledTableCell align='right'>{product.categories || ''}</StyledTableCell>
-                <StyledTableCell align='right'>
-                  <img className={classes.thumbnail} src={product.thumbnail || '/apples.jpg'} />
-                </StyledTableCell>
-                <StyledTableCell align='right'>
-                  <IconButton aria-label='delete' onClick={() => setShowModal(product.id)}>
-                    <DeleteForeverIcon />
-                  </IconButton>
-                  {showModal === product.id && (
-                    <ConfirmModal
-                      title={`Vill du ta bort ${product.name}?`}
-                      content='Den här åtgärden går inte att ångra.'
-                      name={product.name}
-                      isConfirmed={(shouldRemove => shouldRemove ? handleRemoveProduct(product.id) : setShowModal(''))}
-                    />
-                  )}
-                </StyledTableCell>
-              </StyledTableRow>
+    <TableContainer component={Paper}>
+      <Table className={classes.table} aria-label='customized table'>
+        <TableHead>
+          <TableRow>
+            <StyledTableCell>Namn</StyledTableCell>
+            <StyledTableCell align='right'>Pris</StyledTableCell>
+            <StyledTableCell align='right'>Rabatterat pris</StyledTableCell>
+            <StyledTableCell align='right'>Enhet</StyledTableCell>
+            <StyledTableCell align='right'>Antal i lager</StyledTableCell>
+            <StyledTableCell align='right'>Kategorier</StyledTableCell>
+            <StyledTableCell align='right'>Tumnagel</StyledTableCell>
+            <StyledTableCell align='right' />
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {products.map((product) => (
+            <StyledTableRow key={product.id}>
+              <StyledTableCell component='th' scope='row'>
+                {product.name}
+              </StyledTableCell>
+              <StyledTableCell align='right'>{product.price} kr</StyledTableCell>
+              <StyledTableCell align='right'>{product.salePrice || ''}</StyledTableCell>
+              <StyledTableCell align='right'>{product.unit}</StyledTableCell>
+              <StyledTableCell align='right'>{product.in_stock} st</StyledTableCell>
+              <StyledTableCell align='right'>{product.categories || ''}</StyledTableCell>
+              <StyledTableCell align='right'>
+                <img className={classes.thumbnail} src={product.thumbnail || '/apples.jpg'} />
+              </StyledTableCell>
+              <StyledTableCell align='right'>
+                <IconButton aria-label='delete' onClick={() => setShowModal(product.id)}>
+                  <DeleteForeverIcon />
+                </IconButton>
+                {showModal === product.id && (
+                  <ConfirmModal
+                    title={`Vill du ta bort ${product.name}?`}
+                    content='Den här åtgärden går inte att ångra.'
+                    name={product.name}
+                    isConfirmed={(shouldRemove => shouldRemove ? handleRemoveProduct(product.id) : setShowModal(''))}
+                  />
+                )}
+              </StyledTableCell>
+            </StyledTableRow>
 
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
   )
 }
