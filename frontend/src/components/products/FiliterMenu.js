@@ -40,6 +40,7 @@ const FilterMenu = (props) => {
 
   const handleChangeSubCategory = (e) => {
     setSubCategoryId(e.target.value)
+    filterProducts(parseInt(e.target.value))
   }
 
   const subCat = () => availableCategories.find((x) => parseInt(categoryId) === x.id)

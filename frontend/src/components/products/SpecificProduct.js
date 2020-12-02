@@ -23,7 +23,8 @@ const SpecificProduct = (props) => {
     })
   }, [props])
 
-  const { imgSrc, name, description, in_stock, price, unit } = product
+  const { name, description, in_stock, price, unit } = product
+  const imgSrc = 'apples.JPG' // TODO: Get img from backend
 
   const classes = useStyles()
   return (

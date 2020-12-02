@@ -19,6 +19,7 @@ const Products = () => {
     getAllProducts().then((response) => {
       setProducts(response.filter((product) => product.id === id || id === -1))
       // TODO: product.id should be category id instead
+      // TODO: find if id is in array of category ids
     })
   }
 
@@ -33,7 +34,7 @@ const Products = () => {
               description={product.description}
               price={product.price}
               in_stock={product.in_stock}
-              imgSrc={product.imgSrc} // Needs image
+              imgSrc='/apples.jpg' // Needs image
               id={product.id}
               unit={product.unit}
             />
