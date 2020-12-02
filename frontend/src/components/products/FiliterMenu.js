@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Grid, FormControl, InputLabel, Select, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-import { getAllCategories } from '../../utils/api'
+import { getCategories } from '../../utils/api'
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -30,7 +30,7 @@ const FilterMenu = (props) => {
   })
 
   useEffect(() => {
-    getAllCategories().then((response) => setAvailableCategories([...response]))
+    getCategories().then((response) => setAvailableCategories([...response]))
   }, [])
 
   const handleChangeCategory = (e) => {
