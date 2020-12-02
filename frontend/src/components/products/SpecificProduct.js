@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import { Container, Typography, Grid } from '@material-ui/core'
 import SpecificProductCard from './SpecificProductCard'
@@ -23,12 +23,13 @@ const SpecificProduct = (props) => {
     })
   }, [props])
 
-  const { imgSrc, name, description, in_stock, price, unit } = product
+  const { name, description, in_stock, price, unit } = product
+  const imgSrc = 'apples.JPG' // TODO: Get img from backend
 
   const classes = useStyles()
   return (
     <Container className={classes.container}>
-      <Grid className={classes.gridContainer} container spacing={24}>
+      <Grid className={classes.gridContainer} container spacing={2}>
         <Grid item xs={7}>
           <img className={classes.img} alt='Produkt bild' src={`/${imgSrc}`} />
         </Grid>

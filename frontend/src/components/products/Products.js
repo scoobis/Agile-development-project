@@ -1,31 +1,49 @@
-import React, { useContext } from 'react'
-import { Grid } from '@material-ui/core'
+import React, { useState, useEffect } from 'react'
+import { Grid, Container } from '@material-ui/core'
 import ProductCard from './ProductCard'
-import { ProductContext } from '../../context/ProductContext'
 import FilterMenu from './FiliterMenu'
+import { getAllProducts } from '../../utils/api'
 
 const Products = () => {
-  const { products } = useContext(ProductContext)
+  const [products, setProducts] = useState([])
+
+  useEffect(() => {
+    getAllProducts().then((response) => {
+      setProducts([...response])
+    })
+  }, [])
+
+  const filterProducts = (id) => {
+    console.log(id)
+    // Needs new data in order to prevent previous filtered products that can not be fetched
+    getAllProducts().then((response) => {
+      setProducts(response.filter((product) => product.id === id || id === -1))
+      // TODO: product.id should be category id instead
+      // TODO: find if id is in array of category ids
+    })
+  }
 
   return (
-    <Grid container spacing={2}>
-      <FilterMenu />
-      {products.map((product) => {
-        return (
-          <Grid item xs={12} sm={6} lg={3} key={product.id}>
-            <ProductCard
-              name={product.name}
-              description={product.description}
-              price={product.price}
-              in_stock={product.in_stock}
-              imgSrc={product.imgSrc} // Needs image
-              id={product.id}
-              unit={product.unit}
-            />
-          </Grid>
-        )
-      })}
-    </Grid>
+    <Container maxWidth='lg'>
+      <Grid container spacing={2}>
+        <FilterMenu filterProducts={filterProducts} />
+        {products.map((product) => {
+          return (
+            <Grid item xs={3} key={product.id}>
+              <ProductCard
+                name={product.name}
+                description={product.description}
+                price={product.price}
+                in_stock={product.in_stock}
+                imgSrc='/apples.jpg' // Needs image
+                id={product.id}
+                unit={product.unit}
+              />
+            </Grid>
+          )
+        })}
+      </Grid>
+    </Container>
   )
 }
 
