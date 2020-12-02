@@ -23,8 +23,6 @@ productDAO.create = async (product, categoryId) => {
     const productId = productResponse.insertId
 
     await conn.query(`INSERT INTO product_category (product_id, category_id) VALUES ('${productId}', '${categoryId}')`)
-  } catch (error) {
-    throw error
   } finally {
     if (conn) conn.release()
   }

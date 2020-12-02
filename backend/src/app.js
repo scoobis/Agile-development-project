@@ -30,8 +30,8 @@ app.use('*', (req, res, next) => next(createError(404)))
 app.use((err, req, res, next) => {
   let responseError = err
   if (!createError.isHttpError(err)) {
-    console.error(err) 
-    responseErr = createError(500)
+    console.error(err)
+    responseError = createError(500)
   }
   res.status(responseError.status).send({ message: `${responseError.message}` })
 })
