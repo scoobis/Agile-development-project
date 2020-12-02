@@ -8,7 +8,11 @@ const controller = {}
 controller.test = async (req, res, next) => {
   try {
     res.status(200).json({message: 'You reached /users/'})
-  } catch (err) { next(err) }
+  } catch (error) { 
+    console.error(error)
+    // TODO: Fix better than 500?
+    return next(createError(500))
+  }
 }
 
 controller.create = async (req, res, next) => {
@@ -21,7 +25,9 @@ controller.create = async (req, res, next) => {
       res.status(200).json({ 'success': true, 'message': 'Account created!' })
     }
   } catch (error) {
-    return next(error)
+    console.error(error)
+    // TODO: Fix better than 500?
+    return next(createError(500))
   } 
 }
 
@@ -43,7 +49,9 @@ controller.login = async (req, res, next) => {
       throw new createError(400, "User does not exist!")
     }
   } catch (error) {
-    return next(error)
+    console.error(error)
+    // TODO: Fix better than 500?
+    return next(createError(500))
   }
 }
 
