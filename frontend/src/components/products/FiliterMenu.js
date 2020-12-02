@@ -36,22 +36,42 @@ const FilterMenu = (props) => {
     setCategoryId(e.target.value)
     filterProducts(parseInt(e.target.value))
     const test = availableCategories.find((x) => parseInt(e.target.value) === x.id)
-    test && test.children ? setHasSubCategory({ cat1: true, cat2: hasSubCategory.cat2 }) : setHasSubCategory({ cat1: false, cat2: hasSubCategory.cat2 })
+    test && test.children ? setHasSubCategory({ cat1: true, cat2: false }) : setHasSubCategory({ cat1: false, cat2: false })
   }
 
   const handleChangeSubCategory = (e) => {
     setSubCategoryId(e.target.value)
     filterProducts(parseInt(e.target.value))
+    let test = subCat(1)
+    test = test.children.find((x) => parseInt(e.target.value) === x.id)
+    test && test.children ? setHasSubCategory({ cat1: hasSubCategory.cat1, cat2: true }) : setHasSubCategory({ cat1: hasSubCategory.cat1, cat2: false })
   }
 
-  const subCat = () => availableCategories.find((x) => parseInt(categoryId) === x.id)
+  const subCat = (number) => {
+    if (number === 1) return availableCategories.find((x) => parseInt(categoryId) === x.id)
+  }
+
+  const subCat2 = () => {
+    let test = availableCategories.find((x) => parseInt(categoryId) === x.id)
+    return test && test.children ? test.children.find((x) => parseInt(subCategoryId) === x.id).children : [{ id: 0, name: '.' }]
+  }
+
+  const test = () => {
+    let test = subCat(1)
+    if (test && test.children) test = test.children.find((x) => parseInt(subCategoryId) === x.id)
+    return test && test.children
+  }
+
+  const remove = () => {
+    console.log('sss')
+  }
 
   // TODO: why does availableCategories map twice????
   return (
     <Grid item xs={12} className={classes.border}>
       <Typography variant='body2'>Välj Kategorier</Typography>
       <FormControl variant='outlined' className={classes.formControl}>
-        <InputLabel>Ketegori</InputLabel>
+        <InputLabel shrink>Ketegori</InputLabel>
         <Select native value={categoryId} onChange={handleChangeCategory}>
           <option value={-1}>Alla</option>
           {availableCategories.map((category) => {
@@ -65,13 +85,33 @@ const FilterMenu = (props) => {
       </FormControl>
 
       <FormControl variant='outlined' className={classes.formControl}>
-        <InputLabel className={!hasSubCategory.cat1 ? classes.dissabledText : ''}>{hasSubCategory.cat1 ? 'Välj Sub-Ketegori' : 'Ingen Sub-Kategori'}</InputLabel>
+        <InputLabel shrink className={!hasSubCategory.cat1 ? classes.dissabledText : ''}>
+          {hasSubCategory.cat1 ? 'Välj Sub-Ketegori' : 'Ingen Sub-Kategori'}
+        </InputLabel>
         <Select value={subCategoryId} disabled={!hasSubCategory.cat1} onChange={handleChangeSubCategory} native>
+          <option value={categoryId}>Alla</option>
+          {hasSubCategory.cat1
+            ? subCat(1).children.map((category) => {
+                return (
+                  <option key={category.id} value={category.id}>
+                    {category.name}
+                  </option>
+                )
+              })
+            : null}
+        </Select>
+      </FormControl>
+
+      <FormControl variant='outlined' className={classes.formControl}>
+        <InputLabel shrink className={!hasSubCategory.cat2 ? classes.dissabledText : ''}>
+          {hasSubCategory.cat2 ? 'Välj Sub-Ketegori' : 'Ingen Sub-Kategori'}
+        </InputLabel>
+        <Select value={subCategoryId} disabled={!hasSubCategory.cat2} onChange={remove} native>
           <option aria-label='None' value={-1}>
             Alla
           </option>
-          {hasSubCategory.cat1
-            ? subCat().children.map((category) => {
+          {test()
+            ? subCat2().map((category) => {
                 return (
                   <option key={category.id} value={category.id}>
                     {category.name}
