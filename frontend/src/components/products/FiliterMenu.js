@@ -23,6 +23,10 @@ const FilterMenu = (props) => {
   const [categoryId, setCategoryId] = useState('')
   const [subCategoryId, setSubCategoryId] = useState('')
   const [availableCategories, setAvailableCategories] = useState([{}])
+  const [hasSubCategory, setHasSubCategory] = useState({
+    cat1: false,
+    cat2: false,
+  })
 
   useEffect(() => {
     getAllCategories().then((response) => setAvailableCategories([...response]))
@@ -31,12 +35,8 @@ const FilterMenu = (props) => {
   const handleChangeCategory = (e) => {
     setCategoryId(e.target.value)
     filterProducts(parseInt(e.target.value))
-    console.log(categoryId)
-  }
-
-  const hasSubCategory = () => {
-    const test = availableCategories.find((x) => parseInt(categoryId) === x.id)
-    return test && test.children
+    const test = availableCategories.find((x) => parseInt(e.target.value) === x.id)
+    test && test.children ? setHasSubCategory({ cat1: true, cat2: hasSubCategory.cat2 }) : setHasSubCategory({ cat1: false, cat2: hasSubCategory.cat2 })
   }
 
   const handleChangeSubCategory = (e) => {
@@ -53,7 +53,7 @@ const FilterMenu = (props) => {
       <FormControl variant='outlined' className={classes.formControl}>
         <InputLabel>Ketegori</InputLabel>
         <Select native value={categoryId} onChange={handleChangeCategory}>
-          <option aria-label='None' value={-1} />
+          <option value={-1}>Alla</option>
           {availableCategories.map((category) => {
             return (
               <option key={category.id} value={category.id}>
@@ -65,10 +65,12 @@ const FilterMenu = (props) => {
       </FormControl>
 
       <FormControl variant='outlined' className={classes.formControl}>
-        <InputLabel className={!hasSubCategory() ? classes.dissabledText : ''}>{hasSubCategory() ? 'Välj Sub-Ketegori' : 'Ingen Sub-Kategori'}</InputLabel>
-        <Select native value={subCategoryId} disabled={!hasSubCategory()} onChange={handleChangeSubCategory}>
-          <option aria-label='None' value={-1} />
-          {hasSubCategory()
+        <InputLabel className={!hasSubCategory.cat1 ? classes.dissabledText : ''}>{hasSubCategory.cat1 ? 'Välj Sub-Ketegori' : 'Ingen Sub-Kategori'}</InputLabel>
+        <Select value={subCategoryId} disabled={!hasSubCategory.cat1} onChange={handleChangeSubCategory} native>
+          <option aria-label='None' value={-1}>
+            Alla
+          </option>
+          {hasSubCategory.cat1
             ? subCat().children.map((category) => {
                 return (
                   <option key={category.id} value={category.id}>
