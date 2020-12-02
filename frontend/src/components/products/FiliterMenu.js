@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
     minWidth: 250,
   },
   dissabledText: { color: 'red' },
-  border: { borderBottom: '2px solid #a6a6a6' },
+  border: { borderBottom: '2px solid #a6a6a6', marginBottom: '30px' },
 }))
 
 const FilterMenu = (props) => {

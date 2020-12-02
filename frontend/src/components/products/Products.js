@@ -13,7 +13,6 @@ const Products = () => {
     })
   }, [])
 
-  // TODO: Add for child filtering
   const filterProducts = (id) => {
     // Needs new data in order to prevent previous filtered products that can not be fetched
     getAllProducts().then((response) => {
@@ -29,7 +28,7 @@ const Products = () => {
         <FilterMenu filterProducts={filterProducts} />
         {products.map((product) => {
           return (
-            <Grid item xs={12} sm={6} lg={3} key={product.id}>
+            <Grid item xs={3} key={product.id}>
               <ProductCard
                 name={product.name}
                 description={product.description}
