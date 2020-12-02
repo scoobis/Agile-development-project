@@ -20,6 +20,7 @@ const FilterMenu = (props) => {
   const { filterProducts } = props
 
   const [categoryId, setCategoryId] = useState('')
+  const [subCategoryId, setSubCategoryId] = useState('')
   const [availableCategories, setAvailableCategories] = useState([{}])
 
   useEffect(() => {
@@ -35,9 +36,16 @@ const FilterMenu = (props) => {
     filterProducts(parseInt(value))
   }
 
-  const hasSubCategory = () => availableCategories[categoryId] && availableCategories[categoryId].children
+  const hasSubCategory = () => {
+    const test = availableCategories.find((x) => parseInt(categoryId) === x.id)
+    return test && test.children
+  }
 
-  const handleChangeSubCategory = (event) => {}
+  const handleChangeSubCategory = (event) => {
+    setSubCategoryId(event.target.value)
+  }
+
+  const test = () => availableCategories.find((x) => parseInt(categoryId) === x.id)
 
   // TODO: why does availableCategories map twice????
   return (
@@ -58,10 +66,10 @@ const FilterMenu = (props) => {
 
       <FormControl variant='outlined' className={classes.formControl}>
         <InputLabel className={!hasSubCategory() ? classes.dissabledText : ''}>Sub Ketegori</InputLabel>
-        <Select disabled={!hasSubCategory()} native onChange={handleChangeSubCategory}>
+        <Select native value={subCategoryId} disabled={!hasSubCategory()} onChange={handleChangeSubCategory}>
           <option aria-label='None' value={-1} />
           {hasSubCategory()
-            ? availableCategories[categoryId].children.map((category) => {
+            ? test().children.map((category) => {
                 return (
                   <option key={category.id} value={category.id}>
                     {category.name}
