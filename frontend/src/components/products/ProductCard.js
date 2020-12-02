@@ -50,7 +50,7 @@ const ProductCard = (props) => {
               {name}
             </Typography>
             <Typography className={classes.pos} color='textSecondary'>
-              {description}
+              Kategori?: Test
             </Typography>
             <Typography variant='h5'>
               {price} kr / {unit}
