@@ -51,3 +51,8 @@ export const getCategories = () =>
   axios.get('/products/categories')
     .then(response => response.data)
     .catch(err => err.response)
+
+export const editProduct = product =>
+  axios.put(`/product/${product.id}`, product)
+    .then(response => response.data)
+    .catch(err => err.response)

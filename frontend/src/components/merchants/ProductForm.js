@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { Box, Button, Container, Grid, TextField, Typography } from '@material-ui/core'
 import MultipleSelect from './MultipleSelect'
-import { addProduct, getCategories } from '../../utils/api'
+import { getCategories } from '../../utils/api'
 import UploadImages from './UploadImages'
 import useAuth from '../../utils/useAuth'
+import { findParents } from '../../utils/helpers'
 
-const INITIAL_STATE = {
+const EMPTY_INITIAL_STATE = {
   product: {
     name: '',
     description: '',
@@ -20,9 +21,11 @@ const INITIAL_STATE = {
   message: ''
 }
 
-function AddProductForm () {
+function ProductForm ({ onSubmit, preFilled }) {
   const { user } = useAuth()
-  const [state, setState] = useState(INITIAL_STATE)
+  const [state, setState] = useState(preFilled
+    ? { ...EMPTY_INITIAL_STATE, product: { ...preFilled } }
+    : EMPTY_INITIAL_STATE)
   const [categories, setCategories] = useState([])
 
   useEffect(() => {
@@ -34,6 +37,22 @@ function AddProductForm () {
       setCategories(result)
     })
   }, [])
+
+  const getParentCategoriesForChildren = () => {
+    const arr = []
+    const selectedCategories = state.product.categories
+    if (selectedCategories.length) {
+      for (const selectedCatId of selectedCategories) {
+        for (const category of categories) {
+          const parents = findParents(category, parseInt(selectedCatId))
+          if (parents) {
+            arr.push(...parents)
+          }
+        }
+      }
+    }
+    return [...new Set(arr)]
+  }
 
   const handleCategoryChange = categories => {
     setState({
@@ -57,14 +76,20 @@ function AddProductForm () {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    addProduct({ ...state.product, orgNumber: user.user.orgNumber })
-      .then(response => {
-        if (response.success) {
-          setState({ ...INITIAL_STATE, message: response.message })
-        } else {
-          setState({ ...state, message: response.message })
-        }
-      })
+
+    onSubmit({
+      ...state.product,
+      orgNumber: user.user.orgNumber,
+      categories: getParentCategoriesForChildren()
+    }).then(response => {
+      if (response.success) {
+        preFilled
+          ? setState({ ...state, message: response.message, errors: {} })
+          : setState({ ...EMPTY_INITIAL_STATE, message: response.message, errors: {} })
+      } else {
+        setState({ ...state, message: response.message })
+      }
+    })
   }
 
   const handleChange = e => {
@@ -114,7 +139,7 @@ function AddProductForm () {
               }}
               required
               inputProps={{
-                minLength: 3,
+                minLength: 2,
                 maxLength: 20
               }}
               error={!!state.errors.name}
@@ -184,7 +209,7 @@ function AddProductForm () {
             <TextField
               placeholder='kg/l/st'
               name='unit'
-              label='Enhetpris'
+              label='Enhet'
               value={state.product.unit}
               variant='outlined'
               margin='normal'
@@ -192,7 +217,7 @@ function AddProductForm () {
                 shrink: true
               }}
               inputProps={{
-                minLength: 2,
+                minLength: 1,
                 maxLength: 20
               }}
               required
@@ -203,9 +228,9 @@ function AddProductForm () {
           </Grid>
           <Grid item xs={12}>
             <TextField
-              placeholder='Antal i lager'
+              placeholder='Antal enheter i lager'
               name='inStock'
-              label='Antal i lager'
+              label='Antal enheter i lager'
               value={state.product.inStock}
               type='number'
               variant='outlined'
@@ -248,4 +273,4 @@ function AddProductForm () {
   )
 }
 
-export default AddProductForm
+export default ProductForm
