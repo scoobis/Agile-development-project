@@ -182,4 +182,31 @@ productDAO.getAllSubCategories = async () => {
   }
 }
 
+/**
+ * Gets all categories from a specific product
+ *
+ * @param {*} productId
+ */
+productDAO.getCategoriesByProductId = async (productId) => {
+  let conn
+  const categories = []
+  try {
+    conn = await pool.getConnection()
+    const categoryIds = await conn.query('SELECT category_id FROM product_category WHERE product_id=?', [productId])
+    if (categoryIds.length > 0) {
+      for await (const categoryId of categoryIds) {
+        for (const key in categoryId) {
+          const [category] = await conn.query('SELECT * FROM category WHERE id=?', [categoryId[key]])
+          categories.push(category)
+        }
+      }
+      return categories
+    } else {
+      throw createError(400, 'No categories found!')
+    }
+  } finally {
+    if (conn) conn.release()
+  }
+}
+
 module.exports = productDAO
