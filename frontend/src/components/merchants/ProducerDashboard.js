@@ -1,25 +1,19 @@
 import { Container, Grid, MenuItem, MenuList, Paper, Typography } from '@material-ui/core'
 import React, { useState } from 'react'
-import AddProductForm from './AddProductForm'
+import ProductForm from './ProductForm'
 import useAuth from '../../utils/useAuth'
-import MyProducts from './MyProducts'
-import { getProductsByProducer, removeProduct } from '../../utils/api'
+import MyProducts from './MyProducts/MyProducts'
+import { addProduct } from '../../utils/api'
 
 function ProducerDashboard () {
   const { user } = useAuth()
-  const [products, setProducts] = useState([])
   const [activeComponent, setActiveComponent] = useState('')
+
+  const handleAddProduct = (data) => addProduct(data)
 
   const OPTIONS = {
     ADD_PRODUCT: 'ADD_PRODUCT',
     VIEW_PRODUCTS: 'VIEW_PRODUCTS'
-  }
-
-  const handleRemoveProduct = (id) => {
-    removeProduct(id)
-      .then(response => response.success && (
-        setProducts(products.filter(product => product.id !== id))
-      )).catch(console.log)
   }
 
   const renderActiveComponent = () => {
@@ -28,15 +22,14 @@ function ProducerDashboard () {
         return (
           <>
             {getActiveComponentHeading('Lägg till produkt')}
-            <AddProductForm />
+            <ProductForm onSubmit={handleAddProduct} />
           </>
         )
       case OPTIONS.VIEW_PRODUCTS:
-        getProductsByProducer(user.user.orgNumber).then(setProducts)
         return (
           <>
             {getActiveComponentHeading('Mina produkter')}
-            <MyProducts products={products} onProductRemoval={handleRemoveProduct} />
+            <MyProducts />
           </>
         )
       default:

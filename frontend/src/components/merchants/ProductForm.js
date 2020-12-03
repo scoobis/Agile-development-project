@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { Box, Button, Container, Grid, TextField, Typography } from '@material-ui/core'
 import MultipleSelect from './MultipleSelect'
-import { addProduct, getCategories } from '../../utils/api'
+import { getCategories } from '../../utils/api'
 import UploadImages from './UploadImages'
 import useAuth from '../../utils/useAuth'
 
-const INITIAL_STATE = {
+const EMPTY_INITIAL_STATE = {
   product: {
     name: '',
     description: '',
@@ -20,9 +20,11 @@ const INITIAL_STATE = {
   message: ''
 }
 
-function AddProductForm () {
+function ProductForm ({ onSubmit, preFilled }) {
   const { user } = useAuth()
-  const [state, setState] = useState(INITIAL_STATE)
+  const [state, setState] = useState(preFilled
+    ? { ...EMPTY_INITIAL_STATE, product: { ...preFilled } }
+    : EMPTY_INITIAL_STATE)
   const [categories, setCategories] = useState([])
 
   useEffect(() => {
@@ -57,10 +59,12 @@ function AddProductForm () {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    addProduct({ ...state.product, orgNumber: user.user.orgNumber })
+    onSubmit({ ...state.product, orgNumber: user.user.orgNumber })
       .then(response => {
         if (response.success) {
-          setState({ ...INITIAL_STATE, message: response.message })
+          preFilled
+            ? setState({ ...state, message: response.message, errors: {} })
+            : setState({ ...EMPTY_INITIAL_STATE, message: response.message, errors: {} })
         } else {
           setState({ ...state, message: response.message })
         }
@@ -248,4 +252,4 @@ function AddProductForm () {
   )
 }
 
-export default AddProductForm
+export default ProductForm
