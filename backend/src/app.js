@@ -18,7 +18,7 @@ app.use(express.urlencoded({ extended: true }))
 app.use(headers)
 
 // Root routes
-//app.use('/', require('./routes/WHICHROUTER?'))
+// app.use('/', require('./routes/WHICHROUTER?'))
 app.use('/user', require('./routes/userRouter'))
 app.use('/product', require('./routes/productRouter'))
 app.use('/products', require('./routes/productsRouter'))

@@ -12,10 +12,7 @@ const service = {}
  */
 service.create = async (req, res, next) => {
   const newProduct = await service.getProductFromRequest(req)
-
-  const categoryId = 1 // (req.body.categoryId) Tillfälligt hårdkodad för att matcha testkategori i databasen // One or more? Add to product model?
-
-  await productDAO.create(newProduct, categoryId)
+  await productDAO.create(newProduct)
 }
 
 /**
@@ -27,12 +24,21 @@ service.create = async (req, res, next) => {
  */
 service.update = async (req, res, next) => {
   const updatedProduct = await service.getProductFromRequest(req)
-
   updatedProduct.id = await req.params.id
 
-  const categoryId = 1 // (req.body.categoryId) Tillfälligt hårdkodad för att matcha testkategori i databasen // One or more? Add to product model?
+  await productDAO.update(updatedProduct)
+}
 
-  await productDAO.update(updatedProduct, categoryId)
+/**
+ * Deletes a product
+ *
+ * @param {*} req
+ * @param {*} res
+ * @param {*} next
+ */
+service.delete = async (req, res, next) => {
+  const productId = await req.params.id
+  await productDAO.delete(productId)
 }
 
 /**
@@ -73,6 +79,17 @@ service.getAllFromProducer = async (req, res, next) => {
   return productDAO.getAllByOrgNumber(orgNumber)
 }
 
+/**
+ * Gets all products from a category
+ *
+ * @param {*} req
+ * @param {*} res
+ * @param {*} next
+ */
+service.getAllFromCategory = async (req, res, next) => {
+  const categoryId = await req.params.categoryId
+  return productDAO.getAllByCategoryId(categoryId)
+}
 
 service.getAllCategories = async (req, res, next) => {
   const categories = await productDAO.getAllCategories()
@@ -141,18 +158,6 @@ service.getAllSubCategories = async (req, res, next) => {
 }
 
 /**
- * Deletes a product
- *
- * @param {*} req
- * @param {*} res
- * @param {*} next
- */
-service.delete = async (req, res, next) => {
-  const productId = await req.params.id
-  await productDAO.delete(productId)
-}
-
-/**
  * Creates and returns a Product object out of the request data
  *
  * @param {*} req
@@ -164,7 +169,8 @@ service.getProductFromRequest = async (req) => {
     req.body.description,
     req.body.price,
     req.body.unit,
-    req.body.inStock
+    req.body.inStock,
+    req.body.categories
   )
 }
 

@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
-import { Button, MenuItem, Grid, FormControl, InputLabel, Select } from '@material-ui/core'
+import React, { useEffect, useState } from 'react'
+import { Grid, FormControl, InputLabel, Select, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
+import { getCategories } from '../../utils/api'
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -9,38 +10,116 @@ const useStyles = makeStyles((theme) => ({
   },
   formControl: {
     margin: theme.spacing(1),
-    minWidth: 220,
+    minWidth: 250,
   },
+  dissabledText: { color: 'red' },
+  border: { borderBottom: '2px solid #a6a6a6', marginBottom: '30px' },
 }))
 
-const FilterMenu = () => {
+const FilterMenu = (props) => {
   const classes = useStyles()
-  const [category, setCategory] = useState('')
-  const [open, setOpen] = useState(false)
+  const { filterProducts } = props
 
-  const [allCategories, setAllCategories] = useState([{}])
+  const [categoryId, setCategoryId] = useState('')
+  const [subCategoryId, setSubCategoryId] = useState('')
+  const [secondSubCategoryId, setSecondSubCategoryId] = useState('')
+  const [availableCategories, setAvailableCategories] = useState([{}])
+  const [hasSubCategory, setHasSubCategory] = useState({
+    cat1: false,
+    cat2: false,
+  })
 
-  const handleChange = (event) => {
-    setCategory(event.target.value)
+  useEffect(() => {
+    getCategories().then((response) => setAvailableCategories([...response]))
+  }, [])
+
+  const handleChangeCategory = (e) => {
+    setCategoryId(e.target.value)
+    setSubCategoryId('')
+    setSecondSubCategoryId('')
+    filterProducts(parseInt(e.target.value))
+
+    // Check if category has children (sub category)
+    const test = availableCategories.find((x) => parseInt(e.target.value) === x.id)
+    test && test.children ? setHasSubCategory({ cat1: true, cat2: false }) : setHasSubCategory({ cat1: false, cat2: false })
   }
 
-  const handleClose = () => setOpen(false)
-  const handleOpen = () => setOpen(true)
+  const handleChangeSubCategory = (e) => {
+    setSubCategoryId(e.target.value)
+    setSecondSubCategoryId('')
+    filterProducts(parseInt(e.target.value))
 
+    // Check if sub category has children (sub category)
+    let test = getSubCategory()
+    test = test.children.find((x) => parseInt(e.target.value) === x.id)
+    test && test.children ? setHasSubCategory({ cat1: hasSubCategory.cat1, cat2: true }) : setHasSubCategory({ cat1: hasSubCategory.cat1, cat2: false })
+  }
+
+  const getSubCategory = () => availableCategories.find((x) => parseInt(categoryId) === x.id)
+
+  const getSubCategory2 = () => {
+    let test = availableCategories.find((x) => parseInt(categoryId) === x.id)
+    return test.children.find((x) => parseInt(subCategoryId) === x.id).children
+  }
+
+  const handleSecondCategory = (e) => {
+    filterProducts(parseInt(e.target.value))
+    setSecondSubCategoryId(e.target.value)
+  }
+
+  // TODO: why does availableCategories map twice????
   return (
-    <Grid item xs={12}>
-      <Button className={classes.button} onClick={handleOpen}>
-        Välj Ketegori
-      </Button>
-      <FormControl className={classes.formControl}>
-        <InputLabel>Ketegori</InputLabel>
-        <Select open={open} onClose={handleClose} onOpen={handleOpen} value={category} onChange={handleChange}>
-          <MenuItem value=''>
-            <em>Ingen</em>
-          </MenuItem>
-          <MenuItem value={10}>Ten</MenuItem>
-          <MenuItem value={20}>Twenty</MenuItem>
-          <MenuItem value={30}>Thirty</MenuItem>
+    <Grid item xs={12} className={classes.border}>
+      <Typography variant='body2'>Välj Kategorier</Typography>
+      <FormControl variant='outlined' className={classes.formControl}>
+        <InputLabel shrink>Ketegori</InputLabel>
+        <Select native value={categoryId} onChange={handleChangeCategory}>
+          <option value={-1}>Alla</option>
+          {availableCategories.map((category) => {
+            return (
+              <option key={category.id} value={category.id}>
+                {category.name}
+              </option>
+            )
+          })}
+        </Select>
+      </FormControl>
+
+      <FormControl variant='outlined' className={classes.formControl}>
+        <InputLabel shrink className={!hasSubCategory.cat1 ? classes.dissabledText : ''}>
+          {hasSubCategory.cat1 ? 'Välj Sub-Ketegori' : 'Ingen Sub-Kategori'}
+        </InputLabel>
+        <Select value={subCategoryId} disabled={!hasSubCategory.cat1} onChange={handleChangeSubCategory} native>
+          <option value={categoryId}>Alla</option>
+          {hasSubCategory.cat1
+            ? getSubCategory().children.map((category) => {
+                return (
+                  <option key={category.id} value={category.id}>
+                    {category.name}
+                  </option>
+                )
+              })
+            : null}
+        </Select>
+      </FormControl>
+
+      <FormControl variant='outlined' className={classes.formControl}>
+        <InputLabel shrink className={!hasSubCategory.cat2 ? classes.dissabledText : ''}>
+          {hasSubCategory.cat2 ? 'Välj Sub-Ketegori' : 'Ingen Sub-Kategori'}
+        </InputLabel>
+        <Select value={secondSubCategoryId} disabled={!hasSubCategory.cat2} onChange={handleSecondCategory} native>
+          <option aria-label='None' value={subCategoryId}>
+            Alla
+          </option>
+          {hasSubCategory.cat2
+            ? getSubCategory2().map((category) => {
+                return (
+                  <option key={category.id} value={category.id}>
+                    {category.name}
+                  </option>
+                )
+              })
+            : null}
         </Select>
       </FormControl>
     </Grid>

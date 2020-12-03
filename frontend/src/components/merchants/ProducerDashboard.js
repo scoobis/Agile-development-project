@@ -32,7 +32,7 @@ function ProducerDashboard () {
           </>
         )
       case OPTIONS.VIEW_PRODUCTS:
-        products.length === 0 && getProductsByProducer(user.user.orgNumber).then(setProducts)
+        getProductsByProducer(user.user.orgNumber).then(setProducts)
         return (
           <>
             {getActiveComponentHeading('Mina produkter')}

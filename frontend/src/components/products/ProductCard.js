@@ -1,6 +1,6 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
-import { Card, CardActions, CardContent } from '@material-ui/core'
+import { Card, CardActions, CardContent, CardMedia } from '@material-ui/core'
 import { Typography, Button } from '@material-ui/core'
 import Link from 'next/link'
 
@@ -21,11 +21,16 @@ const ProductCard = (props) => {
       marginBottom: 12,
     },
     img: {
-      width: '300px',
+      width: '260px',
+      margin: 'auto',
+      display: 'block',
     },
     a: {
       color: 'black',
       textDecoration: 'none',
+    },
+    media: {
+      height: 200,
     },
   })
 
@@ -39,13 +44,13 @@ const ProductCard = (props) => {
     <Card className={classes.root}>
       <Link href={`/produkter/${id}`}>
         <a className={classes.a}>
+          <CardMedia className={classes.media} image={imgSrc} title='Produkt bild' />
           <CardContent>
-            <img className={classes.img} alt='Produkt bild' src={imgSrc} />
             <Typography variant='h4' component='h2'>
               {name}
             </Typography>
             <Typography className={classes.pos} color='textSecondary'>
-              {description}
+              Kategori?: Test
             </Typography>
             <Typography variant='h5'>
               {price} kr / {unit}

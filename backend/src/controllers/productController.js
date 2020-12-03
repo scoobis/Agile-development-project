@@ -21,6 +21,15 @@ controller.update = async (req, res, next) => {
   }
 }
 
+controller.delete = async (req, res, next) => {
+  try {
+    await service.delete(req)
+    res.status(200).json({ success: true, message: 'Product deleted!' })
+  } catch (error) {
+    return next(error)
+  }
+}
+
 controller.get = async (req, res, next) => {
   try {
     const result = await service.get(req)
@@ -52,20 +61,19 @@ controller.getAllFromProducer = async (req, res, next) => {
   }
 }
 
-
-controller.getAllCategories = async (req, res, next) => {
+controller.getAllFromCategory = async (req, res, next) => {
   try {
-    const result = await service.getAllCategories()
+    const result = await service.getAllFromCategory(req)
     res.status(200).json(result)
   } catch (error) {
     return next(error)
   }
 }
 
-controller.delete = async (req, res, next) => {
+controller.getAllCategories = async (req, res, next) => {
   try {
-    service.delete(req)
-    res.status(200).json({ success: true, message: 'Product deleted!' })
+    const result = await service.getAllCategories()
+    res.status(200).json(result)
   } catch (error) {
     return next(error)
   }
