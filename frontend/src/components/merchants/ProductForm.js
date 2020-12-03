@@ -4,6 +4,7 @@ import MultipleSelect from './MultipleSelect'
 import { getCategories } from '../../utils/api'
 import UploadImages from './UploadImages'
 import useAuth from '../../utils/useAuth'
+import { findParents } from '../../utils/helpers'
 
 const EMPTY_INITIAL_STATE = {
   product: {
@@ -37,6 +38,22 @@ function ProductForm ({ onSubmit, preFilled }) {
     })
   }, [])
 
+  const getParentCategoriesForChildren = () => {
+    const arr = []
+    const selectedCategories = state.product.categories
+    if (selectedCategories.length) {
+      for (const selectedCatId of selectedCategories) {
+        for (const category of categories) {
+          const parents = findParents(category, parseInt(selectedCatId))
+          if (parents) {
+            arr.push(...parents)
+          }
+        }
+      }
+    }
+    return [...new Set(arr)]
+  }
+
   const handleCategoryChange = categories => {
     setState({
       ...state,
@@ -59,16 +76,20 @@ function ProductForm ({ onSubmit, preFilled }) {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    onSubmit({ ...state.product, orgNumber: user.user.orgNumber })
-      .then(response => {
-        if (response.success) {
-          preFilled
-            ? setState({ ...state, message: response.message, errors: {} })
-            : setState({ ...EMPTY_INITIAL_STATE, message: response.message, errors: {} })
-        } else {
-          setState({ ...state, message: response.message })
-        }
-      })
+
+    onSubmit({
+      ...state.product,
+      orgNumber: user.user.orgNumber,
+      categories: getParentCategoriesForChildren()
+    }).then(response => {
+      if (response.success) {
+        preFilled
+          ? setState({ ...state, message: response.message, errors: {} })
+          : setState({ ...EMPTY_INITIAL_STATE, message: response.message, errors: {} })
+      } else {
+        setState({ ...state, message: response.message })
+      }
+    })
   }
 
   const handleChange = e => {
@@ -118,7 +139,7 @@ function ProductForm ({ onSubmit, preFilled }) {
               }}
               required
               inputProps={{
-                minLength: 3,
+                minLength: 2,
                 maxLength: 20
               }}
               error={!!state.errors.name}
@@ -188,7 +209,7 @@ function ProductForm ({ onSubmit, preFilled }) {
             <TextField
               placeholder='kg/l/st'
               name='unit'
-              label='Enhetpris'
+              label='Enhet'
               value={state.product.unit}
               variant='outlined'
               margin='normal'
@@ -196,7 +217,7 @@ function ProductForm ({ onSubmit, preFilled }) {
                 shrink: true
               }}
               inputProps={{
-                minLength: 2,
+                minLength: 1,
                 maxLength: 20
               }}
               required
@@ -207,9 +228,9 @@ function ProductForm ({ onSubmit, preFilled }) {
           </Grid>
           <Grid item xs={12}>
             <TextField
-              placeholder='Antal i lager'
+              placeholder='Antal enheter i lager'
               name='inStock'
-              label='Antal i lager'
+              label='Antal enheter i lager'
               value={state.product.inStock}
               type='number'
               variant='outlined'
