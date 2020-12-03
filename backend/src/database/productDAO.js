@@ -9,12 +9,12 @@ const productDAO = {}
  * @param {} product
  * @param {} categoryId
  */
-productDAO.create = async (product, categoryId) => {
+productDAO.create = async (product) => {
   let conn
   try {
     conn = await pool.getConnection()
 
-    const { orgNumber, name, desc, price, unit, inStock } = product
+    const { orgNumber, name, desc, price, unit, inStock, categories } = product
 
     // TODO: Fix Transaction.
     const productResponse = await conn.query(
@@ -23,9 +23,11 @@ productDAO.create = async (product, categoryId) => {
     )
     const productId = productResponse.insertId
 
-    await conn.query(
-      'INSERT INTO product_category value (?, ?)', [productId, categoryId]
-    )
+    categories.forEach(async categoryId => {
+      await conn.query(
+        'INSERT INTO product_category value (?, ?)', [productId, categoryId]
+      )
+    })
   } finally {
     if (conn) conn.release()
   }
@@ -51,7 +53,7 @@ productDAO.update = async (product, categoryId) => {
     )
 
     if (result.affectedRows) {
-      // If exists, else INSERT
+      // This one does not work yet with the new category system
       await conn.query(
         'UPDATE product_category SET category_id=? WHERE product_id=?', [categoryId, id]
       )

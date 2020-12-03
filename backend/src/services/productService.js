@@ -12,10 +12,7 @@ const service = {}
  */
 service.create = async (req, res, next) => {
   const newProduct = await service.getProductFromRequest(req)
-
-  const categoryId = 1 // (req.body.categoryId) Tillfälligt hårdkodad för att matcha testkategori i databasen // One or more? Add to product model?
-
-  await productDAO.create(newProduct, categoryId)
+  await productDAO.create(newProduct)
 }
 
 /**
@@ -163,7 +160,8 @@ service.getProductFromRequest = async (req) => {
     req.body.description,
     req.body.price,
     req.body.unit,
-    req.body.inStock
+    req.body.inStock,
+    req.body.categories
   )
 }
 
