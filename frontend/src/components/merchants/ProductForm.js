@@ -139,7 +139,7 @@ function ProductForm ({ onSubmit, preFilled }) {
               }}
               required
               inputProps={{
-                minLength: 3,
+                minLength: 2,
                 maxLength: 20
               }}
               error={!!state.errors.name}
@@ -209,7 +209,7 @@ function ProductForm ({ onSubmit, preFilled }) {
             <TextField
               placeholder='kg/l/st'
               name='unit'
-              label='Enhetpris'
+              label='Enhet'
               value={state.product.unit}
               variant='outlined'
               margin='normal'
@@ -217,7 +217,7 @@ function ProductForm ({ onSubmit, preFilled }) {
                 shrink: true
               }}
               inputProps={{
-                minLength: 2,
+                minLength: 1,
                 maxLength: 20
               }}
               required
@@ -228,9 +228,9 @@ function ProductForm ({ onSubmit, preFilled }) {
           </Grid>
           <Grid item xs={12}>
             <TextField
-              placeholder='Antal i lager'
+              placeholder='Antal enheter i lager'
               name='inStock'
-              label='Antal i lager'
+              label='Antal enheter i lager'
               value={state.product.inStock}
               type='number'
               variant='outlined'
