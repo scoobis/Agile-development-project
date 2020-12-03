@@ -39,7 +39,7 @@ productDAO.create = async (product) => {
  * @param {*} product
  * @param {*} categoryId
  */
-productDAO.update = async (product, categoryId) => {
+productDAO.update = async (product) => {
   let conn
   try {
     conn = await pool.getConnection()
@@ -54,9 +54,9 @@ productDAO.update = async (product, categoryId) => {
 
     if (result.affectedRows) {
       // This one does not work yet with the new category system
-      await conn.query(
-        'UPDATE product_category SET category_id=? WHERE product_id=?', [categoryId, id]
-      )
+      // await conn.query(
+      //   'UPDATE product_category SET category_id=? WHERE product_id=?', [categoryId, id]
+      // )
     } else {
       throw createError(400, 'Product not found!')
     }
