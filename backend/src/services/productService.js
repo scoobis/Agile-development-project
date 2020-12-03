@@ -79,6 +79,18 @@ service.getAllFromProducer = async (req, res, next) => {
   return productDAO.getAllByOrgNumber(orgNumber)
 }
 
+/**
+ * Gets all products from a category
+ *
+ * @param {*} req
+ * @param {*} res
+ * @param {*} next
+ */
+service.getAllFromCategory = async (req, res, next) => {
+  const categoryId = await req.params.categoryId
+  return productDAO.getAllByCategoryId(categoryId)
+}
+
 service.getAllCategories = async (req, res, next) => {
   const categories = await productDAO.getAllCategories()
   const subcategories = await service.getAllSubCategories()

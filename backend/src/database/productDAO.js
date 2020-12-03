@@ -133,6 +133,33 @@ productDAO.getAllByOrgNumber = async (orgNumber) => {
   }
 }
 
+/**
+ * Gets all products from a specific category
+ *
+ * @param {*} categoryId
+ */
+productDAO.getAllByCategoryId = async (categoryId) => {
+  let conn
+  const products = []
+  try {
+    conn = await pool.getConnection()
+    const productIds = await conn.query('SELECT product_id FROM product_category WHERE category_id=?', [categoryId])
+    if (productIds.length > 0) {
+      for await (const productId of productIds) {
+        for (const key in productId) {
+          const [product] = await conn.query('SELECT * FROM product WHERE id=?', [productId[key]])
+          products.push(product)
+        }
+      }
+      return products
+    } else {
+      throw createError(400, 'No products found!')
+    }
+  } finally {
+    if (conn) conn.release()
+  }
+}
+
 productDAO.getAllCategories = async () => {
   let conn
   try {
