@@ -12,10 +12,7 @@ const service = {}
  */
 service.create = async (req, res, next) => {
   const newProduct = await service.getProductFromRequest(req)
-
-  const categoryId = 1 // (req.body.categoryId) Tillfälligt hårdkodad för att matcha testkategori i databasen // One or more? Add to product model?
-
-  await productDAO.create(newProduct, categoryId)
+  await productDAO.create(newProduct)
 }
 
 /**
@@ -27,12 +24,9 @@ service.create = async (req, res, next) => {
  */
 service.update = async (req, res, next) => {
   const updatedProduct = await service.getProductFromRequest(req)
-
   updatedProduct.id = await req.params.id
 
-  const categoryId = 1 // (req.body.categoryId) Tillfälligt hårdkodad för att matcha testkategori i databasen // One or more? Add to product model?
-
-  await productDAO.update(updatedProduct, categoryId)
+  await productDAO.update(updatedProduct)
 }
 
 /**
@@ -83,6 +77,18 @@ service.getAllFromProducer = async (req, res, next) => {
   const orgNumber = await req.params.org_no
   // Todo: Format them specifically?
   return productDAO.getAllByOrgNumber(orgNumber)
+}
+
+/**
+ * Gets all products from a category
+ *
+ * @param {*} req
+ * @param {*} res
+ * @param {*} next
+ */
+service.getAllFromCategory = async (req, res, next) => {
+  const categoryId = await req.params.categoryId
+  return productDAO.getAllByCategoryId(categoryId)
 }
 
 service.getAllCategories = async (req, res, next) => {
@@ -163,7 +169,8 @@ service.getProductFromRequest = async (req) => {
     req.body.description,
     req.body.price,
     req.body.unit,
-    req.body.inStock
+    req.body.inStock,
+    req.body.categories
   )
 }
 

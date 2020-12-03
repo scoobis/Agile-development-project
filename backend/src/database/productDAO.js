@@ -9,12 +9,12 @@ const productDAO = {}
  * @param {} product
  * @param {} categoryId
  */
-productDAO.create = async (product, categoryId) => {
+productDAO.create = async (product) => {
   let conn
   try {
     conn = await pool.getConnection()
 
-    const { orgNumber, name, desc, price, unit, inStock } = product
+    const { orgNumber, name, desc, price, unit, inStock, categories } = product
 
     // TODO: Fix Transaction.
     const productResponse = await conn.query(
@@ -23,9 +23,11 @@ productDAO.create = async (product, categoryId) => {
     )
     const productId = productResponse.insertId
 
-    await conn.query(
-      'INSERT INTO product_category value (?, ?)', [productId, categoryId]
-    )
+    categories.forEach(async categoryId => {
+      await conn.query(
+        'INSERT INTO product_category value (?, ?)', [productId, categoryId]
+      )
+    })
   } finally {
     if (conn) conn.release()
   }
@@ -37,7 +39,7 @@ productDAO.create = async (product, categoryId) => {
  * @param {*} product
  * @param {*} categoryId
  */
-productDAO.update = async (product, categoryId) => {
+productDAO.update = async (product) => {
   let conn
   try {
     conn = await pool.getConnection()
@@ -51,10 +53,10 @@ productDAO.update = async (product, categoryId) => {
     )
 
     if (result.affectedRows) {
-      // If exists, else INSERT
-      await conn.query(
-        'UPDATE product_category SET category_id=? WHERE product_id=?', [categoryId, id]
-      )
+      // This one does not work yet with the new category system
+      // await conn.query(
+      //   'UPDATE product_category SET category_id=? WHERE product_id=?', [categoryId, id]
+      // )
     } else {
       throw createError(400, 'Product not found!')
     }
@@ -131,6 +133,33 @@ productDAO.getAllByOrgNumber = async (orgNumber) => {
   }
 }
 
+/**
+ * Gets all products from a specific category
+ *
+ * @param {*} categoryId
+ */
+productDAO.getAllByCategoryId = async (categoryId) => {
+  let conn
+  const products = []
+  try {
+    conn = await pool.getConnection()
+    const productIds = await conn.query('SELECT product_id FROM product_category WHERE category_id=?', [categoryId])
+    if (productIds.length > 0) {
+      for await (const productId of productIds) {
+        for (const key in productId) {
+          const [product] = await conn.query('SELECT * FROM product WHERE id=?', [productId[key]])
+          products.push(product)
+        }
+      }
+      return products
+    } else {
+      throw createError(400, 'No products found!')
+    }
+  } finally {
+    if (conn) conn.release()
+  }
+}
+
 productDAO.getAllCategories = async () => {
   let conn
   try {
@@ -148,6 +177,33 @@ productDAO.getAllSubCategories = async () => {
     conn = await pool.getConnection()
     const subcategories = await conn.query('SELECT name, id, parent_id FROM category WHERE parent_id IS NOT NULL')
     return subcategories
+  } finally {
+    if (conn) conn.release()
+  }
+}
+
+/**
+ * Gets all categories from a specific product
+ *
+ * @param {*} productId
+ */
+productDAO.getCategoriesByProductId = async (productId) => {
+  let conn
+  const categories = []
+  try {
+    conn = await pool.getConnection()
+    const categoryIds = await conn.query('SELECT category_id FROM product_category WHERE product_id=?', [productId])
+    if (categoryIds.length > 0) {
+      for await (const categoryId of categoryIds) {
+        for (const key in categoryId) {
+          const [category] = await conn.query('SELECT * FROM category WHERE id=?', [categoryId[key]])
+          categories.push(category)
+        }
+      }
+      return categories
+    } else {
+      throw createError(400, 'No categories found!')
+    }
   } finally {
     if (conn) conn.release()
   }

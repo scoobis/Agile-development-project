@@ -1,11 +1,12 @@
 class product {
-  constructor (orgNumber, name, desc, price, unit, inStock) {
+  constructor (orgNumber, name, desc, price, unit, inStock, categories) {
     this.orgNumber = orgNumber
     this.name = name
     this.desc = desc
     this.price = price
     this.unit = unit
     this.inStock = inStock
+    this.categories = categories
   }
 
   /**
@@ -83,6 +84,17 @@ class product {
 
   get orgNumber () {
     return this._orgNumber
+  }
+
+  /**
+   * @param {any} categories
+   */
+  set categories (categories) {
+    this._categories = categories
+  }
+
+  get categories () {
+    return this._categories
   }
 }
 
