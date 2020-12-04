@@ -24,6 +24,7 @@ services:
       - mariadb
     volumes:
       - ./backend/src:/app/src
+      - ./backend/uploads:/app/uploads
     ports:
       - 5001:5001
 

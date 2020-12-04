@@ -9,25 +9,41 @@ const productDAO = {}
  * @param {} product
  * @param {} categoryId
  */
-productDAO.create = async (product) => {
+productDAO.create = async (product, files) => {
   let conn
   try {
     conn = await pool.getConnection()
+    await conn.beginTransaction()
 
     const { orgNumber, name, desc, price, unit, inStock, categories } = product
+    const queryResults = []
 
-    // TODO: Fix Transaction.
     const productResponse = await conn.query(
       `INSERT INTO product (producer_org_no, name, description, price, unit, in_stock) 
-      VALUES ('${orgNumber}', '${name}', '${desc}', ${price}, '${unit}', ${inStock})`
-    )
-    const productId = productResponse.insertId
+      VALUES (?, ?, ?, ?, ?, ?)`, [orgNumber, name, desc, price, unit, inStock])
 
-    categories.forEach(async categoryId => {
-      await conn.query(
-        'INSERT INTO product_category value (?, ?)', [productId, categoryId]
+    const productId = productResponse.insertId
+    const productImgQuery = 'INSERT INTO product_image (product_id, image_name, alt_text) VALUES (?, ?, ?)'
+    files.forEach(
+      file => queryResults.push(
+        conn.query(productImgQuery, [productId, file.filename, file.originalname])
+          .catch(error => { throw error })
       )
-    })
+    )
+
+    categories.forEach(
+      categoryId => queryResults.push(
+        conn.query('INSERT INTO product_category value (?, ?)', [productId, categoryId])
+          .catch(error => { throw error })
+      )
+    )
+
+    await Promise.all(queryResults)
+    await conn.commit()
+  } catch (error) {
+    // Roll back the sql transaaction
+    conn.rollback()
+    throw error
   } finally {
     if (conn) conn.release()
   }
