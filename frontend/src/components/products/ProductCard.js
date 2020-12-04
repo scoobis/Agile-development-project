@@ -56,16 +56,16 @@ const ProductCard = (props) => {
               {price} kr / {unit}
             </Typography>
           </CardContent>
-          <CardActions>
-            <Button variant='contained' color='primary' onClick={() => console.log('Add one to basket?')}>
-              Köp
-            </Button>
-            <Typography className={classes.pos} color='textSecondary'>
-              {Math.ceil(in_stock / 10) * 10}+ i lager
-            </Typography>
-          </CardActions>
         </a>
       </Link>
+      <CardActions>
+        <Button variant='contained' color='primary' onClick={() => console.log('Add one to basket?')}>
+          Köp
+        </Button>
+        <Typography className={classes.pos} color='textSecondary'>
+          {in_stock} i lager
+        </Typography>
+      </CardActions>
     </Card>
   )
 }
