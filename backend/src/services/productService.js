@@ -18,7 +18,10 @@ service.create = async (req, res, next) => {
   } catch (error) {
     // Try deleting the newly uploaded files.
     // Maybe not save them at all if not need be?
-    req.files.forEach(file => fs.unlinkSync(file.path))
+    console.dir('files' + req.files)
+    if (req.files) {
+      req.files.forEach(file => fs.unlinkSync(file.path))
+    }
     throw error
   }
 }
