@@ -17,11 +17,26 @@ export const login = (user) =>
     })
     .catch((err) => err.response)
 
-export const addProduct = (product) =>
-  axios
-    .post('/product', product)
+export const addProduct = (product) => {
+  const fd = new FormData()
+
+  fd.append('name', product.name)
+  fd.append('description', product.description)
+  product.images.forEach(image => fd.append('images', image.file))
+  // fd.append('images', JSON.stringify(product.images))
+  fd.append('price', product.price)
+  fd.append('unit', product.unit)
+  fd.append('salePrice', product.salePrice)
+  fd.append('inStock', product.inStock)
+  product.categories.forEach(category => fd.append('categories', category))
+  // fd.append('categories', JSON.stringify(product.categories))
+  fd.append('orgNumber', product.orgNumber)
+
+  return axios
+    .post('/product', fd)
     .then((response) => response.data)
     .catch((err) => err.response)
+}
 
 export const getProductsByProducer = (orgNumber) =>
   axios
