@@ -24,14 +24,13 @@ productDAO.create = async (product, files) => {
 
     const productId = productResponse.insertId
     const productImgQuery = 'INSERT INTO product_image (product_id, image_name, alt_text) VALUES (?, ?, ?)'
-    if (files) {
-      files.forEach(
-        file => queryResults.push(
-          conn.query(productImgQuery, [productId, file.filename, file.originalname])
-            .catch(error => { throw error })
-        )
+
+    files.forEach(
+      file => queryResults.push(
+        conn.query(productImgQuery, [productId, file.filename, file.originalname])
+          .catch(error => { throw error })
       )
-    }
+    )
 
     categories.forEach(
       categoryId => queryResults.push(

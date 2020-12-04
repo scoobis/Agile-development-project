@@ -18,7 +18,8 @@ service.create = async (req, res, next) => {
   } catch (error) {
     // Try deleting the newly uploaded files.
     // Maybe not save them at all if not need be?
-    console.dir('files' + req.files)
+    // TODO: shouldn't have to check if req.files exist, needs to use models to pre-exist.
+    // But keep it here for now.
     if (req.files) {
       req.files.forEach(file => fs.unlinkSync(file.path))
     }
