@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import { Card, CardActions, CardContent, CardMedia } from '@material-ui/core'
 import { Typography, Button } from '@material-ui/core'
 import Link from 'next/link'
+import PickAmount from './PickAmount'
 
 const ProductCard = (props) => {
   const useStyles = makeStyles({
@@ -32,6 +33,8 @@ const ProductCard = (props) => {
     media: {
       height: 200,
     },
+    green: { color: 'green' },
+    yellow: { color: '#dee600' },
   })
 
   const classes = useStyles()
@@ -49,23 +52,22 @@ const ProductCard = (props) => {
             <Typography variant='h4' component='h2'>
               {name}
             </Typography>
-            <Typography className={classes.pos} color='textSecondary'>
-              Kategori?: Test
+            <Typography color='textSecondary'>Kategori?: Test</Typography>
+            <Typography className={(classes.pos, in_stock <= 10 ? classes.yellow : classes.green)} color='textSecondary'>
+              {in_stock} i lager
             </Typography>
             <Typography variant='h5'>
               {price} kr / {unit}
             </Typography>
           </CardContent>
-          <CardActions>
-            <Button variant='contained' color='primary' onClick={() => console.log('Add one to basket?')}>
-              Köp
-            </Button>
-            <Typography className={classes.pos} color='textSecondary'>
-              {Math.ceil(in_stock / 10) * 10}+ i lager
-            </Typography>
-          </CardActions>
         </a>
       </Link>
+      <CardActions>
+        <Button variant='contained' color='primary' onClick={() => console.log('Add one to basket?')}>
+          Köp
+        </Button>
+        <PickAmount in_stock={in_stock} />
+      </CardActions>
     </Card>
   )
 }
