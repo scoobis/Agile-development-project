@@ -1,5 +1,6 @@
 const Product = require('../models/product')
 const productDAO = require('../database/productDAO')
+const fs = require('fs')
 
 const service = {}
 
@@ -12,7 +13,14 @@ const service = {}
  */
 service.create = async (req, res, next) => {
   const newProduct = await service.getProductFromRequest(req)
-  await productDAO.create(newProduct)
+  try {
+    await productDAO.create(newProduct, req.files)
+  } catch (error) {
+    // Try deleting the newly uploaded files.
+    // Maybe not save them at all if not need be?
+    req.files.forEach(file => fs.unlinkSync(file.path))
+    throw error
+  }
 }
 
 /**
