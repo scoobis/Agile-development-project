@@ -60,23 +60,32 @@ productDAO.update = async (product) => {
   let conn
   try {
     conn = await pool.getConnection()
+    await conn.beginTransaction()
 
-    const { id, orgNumber, name, desc, price, unit, inStock } = product
-    // TODO: Fix Transaction.
+    const { id, orgNumber, name, desc, price, unit, inStock, categories } = product
+    const queryResults = []
 
-    const result = await conn.query(
-      'UPDATE product SET producer_org_no=?, name=?, description=?, price=?, unit=?, in_stock=? WHERE id=?',
-      [orgNumber, name, desc, price, unit, inStock, id]
+    const updateProductQuery = 'UPDATE product SET producer_org_no=?, name=?, description=?, price=?, unit=?, in_stock=? WHERE id=?'
+    const deleteAllOldCategoriesFromProductQuery = 'DELETE FROM product_category WHERE product_id=?'
+    const insertNewCategoryToProductQuery = 'INSERT INTO product_category value (?, ?)'
+
+    await conn.query(updateProductQuery, [orgNumber, name, desc, price, unit, inStock, id])
+
+    await conn.query(deleteAllOldCategoriesFromProductQuery, [id])
+
+    categories.forEach(
+      categoryId => queryResults.push(
+        conn.query(insertNewCategoryToProductQuery, [id, categoryId])
+          .catch(error => { throw error })
+      )
     )
 
-    if (result.affectedRows) {
-      // This one does not work yet with the new category system
-      // await conn.query(
-      //   'UPDATE product_category SET category_id=? WHERE product_id=?', [categoryId, id]
-      // )
-    } else {
-      throw createError(400, 'Product not found!')
-    }
+    await Promise.all(queryResults)
+    await conn.commit()
+  } catch (error) {
+    // Roll back the sql transaaction
+    conn.rollback()
+    throw error
   } finally {
     if (conn) conn.release()
   }
