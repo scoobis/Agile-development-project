@@ -224,7 +224,6 @@ service.getProductsFromQueryResult = async (result) => {
     product.categories = await productDAO.getCategoryIdsByProductId(await product.id)
     products.push(product)
   }
-
   return products
 }
 

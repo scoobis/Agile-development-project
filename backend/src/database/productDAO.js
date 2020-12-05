@@ -239,7 +239,7 @@ productDAO.getCategoriesByProductId = async (productId) => {
 }
 
 /**
- * Gets all categories from a specific product
+ * Gets all ids from the categories of a specific product
  *
  * @param {*} productId
  */
@@ -249,8 +249,13 @@ productDAO.getCategoryIdsByProductId = async (productId) => {
     conn = await pool.getConnection()
 
     const selectAllCategoriesFromProductQuery = 'SELECT category_id FROM product_category WHERE product_id=?'
+    const categoryIds = []
 
-    const categoryIds = await conn.query(selectAllCategoriesFromProductQuery, [productId])
+    const queryResult = await conn.query(selectAllCategoriesFromProductQuery, [productId])
+
+    for await (const id of queryResult) {
+      categoryIds.push(Object.values(id)[0])
+    }
 
     return categoryIds
   } finally {
