@@ -3,12 +3,12 @@ import { Button } from '@material-ui/core'
 import ButtonGroup from '@material-ui/core/ButtonGroup'
 
 const PickAmount = (props) => {
-  const { in_stock } = props
+  const { inStock } = props
 
   const [counter, setCounter] = useState(1)
 
   const handleIncrement = () => {
-    in_stock > counter ? setCounter(counter + 1) : setCounter(counter)
+    inStock > counter ? setCounter(counter + 1) : setCounter(counter)
   }
 
   const handleDecrement = () => {
@@ -16,7 +16,7 @@ const PickAmount = (props) => {
   }
 
   return (
-    <ButtonGroup size='medium' fullWidth={true}>
+    <ButtonGroup size='medium' fullWidth>
       <Button onClick={handleDecrement}>-</Button>
       <Button style={{ fontSize: '16px' }} disabled>
         {counter}

@@ -33,7 +33,7 @@ const Products = () => {
                 name={product.name}
                 description={product.description}
                 price={product.price}
-                in_stock={product.in_stock}
+                inStock={product.inStock}
                 imgSrc='/apples.jpg' // Needs image
                 id={product.id}
                 unit={product.unit}

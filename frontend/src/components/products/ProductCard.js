@@ -1,7 +1,7 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
-import { Card, CardActions, CardContent, CardMedia } from '@material-ui/core'
-import { Typography, Button } from '@material-ui/core'
+import { Card, CardActions, CardContent, CardMedia, Typography, Button } from '@material-ui/core'
+
 import Link from 'next/link'
 import PickAmount from './PickAmount'
 
@@ -12,36 +12,37 @@ const ProductCard = (props) => {
       cursor: 'pointer',
       '&:hover': {
         border: 4,
-        boxShadow: '0 2px 2px 2px black',
-      },
+        boxShadow: '0 2px 2px 2px black'
+      }
     },
     title: {
-      fontSize: 14,
+      fontSize: 14
     },
     pos: {
-      marginBottom: 12,
+      marginBottom: 12
     },
     img: {
       width: '260px',
       margin: 'auto',
-      display: 'block',
+      display: 'block'
     },
     a: {
       color: 'black',
-      textDecoration: 'none',
+      textDecoration: 'none'
     },
     media: {
-      height: 200,
+      height: 200
     },
     green: { color: 'green' },
-    yellow: { color: '#dee600' },
+    yellow: { color: '#dee600' }
   })
 
   const classes = useStyles()
 
-  const { name, description, price, in_stock, imgSrc, id, unit } = props
+  const { id, name, description, price, unit, inStock, imgSrc } = props
 
   console.log(unit)
+  console.log(id)
 
   return (
     <Card className={classes.root}>
@@ -53,8 +54,8 @@ const ProductCard = (props) => {
               {name}
             </Typography>
             <Typography color='textSecondary'>Kategori?: Test</Typography>
-            <Typography className={(classes.pos, in_stock <= 10 ? classes.yellow : classes.green)} color='textSecondary'>
-              {in_stock} i lager
+            <Typography className={(classes.pos, inStock <= 10 ? classes.yellow : classes.green)} color='textSecondary'>
+              {inStock} i lager
             </Typography>
             <Typography variant='h5'>
               {price} kr / {unit}
@@ -66,7 +67,7 @@ const ProductCard = (props) => {
         <Button variant='contained' color='primary' onClick={() => console.log('Add one to basket?')}>
           Köp
         </Button>
-        <PickAmount in_stock={in_stock} />
+        <PickAmount inStock={inStock} />
       </CardActions>
     </Card>
   )
