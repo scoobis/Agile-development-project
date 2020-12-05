@@ -1,9 +1,12 @@
 const router = require('express').Router()
 const controller = require('../controllers/productController')
 
+// Products
 router.get('/', controller.getAll)
+router.get('/fromCategory/:categoryId', controller.getAllFromCategory)
+router.get('/fromProducer/:orgNumber', controller.getAllFromProducer)
+
+// Categories
 router.get('/categories', controller.getAllCategories)
-router.get('/allFromCategory/:categoryId', controller.getAllFromCategory)
-router.get('/:org_no/', controller.getAllFromProducer)
 
 module.exports = router

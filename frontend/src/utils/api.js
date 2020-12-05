@@ -40,7 +40,7 @@ export const addProduct = (product) => {
 
 export const getProductsByProducer = (orgNumber) =>
   axios
-    .get(`/products/${orgNumber}`)
+    .get(`/products/fromProducer/${orgNumber}`)
     .then((response) => response.data)
     .catch((err) => err.response)
 
