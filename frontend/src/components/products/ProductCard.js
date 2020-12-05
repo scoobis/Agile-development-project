@@ -39,7 +39,7 @@ const ProductCard = (props) => {
 
   const classes = useStyles()
 
-  const { id, name, description, price, unit, inStock, imgSrc } = props
+  const { id, name, price, unit, inStock, imgSrc } = props
 
   console.log(unit)
   console.log(id)

@@ -3,9 +3,9 @@ import SpecificProduct from '../../src/components/products/SpecificProduct'
 
 const Post = () => {
   const router = useRouter()
-  const { specificProduct } = router.query
+  const { specifikProdukt } = router.query
 
-  return <SpecificProduct productId={specificProduct} />
+  return <SpecificProduct productId={specifikProdukt} />
 }
 
 export default Post
