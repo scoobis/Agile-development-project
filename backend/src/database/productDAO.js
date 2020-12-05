@@ -151,7 +151,6 @@ productDAO.getAllByOrgNumber = async (orgNumber) => {
   let conn
   try {
     conn = await pool.getConnection()
-    // Todo: Limit this for X amount of rows.
     const rows = await conn.query('SELECT * FROM product WHERE producer_org_no=?', [orgNumber])
     return rows
   } finally {
@@ -215,21 +214,25 @@ productDAO.getAllSubCategories = async () => {
  */
 productDAO.getCategoriesByProductId = async (productId) => {
   let conn
-  const categories = []
   try {
     conn = await pool.getConnection()
-    const categoryIds = await conn.query('SELECT category_id FROM product_category WHERE product_id=?', [productId])
+
+    const selectAllCategoriesFromProductQuery = 'SELECT category_id FROM product_category WHERE product_id=?'
+    const selectCategoryByIdQuery = 'SELECT * FROM category WHERE id=?'
+    const categories = []
+
+    const categoryIds = await conn.query(selectAllCategoriesFromProductQuery, [productId])
+
     if (categoryIds.length > 0) {
       for await (const categoryId of categoryIds) {
         for (const key in categoryId) {
-          const [category] = await conn.query('SELECT * FROM category WHERE id=?', [categoryId[key]])
+          const [category] = await conn.query(selectCategoryByIdQuery, [categoryId[key]])
           categories.push(category)
         }
       }
-      return categories
-    } else {
-      throw createError(400, 'No categories found!')
     }
+
+    return categories
   } finally {
     if (conn) conn.release()
   }
