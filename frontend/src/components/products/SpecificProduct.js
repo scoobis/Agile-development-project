@@ -8,10 +8,10 @@ const SpecificProduct = (props) => {
   const useStyles = makeStyles({
     img: {
       borderRadius: '20px',
-      width: '500px',
+      width: '500px'
     },
     container: { boxShadow: '0 1px 1px 1px black' },
-    gridContainer: { paddingTop: '40px' },
+    gridContainer: { paddingTop: '40px' }
   })
 
   const [product, setProduct] = useState({})
@@ -23,7 +23,7 @@ const SpecificProduct = (props) => {
     })
   }, [props])
 
-  const { name, description, in_stock, price, unit } = product
+  const { name, description, price, unit, inStock } = product
   const imgSrc = 'apples.JPG' // TODO: Get img from backend
 
   const classes = useStyles()
@@ -34,7 +34,7 @@ const SpecificProduct = (props) => {
           <img className={classes.img} alt='Produkt bild' src={`/${imgSrc}`} />
         </Grid>
         <Grid item xs={5}>
-          <SpecificProductCard in_stock={in_stock} price={price} name={name} unit={unit} />
+          <SpecificProductCard inStock={inStock} price={price} name={name} unit={unit} />
         </Grid>
         <Grid item xs={12}>
           <Typography className={classes.pos} variant='h6' color='textSecondary'>

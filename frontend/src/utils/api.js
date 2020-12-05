@@ -38,15 +38,21 @@ export const addProduct = (product) => {
     .catch((err) => err.response)
 }
 
-export const getProductsByProducer = (orgNumber) =>
-  axios
-    .get(`/products/${orgNumber}`)
-    .then((response) => response.data)
-    .catch((err) => err.response)
-
 export const getAllProducts = () =>
   axios
     .get('/products')
+    .then((response) => response.data)
+    .catch((err) => err.response)
+
+export const getProductsByProducer = (orgNumber) =>
+  axios
+    .get(`/products/fromProducer/${orgNumber}`)
+    .then((response) => response.data)
+    .catch((err) => err.response)
+
+export const getAllProductsFromCategory = (id) =>
+  axios
+    .get(`/products/fromCategory/${id}`)
     .then((response) => response.data)
     .catch((err) => err.response)
 

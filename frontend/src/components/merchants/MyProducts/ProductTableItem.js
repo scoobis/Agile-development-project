@@ -42,7 +42,7 @@ function ProductTableItem ({ product, onEdit, onRemove }) {
       <TableCell align='right'>{product.price} kr</TableCell>
       <TableCell align='right'>{product.salePrice || ''}</TableCell>
       <TableCell align='right'>{product.unit}</TableCell>
-      <TableCell align='right'>{product.in_stock} {product.unit}</TableCell>
+      <TableCell align='right'>{product.inStock} {product.unit}</TableCell>
       <TableCell align='right'>{product.categories || ''}</TableCell>
       <TableCell align='right'>
         <img className={classes.thumbnail} src={product.thumbnail || '/apples.jpg'} />

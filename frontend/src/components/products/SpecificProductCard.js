@@ -1,6 +1,6 @@
 import React from 'react'
-import { Card, CardContent } from '@material-ui/core'
-import { Typography, Button, Grid } from '@material-ui/core'
+import { Card, CardContent, Typography, Button, Grid } from '@material-ui/core'
+
 import { makeStyles } from '@material-ui/core/styles'
 import PickAmount from './PickAmount'
 
@@ -8,10 +8,10 @@ const SpecificProductCard = (props) => {
   const useStyles = makeStyles({
     root: { backgroundColor: 'white' },
     center: { textAlign: 'center' },
-    bold: { fontWeight: 'bold' },
+    bold: { fontWeight: 'bold' }
   })
 
-  const { in_stock, price, name, unit } = props
+  const { name, price, unit, inStock } = props
 
   const classes = useStyles()
 
@@ -38,15 +38,15 @@ const SpecificProductCard = (props) => {
           </Grid>
           */}
           <Grid item xs={12}>
-            <PickAmount in_stock={in_stock} />
+            <PickAmount inStock={inStock} />
           </Grid>
           <Grid item xs={12}>
-            <Button size='large' fullWidth={true} variant='contained' color='primary' onClick={() => console.log('Add one to basket?')}>
+            <Button size='large' fullWidth variant='contained' color='primary' onClick={() => console.log('Add one to basket?')}>
               Lägg i kundvagn
             </Button>
           </Grid>
           <Grid item xs={12}>
-            <Typography variant='caption'>I lager: {in_stock}</Typography>
+            <Typography variant='caption'>I lager: {inStock}</Typography>
           </Grid>
         </Grid>
       </CardContent>

@@ -62,7 +62,10 @@ service.delete = async (req, res, next) => {
  */
 service.get = async (req, res, next) => {
   const productId = await req.params.id
-  const product = await productDAO.get(productId)
+  const product = await service.getProductFromQueryResult(await productDAO.get(productId))
+  if (product) {
+    product.categories = await productDAO.getCategoriesByProductId(product.id)
+  }
   return product
 }
 
@@ -74,8 +77,15 @@ service.get = async (req, res, next) => {
  * @param {*} next
  */
 service.getAll = async (req, res, next) => {
-  // Todo: Format them specifically?
-  return productDAO.getAll()
+  let products = []
+
+  const queryResult = await productDAO.getAll()
+
+  if (queryResult) {
+    products = await service.getProductsFromQueryResult(queryResult)
+  }
+
+  return products
 }
 
 /**
@@ -86,9 +96,16 @@ service.getAll = async (req, res, next) => {
  * @param {*} next
  */
 service.getAllFromProducer = async (req, res, next) => {
-  const orgNumber = await req.params.org_no
-  // Todo: Format them specifically?
-  return productDAO.getAllByOrgNumber(orgNumber)
+  let products = []
+
+  const orgNumber = await req.params.orgNumber
+  const queryResult = await productDAO.getAllByOrgNumber(orgNumber)
+
+  if (queryResult) {
+    products = await service.getProductsFromQueryResult(queryResult)
+  }
+
+  return products
 }
 
 /**
@@ -99,8 +116,16 @@ service.getAllFromProducer = async (req, res, next) => {
  * @param {*} next
  */
 service.getAllFromCategory = async (req, res, next) => {
+  let products = []
+
   const categoryId = await req.params.categoryId
-  return productDAO.getAllByCategoryId(categoryId)
+  const queryResult = await productDAO.getAllByCategoryId(categoryId)
+
+  if (queryResult) {
+    products = await service.getProductsFromQueryResult(queryResult)
+  }
+
+  return products
 }
 
 service.getAllCategories = async (req, res, next) => {
@@ -184,6 +209,42 @@ service.getProductFromRequest = async (req) => {
     req.body.inStock,
     req.body.categories
   )
+}
+
+/**
+ * Returns a array of Product objects out of the request data
+ *
+ * @param {*} result
+ */
+service.getProductsFromQueryResult = async (result) => {
+  const products = []
+
+  for await (const object of result) {
+    const product = await service.getProductFromQueryResult(await object)
+    product.categories = await productDAO.getCategoryIdsByProductId(await product.id)
+    products.push(product)
+  }
+  return products
+}
+
+/**
+ * Creates and returns a Product object out of the request data
+ *
+ * @param {*} result
+ */
+service.getProductFromQueryResult = async (result) => {
+  const newProduct = new Product(
+    result.producer_org_no,
+    result.name,
+    result.description,
+    result.price,
+    result.unit,
+    result.in_stock,
+    result.categories
+  )
+
+  newProduct.id = result.id
+  return newProduct
 }
 
 module.exports = service
