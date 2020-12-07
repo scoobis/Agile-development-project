@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button } from '@material-ui/core'
 import ButtonGroup from '@material-ui/core/ButtonGroup'
 
 const PickAmount = (props) => {
-  const { inStock } = props
+  const { inStock, handleAmountChange } = props
 
   const [counter, setCounter] = useState(1)
 
@@ -14,6 +14,10 @@ const PickAmount = (props) => {
   const handleDecrement = () => {
     counter >= 2 ? setCounter(counter - 1) : setCounter(1)
   }
+
+  useEffect(() => {
+    handleAmountChange(counter)
+  }, [counter])
 
   return (
     <ButtonGroup size='medium' fullWidth>

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import { Card, CardActions, CardContent, CardMedia, Typography, Button } from '@material-ui/core'
 
@@ -39,7 +39,11 @@ const ProductCard = (props) => {
 
   const classes = useStyles()
 
+  const [amount, setAmount] = useState(1)
+
   const { id, name, price, unit, inStock, imgSrc } = props
+
+  const handleAmountChange = (value) => setAmount(value)
 
   return (
     <Card className={classes.root}>
@@ -64,7 +68,7 @@ const ProductCard = (props) => {
         <Button variant='contained' color='primary' onClick={() => console.log('Add one to basket?')}>
           Köp
         </Button>
-        <PickAmount inStock={inStock} />
+        <PickAmount inStock={inStock} handleAmountChange={handleAmountChange} />
       </CardActions>
     </Card>
   )

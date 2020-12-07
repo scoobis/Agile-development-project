@@ -1,6 +1,6 @@
 import React, { useContext, createContext, useReducer } from 'react'
 import { CartReducer } from './CartReducer'
-import { getInStorage } from '../utils/localStorage'
+import { getInStorage, saveInStorage } from '../utils/localStorage'
 
 export const CartContext = createContext()
 
@@ -11,7 +11,10 @@ const savedCartItems = localStorage.getItem('cart') ? getInStorage('cart') : []
 const CartContextProvider = (props) => {
   const [state, dispatch] = useReducer(CartReducer, initialState)
 
-  const addProduct = (payload) => {}
+  const addProduct = (payload) => {
+    console.log(payload)
+    dispatch({ type: 'ADD_PRODUCT', payload })
+  }
 
   return <CartContext.Provider value={{ addProduct }}>{props.children}</CartContext.Provider>
 }
