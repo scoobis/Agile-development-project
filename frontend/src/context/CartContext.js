@@ -1,6 +1,6 @@
 import React, { useContext, createContext, useReducer } from 'react'
 import { CartReducer } from './CartReducer'
-import { getInStorage, saveInStorage } from '../utils/localStorage'
+import { getInStorage } from '../utils/localStorage'
 
 export const CartContext = createContext()
 

@@ -1,3 +1,5 @@
+import { saveInStorage } from '../utils/localStorage'
+
 export const CartReducer = (state, action) => {
   switch (action.type) {
     case 'ADD_PRODUCT':
@@ -15,9 +17,10 @@ const addProduct = (state, payload) => {
   } else {
     state.cartProducts.push({
       id: payload.id,
-      quantity: payload.amount,
+      quantity: payload.amount, // TODO: Need more information?
     })
   }
+  saveInStorage('cart', state)
   return {
     ...state,
     cartProducts: [...state.cartProducts],
