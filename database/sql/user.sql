@@ -68,9 +68,6 @@ CREATE TABLE product (
   PRIMARY KEY (id),
   FOREIGN KEY (producer_org_no) REFERENCES producer(org_no)
 );
-INSERT INTO product (producer_org_no, name, description, price, unit, in_stock) 
-VALUES
-  ('1234567897', 'Name', 'Description', 55, 'kg', 25);
 
 -- CATEGORY --
 CREATE TABLE category (
