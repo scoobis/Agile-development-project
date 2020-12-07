@@ -15,7 +15,7 @@ const CartContextProvider = (props) => {
   const [state, dispatch] = useReducer(CartReducer, initialState)
 
   const addProduct = (payload) => {
-    console.log(payload)
+    console.log(state)
     dispatch({ type: 'ADD_PRODUCT', payload })
   }
 
