@@ -125,9 +125,8 @@ productDAO.get = async (productId) => {
     // get categories
     // const categoryArray? = await conn.query()
     // get images
-    // const imageArray = await.conn.query()
-
-    return new Product(id, producer_org_no, name, description, price, null, unit, in_stock, [], [])
+    const imageArray = await conn.query('SELECT * FROM product_image WHERE product_id = ?', [productId])
+    return new Product(id, producer_org_no, name, description, price, null, unit, in_stock, [], imageArray)
     // return row
   } finally {
     if (conn) conn.release()
