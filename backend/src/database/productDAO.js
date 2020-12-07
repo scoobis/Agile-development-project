@@ -142,19 +142,17 @@ productDAO.getAll = async () => {
   let conn
   try {
     conn = await pool.getConnection()
-    
+
     const selectAllProducts = 'SELECT * FROM product'
     const products = []
 
     const rows = await conn.query(selectAllProducts)
-    
+
     if (rows.length > 0) {
       for await (const row of rows) {
-        const { id, producer_org_no, name, description, price, unit, in_stock } = row
-        const product = new Product(id, producer_org_no, name, description, price, null, unit, in_stock, [], [])
-        
-        const categories = await productDAO.getCategoryIdsByProductId(id) // Change to getAllSubCategories() when frontend can handle nested objects
-        product.categories = categories
+        const product = getProduct(row)
+
+        product.categories = await productDAO.getCategoryIdsByProductId(product.id) // Change to getAllSubCategories() when frontend can handle nested objects
 
         products.push(product)
       }
@@ -185,11 +183,9 @@ productDAO.getAllByOrgNumber = async (orgNumber) => {
 
     if (rows.length > 0) {
       for await (const row of rows) {
-        const { id, producer_org_no, name, description, price, unit, in_stock } = row
-        const product = new Product(id, producer_org_no, name, description, price, null, unit, in_stock, [], [])
-        
-        const categories = await productDAO.getCategoryIdsByProductId(id) // Change to getAllSubCategories() when frontend can handle nested objects
-        product.categories = categories
+        const product = getProduct(row)
+
+        product.categories = await productDAO.getCategoryIdsByProductId(product.id) // Change to getAllSubCategories() when frontend can handle nested objects
 
         products.push(product)
       }
@@ -198,7 +194,6 @@ productDAO.getAllByOrgNumber = async (orgNumber) => {
     } else {
       throw createError(400, 'No products found!')
     }
-  
   } finally {
     if (conn) conn.release()
   }
@@ -219,19 +214,16 @@ productDAO.getAllByCategoryId = async (categoryId) => {
     const products = []
 
     const productIds = await conn.query(selectAllProductsByCategoryId, [categoryId])
-    
+
     if (productIds.length > 0) {
       for await (const productId of productIds) {
         for (const key in productId) {
-
           const [row] = await conn.query(selectAllProductsById, [productId[key]])
-          
-          const { id, producer_org_no, name, description, price, unit, in_stock } = row
-          const product = new Product(id, producer_org_no, name, description, price, null, unit, in_stock, [], [])
-          
-          const categories = await productDAO.getCategoryIdsByProductId(id) // Change to getAllSubCategories() when frontend can handle nested objects
-          product.categories = categories
-          
+
+          const product = getProduct(row)
+
+          product.categories = await productDAO.getCategoryIdsByProductId(product.id) // Change to getAllSubCategories() when frontend can handle nested objects
+
           products.push(product)
         }
       }
@@ -320,6 +312,16 @@ productDAO.getCategoryIdsByProductId = async (productId) => {
   } finally {
     if (conn) conn.release()
   }
+}
+
+/**
+ * Returns a Product
+ *
+ * @param {*} row
+ */
+const getProduct = (row) => {
+  const { id, producer_org_no, name, description, price, unit, in_stock } = row
+  return new Product(id, producer_org_no, name, description, price, null, unit, in_stock, [], [])
 }
 
 module.exports = productDAO
