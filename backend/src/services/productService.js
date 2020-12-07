@@ -203,13 +203,16 @@ service.getAllSubCategories = async (req, res, next) => {
  */
 service.getProductFromRequest = async (req) => {
   return new Product(
+    null,
     req.body.orgNumber,
     req.body.name,
     req.body.description,
     req.body.price,
+    null,
     req.body.unit,
     req.body.inStock,
-    req.body.categories
+    req.body.categories,
+    []
   )
 }
 
