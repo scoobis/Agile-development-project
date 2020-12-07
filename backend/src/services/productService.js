@@ -79,15 +79,7 @@ service.get = async (req, res, next) => {
  * @param {*} next
  */
 service.getAll = async (req, res, next) => {
-  let products = []
-
-  const queryResult = await productDAO.getAll()
-
-  if (queryResult) {
-    products = await service.getProductsFromQueryResult(queryResult)
-  }
-
-  return products
+  return productDAO.getAll()
 }
 
 /**
@@ -98,16 +90,8 @@ service.getAll = async (req, res, next) => {
  * @param {*} next
  */
 service.getAllFromProducer = async (req, res, next) => {
-  let products = []
-
   const orgNumber = await req.params.orgNumber
-  const queryResult = await productDAO.getAllByOrgNumber(orgNumber)
-
-  if (queryResult) {
-    products = await service.getProductsFromQueryResult(queryResult)
-  }
-
-  return products
+  return productDAO.getAllByOrgNumber(orgNumber)
 }
 
 /**
@@ -118,16 +102,8 @@ service.getAllFromProducer = async (req, res, next) => {
  * @param {*} next
  */
 service.getAllFromCategory = async (req, res, next) => {
-  let products = []
-
   const categoryId = await req.params.categoryId
-  const queryResult = await productDAO.getAllByCategoryId(categoryId)
-
-  if (queryResult) {
-    products = await service.getProductsFromQueryResult(queryResult)
-  }
-
-  return products
+  return productDAO.getAllByCategoryId(categoryId)
 }
 
 service.getAllCategories = async (req, res, next) => {
@@ -214,42 +190,6 @@ service.getProductFromRequest = async (req) => {
     req.body.categories,
     []
   )
-}
-
-/**
- * Returns a array of Product objects out of the request data
- *
- * @param {*} result
- */
-service.getProductsFromQueryResult = async (result) => {
-  const products = []
-
-  for await (const object of result) {
-    const product = await service.getProductFromQueryResult(await object)
-    product.categories = await productDAO.getCategoryIdsByProductId(await product.id)
-    products.push(product)
-  }
-  return products
-}
-
-/**
- * Creates and returns a Product object out of the request data
- *
- * @param {*} result
- */
-service.getProductFromQueryResult = async (result) => {
-  const newProduct = new Product(
-    result.producer_org_no,
-    result.name,
-    result.description,
-    result.price,
-    result.unit,
-    result.in_stock,
-    result.categories
-  )
-
-  newProduct.id = result.id
-  return newProduct
 }
 
 module.exports = service
