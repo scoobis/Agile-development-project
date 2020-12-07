@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Grid, Container } from '@material-ui/core'
+import { Grid, Container, Typography } from '@material-ui/core'
 import ProductCard from './ProductCard'
 import FilterMenu from './FiliterMenu'
 import { getAllProducts, getAllProductsFromCategory } from '../../utils/api'
@@ -23,21 +23,25 @@ const Products = () => {
     <Container maxWidth='lg'>
       <Grid container spacing={2}>
         <FilterMenu filterProducts={filterProducts} />
-        {products.map((product) => {
-          return (
-            <Grid item xs={3} key={product.id}>
-              <ProductCard
-                name={product.name}
-                description={product.description}
-                price={product.price}
-                inStock={product.inStock}
-                imgSrc='/apples.jpg' // Needs image
-                id={product.id}
-                unit={product.unit}
-              />
-            </Grid>
-          )
-        })}
+        {products.length ? (
+          products.map((product) => {
+            return (
+              <Grid item xs={3} key={product.id}>
+                <ProductCard
+                  name={product.name}
+                  description={product.description}
+                  price={product.price}
+                  inStock={product.inStock}
+                  imgSrc='/apples.jpg' // Needs image
+                  id={product.id}
+                  unit={product.unit}
+                />
+              </Grid>
+            )
+          })
+        ) : (
+          <Typography variant='h4'>Inga produkter hittades!</Typography>
+        )}
       </Grid>
     </Container>
   )
