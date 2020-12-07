@@ -4,9 +4,12 @@ import { getInStorage, saveInStorage } from '../utils/localStorage'
 
 export const CartContext = createContext()
 
-const initialState = {}
+//const savedCartProducts = localStorage.getItem('cart') ? getInStorage('cart') : []
+const savedCartProducts = []
 
-const savedCartItems = localStorage.getItem('cart') ? getInStorage('cart') : []
+const initialState = {
+  cartProducts: savedCartProducts,
+}
 
 const CartContextProvider = (props) => {
   const [state, dispatch] = useReducer(CartReducer, initialState)
