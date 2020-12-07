@@ -21,8 +21,5 @@ const addProduct = (state, payload) => {
     })
   }
   saveInStorage('cart', state)
-  return {
-    ...state,
-    cartProducts: [...state.cartProducts],
-  }
+  return { ...state, cartProducts: [...state.cartProducts] }
 }

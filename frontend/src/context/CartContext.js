@@ -14,10 +14,7 @@ const initialState = {
 const CartContextProvider = (props) => {
   const [state, dispatch] = useReducer(CartReducer, initialState)
 
-  const addProduct = (payload) => {
-    console.log(state)
-    dispatch({ type: 'ADD_PRODUCT', payload })
-  }
+  const addProduct = (payload) => dispatch({ type: 'ADD_PRODUCT', payload })
 
   return <CartContext.Provider value={{ addProduct }}>{props.children}</CartContext.Provider>
 }

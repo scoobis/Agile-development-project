@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import { Card, CardActions, CardContent, CardMedia, Typography, Button } from '@material-ui/core'
-
+import { CartContext } from '../../context/CartContext'
 import Link from 'next/link'
 import PickAmount from './PickAmount'
 
@@ -39,6 +39,8 @@ const ProductCard = (props) => {
 
   const classes = useStyles()
 
+  const { addProduct } = useContext(CartContext)
+
   const [amount, setAmount] = useState(1)
 
   const { id, name, price, unit, inStock, imgSrc } = props
@@ -65,7 +67,7 @@ const ProductCard = (props) => {
         </a>
       </Link>
       <CardActions>
-        <Button variant='contained' color='primary' onClick={() => console.log('Add one to basket?')}>
+        <Button variant='contained' color='primary' onClick={() => addProduct({ id, amount })}>
           Köp
         </Button>
         <PickAmount inStock={inStock} handleAmountChange={handleAmountChange} />
