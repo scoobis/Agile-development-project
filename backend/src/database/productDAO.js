@@ -146,18 +146,18 @@ productDAO.getAll = async () => {
   try {
     conn = await pool.getConnection()
 
-    const selectAllProducts = 'SELECT id, producer_org_no, name, description, price, unit, in_stock FROM product'
+    const selectAllProducts = 'SELECT id, producer_org_no, name, description, price, unit, in_stock FROM product' // LIMIT 100?
     const products = []
 
     const rows = await conn.query(selectAllProducts)
 
     if (rows.length > 0) {
-      for await (const row of rows) {
+      for (const row of rows) {
         const product = getProduct(row)
 
         product.categories = await productDAO.getCategoriesByProductId(product.id)
 
-        // getImages
+        product.images = await conn.query('SELECT * FROM product_image WHERE product_id = ?', [product.id])
 
         products.push(product)
       }
