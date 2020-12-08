@@ -69,14 +69,16 @@ validate.producer = async (req, res, next) => {
  */
 validate.product = async (req, res, next) => {
   const { orgNumber, name, description, price, salePrice, unit, inStock, categories, images } = req.body
-  console.log(await req.body)
+
   /**
    * OrgNumber
    */
   if (productService.isUndefined(orgNumber)) {
     return next(createError(400, 'Organisation number is "undefined"'))
   } else {
-    console.log('Check if orgNumber exists')
+    if (!await productService.isValidOrgNumber(orgNumber)) {
+      return next(createError(400, 'Producer does not exist'))
+    }
   }
 
   /**

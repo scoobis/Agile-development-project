@@ -1,4 +1,4 @@
-const productDAO = require("../database/productDAO")
+const userDAO = require('../database/userDAO')
 
 const service = {}
 
@@ -17,5 +17,15 @@ service.isValidUnit = (unit) => unit.length > 0 && unit.length <= 20
 service.isValidInStock = (inStock) => inStock >= 0 && inStock <= 9999999
 
 service.isValidCategories = (categories) => categories.length > 0
+
+service.isValidOrgNumber = async (orgNumber) => {
+  const producer = await userDAO.getProducerByOrgNumber(orgNumber)
+  console.log(producer)
+  if (producer) {
+    return true
+  } else {
+    return false
+  }
+}
 
 module.exports = service
