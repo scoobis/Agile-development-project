@@ -6,6 +6,8 @@ export const CartReducer = (state, action) => {
       return addProduct(state, action.payload)
     case 'INCREASE':
       return increase(state, action.payload)
+    case 'DECREASE':
+      decrease(state, action.payload)
     default:
       return { ...state }
   }
@@ -31,6 +33,16 @@ const addProduct = (state, payload) => {
 const increase = (state, payload) => {
   const increaseIndex = state.cartProducts.findIndex((product) => product.id === payload.id)
   state.cartProducts[increaseIndex].quantity++
+  saveInStorage('cart', state.cartProducts)
+  return {
+    ...state,
+    cartItems: [...state.cartProducts],
+  }
+}
+
+const decrease = (state, payload) => {
+  const decreaseIndex = state.cartProducts.findIndex((product) => product.id === payload.id)
+  state.cartProducts[decreaseIndex].quantity--
   saveInStorage('cart', state.cartProducts)
   return {
     ...state,

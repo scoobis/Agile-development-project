@@ -17,8 +17,9 @@ const CartContextProvider = (props) => {
 
   const addProduct = (payload) => dispatch({ type: 'ADD_PRODUCT', payload })
   const increase = (payload) => dispatch({ type: 'INCREASE', payload })
+  const decrease = (payload) => dispatch({ type: 'DECREASE', payload })
 
-  return <CartContext.Provider value={{ addProduct, increase, state }}>{props.children}</CartContext.Provider>
+  return <CartContext.Provider value={{ addProduct, increase, decrease, state }}>{props.children}</CartContext.Provider>
 }
 
 export default CartContextProvider

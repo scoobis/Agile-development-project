@@ -22,7 +22,7 @@ const ProductTable = (props) => {
   const classes = useStyles()
 
   const { name, quantity, price, id } = props.product
-  const { increase } = props
+  const { increase, decrease } = props
 
   return (
     <StyledTableRow>
@@ -33,7 +33,7 @@ const ProductTable = (props) => {
         {name}
       </TableCell>
       <TableCell>
-        <PickAmountCart inStock={25} increase={increase} initialValue={quantity} id={id} /> {/*TODO: Set inStock */}
+        <PickAmountCart inStock={25} increase={increase} decrease={decrease} initialValue={quantity} id={id} /> {/*TODO: Set inStock */}
       </TableCell>
       <TableCell align='right' className={classes.bold}>
         {price * quantity}.00 SEK
