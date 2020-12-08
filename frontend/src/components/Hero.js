@@ -4,7 +4,7 @@ import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
 import Link from 'next/link'
-import { Button } from '@material-ui/core'
+import { Button, Container } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => ({
   hero: {
@@ -12,7 +12,6 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.grey[800],
     color: theme.palette.common.white,
     marginBottom: theme.spacing(4),
-    backgroundImage: 'url(https://source.unsplash.com/random)',
     backgroundSize: 'cover',
     backgroundRepeat: 'no-repeat',
     backgroundPosition: 'center center',
@@ -31,18 +30,28 @@ const useStyles = makeStyles((theme) => ({
   },
   heroContent: {
     position: 'relative',
-    padding: theme.spacing(3),
-    [theme.breakpoints.up('md')]: {
-      padding: theme.spacing(6),
-      paddingRight: 0
+    textAlign: 'center',
+    paddingTop: theme.spacing(6),
+    paddingBottom: theme.spacing(6),
+    [theme.breakpoints.down('sm')]: {
+      paddingLeft: theme.spacing(3),
+      paddingRight: theme.spacing(3)
     }
   },
   heroTitle: {
     fontWeight: '700'
   },
   button: {
-    // width: 'auto',
-    // maxWidth: '200px'
+    backgroundColor: '#81b23e',
+    borderRadius: '30px',
+    paddingLeft: theme.spacing(2.5),
+    paddingRight: theme.spacing(2.5),
+    paddingTop: theme.spacing(1.2),
+    paddingBottom: theme.spacing(1.2),
+    '& *': {
+      textDecoration: 'none',
+      color: theme.palette.common.black
+    }
   }
 }))
 
@@ -53,23 +62,25 @@ export default function Hero ({ content }) {
     <Paper className={classes.hero} style={{ backgroundImage: `url(${content.image})` }}>
       {/* {<img style={{ display: 'none' }} src={content.image} alt={content.imageText} />} */}
       <div className={classes.overlay} />
-      <Grid container>
-        <Grid item md={6}>
-          <div className={classes.heroContent}>
-            <Typography className={classes.heroTitle} component='p' variant='h2' color='inherit' gutterBottom>
-              {content.title}
-            </Typography>
-            <Typography variant='h5' color='inherit' paragraph>
-              {content.description}
-            </Typography>
-            <Button variant='contained' color='primary' className={classes.button}>
-              <Link href={content.buttonHref}>
-                <a>{content.buttonText}</a>
-              </Link>
-            </Button>
-          </div>
+      <Container>
+        <Grid>
+          <Grid item md={12}>
+            <div className={classes.heroContent}>
+              <Typography className={classes.heroTitle} component='p' variant='h1' color='inherit' gutterBottom>
+                {content.title}
+              </Typography>
+              <Typography variant='h5' color='inherit' paragraph>
+                {content.description}
+              </Typography>
+              <Button variant='contained' color='primary' className={classes.button}>
+                <Link href={content.buttonHref}>
+                  <a>{content.buttonText}</a>
+                </Link>
+              </Button>
+            </div>
+          </Grid>
         </Grid>
-      </Grid>
+      </Container>
     </Paper>
   )
 }

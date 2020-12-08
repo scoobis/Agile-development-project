@@ -5,7 +5,6 @@ import CssBaseline from '@material-ui/core/CssBaseline'
 import theme from '../src/theme'
 import Header from '../src/components/layouts/Header/Header'
 import Footer from '../src/components/layouts/Footer'
-import Layout from '../src/components/layouts/Layout'
 import AuthProvider from '../src/context/AuthContext'
 
 export default function MyApp (props) {
@@ -30,9 +29,7 @@ export default function MyApp (props) {
         <CssBaseline />
         <AuthProvider>
           <Header />
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
+          <Component {...pageProps} />
           <Footer />
         </AuthProvider>
       </ThemeProvider>
