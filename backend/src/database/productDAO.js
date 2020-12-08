@@ -143,7 +143,7 @@ productDAO.getAll = async () => {
   try {
     conn = await pool.getConnection()
 
-    const selectAllProducts = 'SELECT * FROM product'
+    const selectAllProducts = 'SELECT id, producer_org_no, name, description, price, unit, in_stock FROM product'
     const products = []
 
     const rows = await conn.query(selectAllProducts)
@@ -176,7 +176,7 @@ productDAO.getAllByOrgNumber = async (orgNumber) => {
   try {
     conn = await pool.getConnection()
 
-    const selectAllProductsByOrgNumber = 'SELECT * FROM product WHERE producer_org_no=?'
+    const selectAllProductsByOrgNumber = 'SELECT id, producer_org_no, name, description, price, unit, in_stock FROM product WHERE producer_org_no=?'
     const products = []
 
     const rows = await conn.query(selectAllProductsByOrgNumber, [orgNumber])
@@ -189,7 +189,7 @@ productDAO.getAllByOrgNumber = async (orgNumber) => {
 
         products.push(product)
       }
-      console.log(products)
+
       return products
     } else {
       throw createError(400, 'No products found!')
@@ -210,7 +210,7 @@ productDAO.getAllByCategoryId = async (categoryId) => {
     conn = await pool.getConnection()
 
     const selectAllProductsByCategoryId = 'SELECT product_id FROM product_category WHERE category_id=?'
-    const selectAllProductsById = 'SELECT * FROM product WHERE id=?'
+    const selectAllProductsById = 'SELECT id, producer_org_no, name, description, price, unit, in_stock FROM product WHERE id=?'
     const products = []
 
     const productIds = await conn.query(selectAllProductsByCategoryId, [categoryId])
@@ -270,7 +270,7 @@ productDAO.getCategoriesByProductId = async (productId) => {
     conn = await pool.getConnection()
 
     const selectAllCategoriesFromProductQuery = 'SELECT category_id FROM product_category WHERE product_id=?'
-    const selectCategoryByIdQuery = 'SELECT * FROM category WHERE id=?'
+    const selectCategoryByIdQuery = 'SELECT id, parent_id, name, description FROM category WHERE id=?'
     const categories = []
 
     const categoryIds = await conn.query(selectAllCategoriesFromProductQuery, [productId])
