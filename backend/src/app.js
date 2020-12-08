@@ -17,6 +17,9 @@ app.use(express.urlencoded({ extended: true }))
 
 app.use(headers)
 
+// Images
+app.use('/static', express.static('uploads'))
+
 // Root routes
 // app.use('/', require('./routes/WHICHROUTER?'))
 app.use('/user', require('./routes/userRouter'))
