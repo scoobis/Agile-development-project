@@ -7,7 +7,9 @@ export const CartReducer = (state, action) => {
     case 'INCREASE':
       return increase(state, action.payload)
     case 'DECREASE':
-      decrease(state, action.payload)
+      return decrease(state, action.payload)
+    case 'REMOVE_PRODUCT':
+      return removeProduct(state, action.payload)
     default:
       return { ...state }
   }
@@ -47,5 +49,14 @@ const decrease = (state, payload) => {
   return {
     ...state,
     cartItems: [...state.cartProducts],
+  }
+}
+
+const removeProduct = (state, payload) => {
+  const removeIndex = state.cartProducts.findIndex((product) => product.id === payload.id)
+  state.cartProducts.splice(removeIndex, 1)
+  return {
+    ...state,
+    cartProducts: [state.cartProducts],
   }
 }
