@@ -152,7 +152,7 @@ productDAO.getAll = async () => {
       for await (const row of rows) {
         const product = getProduct(row)
 
-        product.categories = await productDAO.getCategoryIdsByProductId(product.id) // Change to getAllSubCategories() when frontend can handle nested objects
+        product.categories = await productDAO.getCategoriesByProductId(product.id)
 
         products.push(product)
       }
@@ -185,11 +185,11 @@ productDAO.getAllByOrgNumber = async (orgNumber) => {
       for await (const row of rows) {
         const product = getProduct(row)
 
-        product.categories = await productDAO.getCategoryIdsByProductId(product.id) // Change to getAllSubCategories() when frontend can handle nested objects
+        product.categories = await productDAO.getCategoriesByProductId(product.id)
 
         products.push(product)
       }
-
+      console.log(products)
       return products
     } else {
       throw createError(400, 'No products found!')
@@ -222,7 +222,7 @@ productDAO.getAllByCategoryId = async (categoryId) => {
 
           const product = getProduct(row)
 
-          product.categories = await productDAO.getCategoryIdsByProductId(product.id) // Change to getAllSubCategories() when frontend can handle nested objects
+          product.categories = await productDAO.getCategoriesByProductId(product.id)
 
           products.push(product)
         }
@@ -264,6 +264,7 @@ productDAO.getAllSubCategories = async () => {
  * @param {*} productId
  */
 productDAO.getCategoriesByProductId = async (productId) => {
+  // Maybe take conn as parameter, as its only used as help method at the moment
   let conn
   try {
     conn = await pool.getConnection()
@@ -284,31 +285,6 @@ productDAO.getCategoriesByProductId = async (productId) => {
     }
 
     return categories
-  } finally {
-    if (conn) conn.release()
-  }
-}
-
-/**
- * Gets all ids from the categories of a specific product
- *
- * @param {*} productId
- */
-productDAO.getCategoryIdsByProductId = async (productId) => {
-  let conn
-  try {
-    conn = await pool.getConnection()
-
-    const selectAllCategoriesFromProductQuery = 'SELECT category_id FROM product_category WHERE product_id=?'
-    const categoryIds = []
-
-    const queryResult = await conn.query(selectAllCategoriesFromProductQuery, [productId])
-
-    for await (const id of queryResult) {
-      categoryIds.push(Object.values(id)[0])
-    }
-
-    return categoryIds
   } finally {
     if (conn) conn.release()
   }
