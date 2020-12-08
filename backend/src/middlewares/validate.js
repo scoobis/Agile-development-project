@@ -1,5 +1,7 @@
 const createError = require('http-errors')
+const service = require('../services/userService')
 const userService = require('../services/userService')
+const productService = require('../services/validateProductService')
 
 const validate = {}
 
@@ -59,69 +61,105 @@ validate.producer = async (req, res, next) => {
   next()
 }
 
+/**
+ * Validates a product
+ *
+ * @param {*} req
+ * @param {*} res
+ * @param {*} next
+ */
 validate.product = async (req, res, next) => {
   const { orgNumber, name, description, price, salePrice, unit, inStock, categories, images } = req.body
-  console.log(description)
-  if (!orgNumber) {
+
+  /**
+   * OrgNumber
+   */
+  if (productService.isUndefined(orgNumber)) {
     return next(createError(400, 'Organisation number is "undefined"'))
   } else {
     console.log('Check if orgNumber exists')
   }
 
-  if (!name) {
+  /**
+   * Name
+   */
+  if (productService.isUndefined(name)) {
     return next(createError(400, 'Name is "undefined"'))
   } else {
-    if (name.length < 1 || name.length > 20) {
+    if (!productService.isValidName(name)) {
       return next(createError(400, 'The length of the product name must be within the range of 1-20'))
     }
   }
 
-  // No description needed but it should not be undefined
-  //if (!description) {
-  //  return next(createError(400, 'The description is "undefined"'))
-  //}
+  /**
+   * Description
+   */
+  if (productService.isUndefined(description)) {
+    return next(createError(400, 'The description is "undefined"'))
+  }
 
-  if (!price) {
+  /**
+   * Price
+   */
+  if (productService.isUndefined(price)) {
     return next(createError(400, 'Price is "undefined"'))
   } else {
-    if (price.length < 1 || price.length > 20) {
+    if (!productService.isValidPrice(price)) {
       return next(createError(400, 'Try to be more reasonable when setting the price'))
     }
   }
 
-  if (!salePrice) {
+  /**
+   * SalePrice
+   */
+  if (productService.isUndefined(salePrice)) {
     return next(createError(400, 'The salePrice is "undefined"'))
   } else {
-    if (salePrice >= price) {
+    if (!productService.isValidSalePrice(salePrice, price)) {
       return next(createError(400, 'The sale price must be lower than the original price'))
     }
   }
 
-  if (!unit) {
+  /**
+   * Unit
+   */
+  if (productService.isUndefined(unit)) {
     return next(createError(400, 'Unit is "undefined"'))
   } else {
-    if (unit.length < 1 || unit.length > 20) {
+    if (!productService.isValidUnit(unit)) {
       return next(createError(400, 'The length of the product unit name must be within the range of 1-20'))
     }
   }
 
-  if (!inStock) {
+  /**
+   * InStock
+   */
+  if (productService.isUndefined(inStock)) {
     return next(createError(400, 'inStock is "undefined"'))
   } else {
-    if (inStock.length < 1 || inStock.length > 9999999) {
-      return next(createError(400, 'The number of units in stock must be at least 1 and at most 999999'))
+    if (!productService.isValidInStock(inStock)) {
+      return next(createError(400, 'The number of units in stock must be at least 0 and at most 999999'))
     }
   }
 
-  if (!categories) {
+  // TODO Check if category exists
+  /**
+   * Categories
+   */
+  if (productService.isUndefined(categories)) {
     return next(createError(400, 'Categories is "undefined"'))
   } else {
-    if (categories.length < 1) {
+    if (!productService.isArray(categories)) {
+      return next(createError(400, 'Categories must be an array'))
+    } else if (!productService.isValidCategories(categories)) {
       return next(createError(400, 'The product must belong to at least 1 category'))
     }
   }
 
   // Wait for implementation to see whats needed
+  /**
+   * Images
+   */
   if (!images) {
     return next(createError(400, 'The image array is "undefined"'))
   }
