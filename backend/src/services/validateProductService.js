@@ -21,7 +21,6 @@ service.isValidCategories = (categories) => categories.length > 0
 
 service.isValidOrgNumber = async (orgNumber) => {
   const producer = await userDAO.getProducerByOrgNumber(orgNumber)
-  console.log(producer)
   if (producer) {
     return true
   } else {

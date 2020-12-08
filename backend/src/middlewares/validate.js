@@ -69,7 +69,6 @@ validate.producer = async (req, res, next) => {
  */
 validate.product = async (req, res, next) => {
   const { orgNumber, name, description, price, salePrice, unit, inStock, categories, images } = req.body
-
   /**
    * OrgNumber
    */
