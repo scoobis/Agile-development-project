@@ -43,7 +43,7 @@ const SpecificProductCard = (props) => {
             <PickAmount inStock={inStock} handleAmountChange={handleAmountChange} />
           </Grid>
           <Grid item xs={12}>
-            <Button size='large' fullWidth variant='contained' color='primary' onClick={() => addProduct({ id, amount })}>
+            <Button size='large' fullWidth variant='contained' color='primary' onClick={() => addProduct({ id, amountm, name, price })}>
               Lägg i kundvagn
             </Button>
           </Grid>

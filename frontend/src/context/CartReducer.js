@@ -18,7 +18,9 @@ const addProduct = (state, payload) => {
   } else {
     state.cartProducts.push({
       id: payload.id,
-      quantity: payload.amount, // TODO: Need more information?
+      quantity: payload.amount,
+      name: payload.name,
+      price: payload.price,
     })
   }
   saveInStorage('cart', state.cartProducts)

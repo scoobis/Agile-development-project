@@ -22,7 +22,7 @@ const ProductTable = (props) => {
   const classes = useStyles()
   const handleAmountChange = (value) => 5
 
-  const { id } = props.product
+  const { name, quantity, price } = props.product
 
   return (
     <StyledTableRow>
@@ -30,13 +30,13 @@ const ProductTable = (props) => {
         <img src='/apples.jpg' className={classes.img} />
       </TableCell>
       <TableCell align='left' className={classes.name}>
-        {id}
+        {name}
       </TableCell>
       <TableCell>
-        <PickAmount inStock={5} handleAmountChange={handleAmountChange} />
+        <PickAmount inStock={25} handleAmountChange={handleAmountChange} /> {/*TODO: Set inStock */}
       </TableCell>
       <TableCell align='right' className={classes.bold}>
-        200.00 SEK
+        {price * quantity}.00 SEK
       </TableCell>
       <TableCell>
         <IconButton>

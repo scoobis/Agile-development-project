@@ -67,7 +67,7 @@ const ProductCard = (props) => {
         </a>
       </Link>
       <CardActions>
-        <Button variant='contained' color='primary' onClick={() => addProduct({ id, amount })}>
+        <Button variant='contained' color='primary' onClick={() => addProduct({ id, amount, name, price })}>
           Köp
         </Button>
         <PickAmount inStock={inStock} handleAmountChange={handleAmountChange} />
