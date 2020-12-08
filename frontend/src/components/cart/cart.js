@@ -9,13 +9,18 @@ import TableBody from '@material-ui/core/TableBody'
 import TableContainer from '@material-ui/core/TableContainer'
 import Paper from '@material-ui/core/Paper'
 import ProductTable from './ProductTable'
+import TableCell from '@material-ui/core/TableCell'
+import TableHead from '@material-ui/core/TableHead'
+import TableRow from '@material-ui/core/TableRow'
 
 const useStyles = makeStyles({ test: { boxShadow: 'none' } })
 
 const Cart = () => {
   const classes = useStyles()
 
-  const { state, decrease, increase } = useContext(CartContext)
+  const { state, decrease, increase, removeProduct } = useContext(CartContext)
+
+  console.log('state:', state.cartProducts)
 
   return (
     <Container>
@@ -23,10 +28,21 @@ const Cart = () => {
         <Grid item xs={8}>
           <TableContainer component={Paper} className={classes.test}>
             <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell></TableCell>
+                  <TableCell></TableCell>
+                  <TableCell></TableCell>
+                  <TableCell></TableCell>
+                  <TableCell></TableCell>
+                </TableRow>
+              </TableHead>
               <TableBody>
-                {state.cartProducts.map((product) => {
-                  return <ProductTable product={product} increase={increase} decrease={decrease} key={product.id} />
-                })}
+                {state.cartProducts.length
+                  ? state.cartProducts.map((product) => {
+                      return <ProductTable product={product} increase={increase} decrease={decrease} removeProduct={removeProduct} key={product.id} />
+                    })
+                  : 'Varukorgen är tom!'}
               </TableBody>
             </Table>
           </TableContainer>

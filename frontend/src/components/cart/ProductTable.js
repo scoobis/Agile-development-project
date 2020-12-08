@@ -22,7 +22,7 @@ const ProductTable = (props) => {
   const classes = useStyles()
 
   const { name, quantity, price, id } = props.product
-  const { increase, decrease } = props
+  const { increase, decrease, removeProduct } = props
 
   return (
     <StyledTableRow>
@@ -39,7 +39,7 @@ const ProductTable = (props) => {
         {price * quantity}.00 SEK
       </TableCell>
       <TableCell>
-        <IconButton>
+        <IconButton onClick={() => removeProduct({ id })}>
           <DeleteForeverIcon />
         </IconButton>
       </TableCell>

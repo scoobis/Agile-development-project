@@ -36,27 +36,19 @@ const increase = (state, payload) => {
   const increaseIndex = state.cartProducts.findIndex((product) => product.id === payload.id)
   state.cartProducts[increaseIndex].quantity++
   saveInStorage('cart', state.cartProducts)
-  return {
-    ...state,
-    cartItems: [...state.cartProducts],
-  }
+  return { ...state, cartProducts: [...state.cartProducts] }
 }
 
 const decrease = (state, payload) => {
   const decreaseIndex = state.cartProducts.findIndex((product) => product.id === payload.id)
   state.cartProducts[decreaseIndex].quantity--
   saveInStorage('cart', state.cartProducts)
-  return {
-    ...state,
-    cartItems: [...state.cartProducts],
-  }
+  return { ...state, cartProducts: [...state.cartProducts] }
 }
 
 const removeProduct = (state, payload) => {
   const removeIndex = state.cartProducts.findIndex((product) => product.id === payload.id)
   state.cartProducts.splice(removeIndex, 1)
-  return {
-    ...state,
-    cartProducts: [state.cartProducts],
-  }
+  saveInStorage('cart', state.cartProducts)
+  return { ...state, cartProducts: [...state.cartProducts] }
 }
