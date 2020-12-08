@@ -1,3 +1,4 @@
+const productDAO = require('../database/productDAO')
 const userDAO = require('../database/userDAO')
 
 const service = {}
@@ -26,6 +27,17 @@ service.isValidOrgNumber = async (orgNumber) => {
   } else {
     return false
   }
+}
+
+service.isValidCategory = async (categories) => {
+  for await (const categoryId of categories) {
+    const category = await productDAO.getCategoryById(categoryId)
+    if (!category) {
+      return false
+    }
+  }
+
+  return true
 }
 
 module.exports = service

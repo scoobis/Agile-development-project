@@ -154,6 +154,8 @@ validate.product = async (req, res, next) => {
       return next(createError(400, 'Categories must be an array'))
     } else if (!productService.isValidCategories(categories)) {
       return next(createError(400, 'The product must belong to at least 1 category'))
+    } else if (!await productService.isValidCategory(categories)) {
+      return next(createError(400, 'One of the categories choosen does not exist'))
     }
   }
 

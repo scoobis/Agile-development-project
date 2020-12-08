@@ -23,14 +23,14 @@ productDAO.create = async (product, files) => {
       VALUES (?, ?, ?, ?, ?, ?)`, [orgNumber, name, desc, price, unit, inStock])
 
     const productId = productResponse.insertId
-    const productImgQuery = 'INSERT INTO product_image (product_id, image_name, alt_text) VALUES (?, ?, ?)'
+    // const productImgQuery = 'INSERT INTO product_image (product_id, image_name, alt_text) VALUES (?, ?, ?)'
 
-    files.forEach(
-      file => queryResults.push(
-        conn.query(productImgQuery, [productId, file.filename, file.originalname])
-          .catch(error => { throw error })
-      )
-    )
+    // files.forEach(
+    //   file => queryResults.push(
+    //     conn.query(productImgQuery, [productId, file.filename, file.originalname])
+    //       .catch(error => { throw error })
+    //   )
+    // )
 
     categories.forEach(
       categoryId => queryResults.push(
@@ -202,6 +202,23 @@ productDAO.getAllSubCategories = async () => {
     conn = await pool.getConnection()
     const subcategories = await conn.query('SELECT name, id, parent_id FROM category WHERE parent_id IS NOT NULL')
     return subcategories
+  } finally {
+    if (conn) conn.release()
+  }
+}
+
+/**
+ * Gets a category by its id
+ *
+ * @param {*} id
+ */
+productDAO.getCategoryById = async (id) => {
+  let conn
+  try {
+    conn = await pool.getConnection()
+    const selectCategoryByIdQuery = 'SELECT id, name FROM category WHERE id=?'
+    const [category] = await conn.query(selectCategoryByIdQuery, [id])
+    return category
   } finally {
     if (conn) conn.release()
   }

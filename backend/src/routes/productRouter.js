@@ -6,7 +6,7 @@ const imageUpload = require('../middlewares/imageupload')
 
 router.post('/', imageUpload.product, validate.product, controller.create)
 router.get('/:id', authorize.ownerOfProduct, controller.get)
-router.put('/:id', validate.product, authorize.ownerOfProduct, controller.update)
+router.put('/:id', authorize.ownerOfProduct, controller.update)
 router.delete('/:id', authorize.ownerOfProduct, controller.delete)
 
 module.exports = router
