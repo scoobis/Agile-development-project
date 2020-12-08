@@ -24,14 +24,14 @@ productDAO.create = async (product, files) => {
       VALUES (?, ?, ?, ?, ?, ?)`, [orgNumber, name, desc, price, unit, inStock])
 
     const productId = productResponse.insertId
-    // const productImgQuery = 'INSERT INTO product_image (product_id, image_name, alt_text) VALUES (?, ?, ?)'
+    const productImgQuery = 'INSERT INTO product_image (product_id, image_name, alt_text) VALUES (?, ?, ?)'
 
-    // files.forEach(
-    //   file => queryResults.push(
-    //     conn.query(productImgQuery, [productId, file.filename, file.originalname])
-    //       .catch(error => { throw error })
-    //   )
-    // )
+    files.forEach(
+      file => queryResults.push(
+        conn.query(productImgQuery, [productId, file.filename, file.originalname])
+          .catch(error => { throw error })
+      )
+    )
 
     categories.forEach(
       categoryId => queryResults.push(
@@ -120,14 +120,17 @@ productDAO.get = async (productId) => {
   let conn
   try {
     conn = await pool.getConnection()
-    const [row] = await conn.query('SELECT * FROM product WHERE id=?', [productId])
-    const { id, producer_org_no, name, description, price, unit, in_stock } = row
-    // get categories
-    // const categoryArray? = await productDAO.getCategoriesByProductId(id)
-    // get images
-    const imageArray = await conn.query('SELECT * FROM product_image WHERE product_id = ?', [productId])
-    return new Product(id, producer_org_no, name, description, price, null, unit, in_stock, [], imageArray)
-    // return row
+
+    const selectProductById = 'SELECT * FROM product WHERE id=?'
+    const selectImageByProductId = 'SELECT * FROM product_image WHERE product_id = ?'
+
+    const [row] = await conn.query(selectProductById, [productId])
+
+    const product = getProduct(row)
+    product.categories = await productDAO.getCategoriesByProductId(product.id)
+    product.images = await conn.query(selectImageByProductId, [product.id])
+
+    return product
   } finally {
     if (conn) conn.release()
   }
