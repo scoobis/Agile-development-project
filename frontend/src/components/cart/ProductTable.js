@@ -33,7 +33,7 @@ const ProductTable = (props) => {
         {name}
       </TableCell>
       <TableCell>
-        <PickAmount inStock={25} handleAmountChange={handleAmountChange} /> {/*TODO: Set inStock */}
+        <PickAmount inStock={25} handleAmountChange={handleAmountChange} initialValue={quantity} /> {/*TODO: Set inStock */}
       </TableCell>
       <TableCell align='right' className={classes.bold}>
         {price * quantity}.00 SEK
