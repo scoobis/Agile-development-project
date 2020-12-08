@@ -16,7 +16,7 @@ const SpecificProductCard = (props) => {
 
   const { name, price, unit, inStock, id } = props
 
-  const { addProduct, state } = useContext(CartContext)
+  const { addProduct } = useContext(CartContext)
 
   const classes = useStyles()
 

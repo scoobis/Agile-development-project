@@ -19,7 +19,8 @@ const useStyles = makeStyles({
 })
 
 // TDOD: remove <br />?
-const SummaryCard = () => {
+const SummaryCard = (props) => {
+  const { total } = props
   const classes = useStyles()
   return (
     <Grid className={classes.summaryContainer}>
@@ -31,13 +32,13 @@ const SummaryCard = () => {
         Order belopp
       </Typography>
       <Typography className={classes.test} variant='body1'>
-        200.00 SEK
+        {total}.00 SEK
       </Typography>
       <br />
       <br />
       <hr />
       <Typography display='inline' variant='body1'>
-        Frakt
+        Frakt??
       </Typography>
       <Typography className={classes.test} variant='body1'>
         75.00 SEK
@@ -50,7 +51,7 @@ const SummaryCard = () => {
         SubTotal
       </Typography>
       <Typography className={classes.test} variant='h4'>
-        275.00 SEK
+        {total + 75}.00 SEK
       </Typography>
       <br />
       <br />

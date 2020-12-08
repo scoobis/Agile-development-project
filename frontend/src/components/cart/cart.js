@@ -40,7 +40,7 @@ const Cart = () => {
           </TableContainer>
         </Grid>
         <Grid item xs={4}>
-          <SummaryCard />
+          <SummaryCard total={state.total} />
         </Grid>
       </Grid>
     </Container>

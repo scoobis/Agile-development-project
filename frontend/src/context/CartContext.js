@@ -1,5 +1,5 @@
 import React, { useContext, createContext, useReducer } from 'react'
-import { CartReducer } from './CartReducer'
+import { CartReducer, totoalSum } from './CartReducer'
 import { getInStorage } from '../utils/localStorage'
 
 export const CartContext = createContext()
@@ -10,6 +10,7 @@ const CartContextProvider = (props) => {
 
   const initialState = {
     cartProducts: savedCartProducts || [],
+    ...totoalSum(savedCartProducts),
   }
   const [state, dispatch] = useReducer(CartReducer, initialState)
 
