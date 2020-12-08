@@ -41,7 +41,7 @@ function ProductForm ({ onSubmit, preFilled }) {
   const getParentCategoriesForChildren = () => {
     const arr = []
     const selectedCategories = state.product.categories
-    if (selectedCategories.length) {
+    if (selectedCategories.length > 1) {
       for (const selectedCatId of selectedCategories) {
         for (const category of categories) {
           const parents = findParents(category, parseInt(selectedCatId))
@@ -50,6 +50,8 @@ function ProductForm ({ onSubmit, preFilled }) {
           }
         }
       }
+    } else if (selectedCategories.length === 1) {
+      arr.push(parseInt(selectedCategories[0]))
     }
     return [...new Set(arr)]
   }
@@ -80,7 +82,7 @@ function ProductForm ({ onSubmit, preFilled }) {
     onSubmit({
       ...state.product,
       orgNumber: user.user.orgNumber,
-      categories: getParentCategoriesForChildren()
+      categories: getParentCategoriesForChildren() || []
     }).then(response => {
       if (response.success) {
         preFilled
