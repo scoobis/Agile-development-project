@@ -1,5 +1,5 @@
 import React from 'react'
-import PickAmount from '../products/PickAmount'
+import PickAmountCart from './PickAmountCart'
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever'
 import { makeStyles, withStyles } from '@material-ui/core/styles'
 import { IconButton, TableCell, TableRow } from '@material-ui/core'
@@ -20,9 +20,9 @@ const useStyles = makeStyles({
 
 const ProductTable = (props) => {
   const classes = useStyles()
-  const handleAmountChange = (value) => 5
 
-  const { name, quantity, price } = props.product
+  const { name, quantity, price, id } = props.product
+  const { increase } = props
 
   return (
     <StyledTableRow>
@@ -33,7 +33,7 @@ const ProductTable = (props) => {
         {name}
       </TableCell>
       <TableCell>
-        <PickAmount inStock={25} handleAmountChange={handleAmountChange} initialValue={quantity} /> {/*TODO: Set inStock */}
+        <PickAmountCart inStock={25} increase={increase} initialValue={quantity} id={id} /> {/*TODO: Set inStock */}
       </TableCell>
       <TableCell align='right' className={classes.bold}>
         {price * quantity}.00 SEK

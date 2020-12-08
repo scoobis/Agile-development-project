@@ -16,8 +16,9 @@ const CartContextProvider = (props) => {
   const [state, dispatch] = useReducer(CartReducer, initialState)
 
   const addProduct = (payload) => dispatch({ type: 'ADD_PRODUCT', payload })
+  const increase = (payload) => dispatch({ type: 'INCREASE', payload })
 
-  return <CartContext.Provider value={{ addProduct, state }}>{props.children}</CartContext.Provider>
+  return <CartContext.Provider value={{ addProduct, increase, state }}>{props.children}</CartContext.Provider>
 }
 
 export default CartContextProvider

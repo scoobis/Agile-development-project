@@ -15,7 +15,7 @@ const useStyles = makeStyles({ test: { boxShadow: 'none' } })
 const Cart = () => {
   const classes = useStyles()
 
-  const { state } = useContext(CartContext)
+  const { state, increase } = useContext(CartContext)
 
   return (
     <Container>
@@ -25,7 +25,7 @@ const Cart = () => {
             <Table>
               <TableBody>
                 {state.cartProducts.map((product) => {
-                  return <ProductTable product={product} key={product.id} />
+                  return <ProductTable product={product} increase={increase} key={product.id} />
                 })}
               </TableBody>
             </Table>
