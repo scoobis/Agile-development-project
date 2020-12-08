@@ -64,9 +64,9 @@ service.get = async (req, res, next) => {
   const productId = await req.params.id
   // const product = await service.getProductFromQueryResult(await productDAO.get(productId))
   const product = await productDAO.get(productId)
-  if (product) {
-    product.categories = await productDAO.getCategoriesByProductId(product.id)
-  }
+  // if (product) {
+  //   product.categories = await productDAO.getCategoriesByProductId(product.id)
+  // }
   // return new Product()
   return product
 }

@@ -1,4 +1,8 @@
-class product {
+/**
+ * Model representing a Product.
+ * @class Product
+ */
+class Product {
   constructor (id = null, orgNumber, name, description, price, salePrice = null, unit, inStock, categories = [], images = []) {
     this.id = id
     this.orgNumber = orgNumber
@@ -13,4 +17,4 @@ class product {
   }
 }
 
-module.exports = product
+module.exports = Product

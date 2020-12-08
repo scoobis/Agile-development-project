@@ -1,6 +1,7 @@
 const pool = require('./databaseConnection')
 const createError = require('http-errors')
 const Product = require('../models/product')
+const product = require('../models/product')
 
 const productDAO = {}
 
@@ -115,6 +116,8 @@ productDAO.delete = async (productId) => {
  * Gets a product by its id
  *
  * @param {} productId
+ *
+ * @return {Product}
  */
 productDAO.get = async (productId) => {
   let conn
@@ -123,10 +126,10 @@ productDAO.get = async (productId) => {
     const [row] = await conn.query('SELECT * FROM product WHERE id=?', [productId])
     const { id, producer_org_no, name, description, price, unit, in_stock } = row
     // get categories
-    // const categoryArray? = await productDAO.getCategoriesByProductId(id)
+    const categoryArray = await productDAO.getCategoriesByProductId(id)
     // get images
     const imageArray = await conn.query('SELECT * FROM product_image WHERE product_id = ?', [productId])
-    return new Product(id, producer_org_no, name, description, price, null, unit, in_stock, [], imageArray)
+    return new Product(id, producer_org_no, name, description, price, null, unit, in_stock, categoryArray, imageArray)
     // return row
   } finally {
     if (conn) conn.release()
