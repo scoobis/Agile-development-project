@@ -1,5 +1,4 @@
 const createError = require('http-errors')
-const service = require('../services/userService')
 const userService = require('../services/userService')
 const productService = require('../services/validateProductService')
 
@@ -70,7 +69,7 @@ validate.producer = async (req, res, next) => {
  */
 validate.product = async (req, res, next) => {
   const { orgNumber, name, description, price, salePrice, unit, inStock, categories, images } = req.body
-
+  console.log(await req.body)
   /**
    * OrgNumber
    */
@@ -161,7 +160,7 @@ validate.product = async (req, res, next) => {
    * Images
    */
   if (!images) {
-    return next(createError(400, 'The image array is "undefined"'))
+    // return next(createError(400, 'The image array is "undefined"'))
   }
 
   next()
