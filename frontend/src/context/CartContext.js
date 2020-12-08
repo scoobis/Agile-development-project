@@ -7,8 +7,9 @@ export const CartContext = createContext()
 let savedCartProducts
 if (typeof window !== 'undefined') savedCartProducts = window.localStorage.getItem('cart') ? getInStorage('cart') : []
 
+console.log(savedCartProducts)
 const initialState = {
-  cartProducts: savedCartProducts,
+  cartProducts: savedCartProducts || [],
 }
 
 const CartContextProvider = (props) => {
@@ -16,7 +17,7 @@ const CartContextProvider = (props) => {
 
   const addProduct = (payload) => dispatch({ type: 'ADD_PRODUCT', payload })
 
-  return <CartContext.Provider value={{ addProduct }}>{props.children}</CartContext.Provider>
+  return <CartContext.Provider value={{ addProduct, state }}>{props.children}</CartContext.Provider>
 }
 
 export default CartContextProvider

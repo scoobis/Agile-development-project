@@ -10,6 +10,7 @@ export const CartReducer = (state, action) => {
 }
 
 const addProduct = (state, payload) => {
+  console.log(state)
   const exists = state.cartProducts.find((product) => product.id === payload.id)
   if (exists) {
     const addedIndex = state.cartProducts.findIndex((product) => product.id === payload.id)
@@ -20,6 +21,6 @@ const addProduct = (state, payload) => {
       quantity: payload.amount, // TODO: Need more information?
     })
   }
-  saveInStorage('cart', state)
+  saveInStorage('cart', state.cartProducts)
   return { ...state, cartProducts: [...state.cartProducts] }
 }
