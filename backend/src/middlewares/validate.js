@@ -1,5 +1,5 @@
 const createError = require('http-errors')
-const service = require('../services/userService')
+const userService = require('../services/userService')
 
 const validate = {}
 
@@ -10,10 +10,10 @@ validate.user = async (req, res, next) => {
     return next(error)
   }
 
-  const isValidPassword = service.isValidPassword(password)
-  const isValidName = service.isValidName(name)
-  const isValidEmail = service.isValidEmail(email)
-  const isAlreadyRegistered = service.isAlreadyRegistered(email)
+  const isValidPassword = userService.isValidPassword(password)
+  const isValidName = userService.isValidName(name)
+  const isValidEmail = userService.isValidEmail(email)
+  const isAlreadyRegistered = userService.isAlreadyRegistered(email)
 
   if (!isValidPassword) {
     const error = createError(400, 'Password needs to be at least 6 characters long!')
@@ -33,19 +33,18 @@ validate.user = async (req, res, next) => {
 }
 
 validate.producer = async (req, res, next) => {
-  if (req.body.role === 'producer') { //If statement could be removed if verified from other place
-
+  if (req.body.role === 'producer') {
     const { orgNumber, phone, zip } = req.body
 
-    const isValidOrganizationNumber = service.isValidOrganizationNumber(orgNumber)
-    const isValidPhoneNumber = service.isValidPhoneNumber(phone)
-    const isValidZipCode = service.isValidZipCode(zip)
-    const isOrgNumberAlreadyInUse = service.isOrgNumberAlreadyInUse(orgNumber)
+    const isValidOrganizationNumber = userService.isValidOrganizationNumber(orgNumber)
+    const isValidPhoneNumber = userService.isValidPhoneNumber(phone)
+    const isValidZipCode = userService.isValidZipCode(zip)
+    const isOrgNumberAlreadyInUse = userService.isOrgNumberAlreadyInUse(orgNumber)
 
     if (!isValidOrganizationNumber) {
       const error = createError(400, 'Not a valid organization number')
       return next(error)
-    } else if (!isValidPhoneNumber){
+    } else if (!isValidPhoneNumber) {
       const error = createError(400, 'Not a valid phone number')
       return next(error)
     } else if (!isValidZipCode) {
@@ -61,6 +60,11 @@ validate.producer = async (req, res, next) => {
 }
 
 validate.product = async (req, res, next) => {
+  // name (1-20)
+  // price (1-20)
+  // unit (1-20)
+  // inStock (1-9999999)
+  // categories (>0)
   console.log('VALIDATION TO BE ADDED?')
   next()
 }
