@@ -1,26 +1,18 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import SummaryCard from './SummaryCard'
 import { Container, Grid } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { CartContext } from '../../context/CartContext'
 
-import Table from '@material-ui/core/Table'
-import TableBody from '@material-ui/core/TableBody'
-import TableContainer from '@material-ui/core/TableContainer'
-import Paper from '@material-ui/core/Paper'
+import { Table, TableBody, TableContainer, Paper, TableCell, TableHead, TableRow } from '@material-ui/core'
 import ProductTable from './ProductTable'
-import TableCell from '@material-ui/core/TableCell'
-import TableHead from '@material-ui/core/TableHead'
-import TableRow from '@material-ui/core/TableRow'
 
 const useStyles = makeStyles({ test: { boxShadow: 'none' } })
 
 const Cart = () => {
   const classes = useStyles()
 
-  const { state, decrease, increase, removeProduct } = useContext(CartContext)
-
-  console.log('state:', state.cartProducts)
+  const { decrease, increase, removeProduct, state } = useContext(CartContext)
 
   return (
     <Container>

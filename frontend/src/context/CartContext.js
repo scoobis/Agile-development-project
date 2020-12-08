@@ -4,15 +4,13 @@ import { getInStorage } from '../utils/localStorage'
 
 export const CartContext = createContext()
 
-let savedCartProducts
-if (typeof window !== 'undefined') savedCartProducts = window.localStorage.getItem('cart') ? getInStorage('cart') : []
-
-console.log('SAVE', savedCartProducts)
-const initialState = {
-  cartProducts: savedCartProducts || [],
-}
-
 const CartContextProvider = (props) => {
+  let savedCartProducts
+  if (typeof window !== 'undefined') savedCartProducts = window.localStorage.getItem('cart') ? getInStorage('cart') : []
+
+  const initialState = {
+    cartProducts: savedCartProducts || [],
+  }
   const [state, dispatch] = useReducer(CartReducer, initialState)
 
   const addProduct = (payload) => dispatch({ type: 'ADD_PRODUCT', payload })
@@ -20,9 +18,7 @@ const CartContextProvider = (props) => {
   const decrease = (payload) => dispatch({ type: 'DECREASE', payload })
   const removeProduct = (payload) => dispatch({ type: 'REMOVE_PRODUCT', payload })
 
-  console.log('CONTEXT', state.cartProducts)
-
-  return <CartContext.Provider value={{ addProduct, increase, decrease, state, removeProduct }}>{props.children}</CartContext.Provider>
+  return <CartContext.Provider value={{ state, addProduct, increase, decrease, removeProduct }}>{props.children}</CartContext.Provider>
 }
 
 export default CartContextProvider
