@@ -82,7 +82,8 @@ function ProductForm ({ onSubmit, preFilled }) {
     onSubmit({
       ...state.product,
       orgNumber: user.user.orgNumber,
-      categories: getParentCategoriesForChildren() || []
+      categories: getParentCategoriesForChildren() || [],
+      description: state.product.description || ''
     }).then(response => {
       if (response.success) {
         preFilled
