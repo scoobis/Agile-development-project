@@ -10,6 +10,7 @@ function ProductsPage() {
         <Products />
       </CartContextProvider>
     </Layout>
+  )
 }
 
 export default ProductsPage
