@@ -61,44 +61,64 @@ validate.producer = async (req, res, next) => {
 
 validate.product = async (req, res, next) => {
   const { orgNumber, name, description, price, salePrice, unit, inStock, categories, images } = req.body
-
-  // Check that orgNumber exists
+  console.log(description)
   if (!orgNumber) {
-    return next(createError(400, 'The organisation number is "undefined"'))
+    return next(createError(400, 'Organisation number is "undefined"'))
+  } else {
+    console.log('Check if orgNumber exists')
   }
 
-  if (!name || name.length < 1 || name.length > 20) {
-    return next(createError(400, 'The length of the product name must be within the range of 1-20'))
+  if (!name) {
+    return next(createError(400, 'Name is "undefined"'))
+  } else {
+    if (name.length < 1 || name.length > 20) {
+      return next(createError(400, 'The length of the product name must be within the range of 1-20'))
+    }
   }
 
   // No description needed but it should not be undefined
-  if (!description) {
-    return next(createError(400, 'The description is "undefined"'))
+  //if (!description) {
+  //  return next(createError(400, 'The description is "undefined"'))
+  //}
+
+  if (!price) {
+    return next(createError(400, 'Price is "undefined"'))
+  } else {
+    if (price.length < 1 || price.length > 20) {
+      return next(createError(400, 'Try to be more reasonable when setting the price'))
+    }
   }
 
-  if (!price || price.length < 1 || price.length > 20) {
-    return next(createError(400, 'Try to be more reasonable when setting the price'))
-  }
-
-  if (salePrice) {
-    if (salePrice.length >= price.length) {
+  if (!salePrice) {
+    return next(createError(400, 'The salePrice is "undefined"'))
+  } else {
+    if (salePrice >= price) {
       return next(createError(400, 'The sale price must be lower than the original price'))
     }
+  }
+
+  if (!unit) {
+    return next(createError(400, 'Unit is "undefined"'))
   } else {
-    // No salePrice needed but it should not be undefined
-    return next(createError(400, 'The salePrice is "undefined"'))
+    if (unit.length < 1 || unit.length > 20) {
+      return next(createError(400, 'The length of the product unit name must be within the range of 1-20'))
+    }
   }
 
-  if (!unit || unit.length < 1 || unit.length > 20) {
-    return next(createError(400, 'The length of the product name must be within the range of 1-20'))
+  if (!inStock) {
+    return next(createError(400, 'inStock is "undefined"'))
+  } else {
+    if (inStock.length < 1 || inStock.length > 9999999) {
+      return next(createError(400, 'The number of units in stock must be at least 1 and at most 999999'))
+    }
   }
 
-  if (!inStock || inStock.length < 1 || inStock.length > 9999999) {
-    return next(createError(400, 'The number of units in stock must be at least 1 and at most 999999'))
-  }
-
-  if (!categories || categories.length < 1) {
-    return next(createError(400, 'The product must belong to at least 1 category'))
+  if (!categories) {
+    return next(createError(400, 'Categories is "undefined"'))
+  } else {
+    if (categories.length < 1) {
+      return next(createError(400, 'The product must belong to at least 1 category'))
+    }
   }
 
   // Wait for implementation to see whats needed
