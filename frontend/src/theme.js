@@ -4,10 +4,10 @@ import { red } from '@material-ui/core/colors'
 const theme = createMuiTheme({
   palette: {
     primary: {
-      main: '#dae1c3'
+      main: '#81b23e'
     },
     secondary: {
-      main: '#acafa1'
+      main: '#dae1c3'
     },
     error: {
       main: red.A400
@@ -43,6 +43,17 @@ const theme = createMuiTheme({
     },
     h5: {
       fontSize: '1.25rem'
+    }
+  },
+  overrides: {
+    MuiButton: {
+      root: {
+        borderRadius: '30px',
+        paddingTop: '10px',
+        paddingBottom: '10px',
+        paddingLeft: '25px',
+        paddingRight: '25px'
+      }
     }
   }
 })

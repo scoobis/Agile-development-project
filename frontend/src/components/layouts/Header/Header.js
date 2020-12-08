@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { AuthContext } from '../../../context/AuthContext'
 import Link from 'next/link'
 import Router from 'next/router'
@@ -10,15 +10,15 @@ import IconButton from '@material-ui/core/IconButton'
 import AccountCircle from '@material-ui/icons/AccountCircle'
 import LocalMallOutlinedIcon from '@material-ui/icons/LocalMallOutlined'
 import SearchBar from '../../SearchBar'
-import Button from '@material-ui/core/Button'
+import { Menu, MenuItem } from '@material-ui/core'
+import Navbar from './Navbar'
 
 const useStyles = makeStyles((theme) => ({
   grow: {
     flexGrow: 1,
   },
   header: {
-    paddingTop: '10px',
-    paddingBottom: '10px',
+    paddingTop: '10px'
   },
   logo: {
     maxWidth: '200px',
@@ -30,12 +30,62 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Header() {
   const classes = useStyles()
-  const { signout, user } = useContext(AuthContext)
+  const { signout, user, isCustomer, isProducer } = useContext(AuthContext)
+  const [anchorEl, setAnchorEl] = useState(null)
+
+  const isMenuOpen = Boolean(anchorEl)
+
+  const handleAccountMenuOpen = (event) => {
+    setAnchorEl(event.currentTarget)
+  }
+
+  const handleMenuClose = () => {
+    setAnchorEl(null)
+  }
 
   const handleSignout = () => {
     Router.push('/')
     signout()
   }
+
+  const LinkMenuItem = (props) => (
+    <Link href={props.href}>
+      <a>
+        <MenuItem>{props.title}</MenuItem>
+      </a>
+    </Link>
+  )
+
+  const renderAccountDropdownMenu = (
+    <Menu
+      anchorEl={anchorEl}
+      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+      id='my-account-menu'
+      keepMounted
+      open={isMenuOpen}
+      onClose={handleMenuClose}
+    >
+      {!user.isAuthenticated ? (
+        <div>
+          <LinkMenuItem href='/logga-in' title='Logga in' />
+          <LinkMenuItem href='/registrera' title='Registrera' />
+          <LinkMenuItem href='/bli-producent' title='Bli producent' />
+        </div>
+      ) : isCustomer ? (
+        <div>
+          <LinkMenuItem href='/mitt-konto' title='Mitt konto' />
+          <MenuItem onClick={handleSignout}>Logga ut</MenuItem>
+        </div>
+      ) : isProducer && (
+        <div>
+          <LinkMenuItem href='/merchants' title='Mina produkter' />
+          <LinkMenuItem href='/merchants' title='Mitt konto' />
+          <MenuItem onClick={handleSignout}>Logga ut</MenuItem>
+        </div>
+      )}
+    </Menu>
+  )
 
   return (
     <div className={classes.grow}>
@@ -52,24 +102,25 @@ export default function Header() {
           <SearchBar />
           <div className={classes.grow} />
           <div className={classes.iconMenu}>
-            <Link href='/registrera'>
-              <a>
-                <IconButton edge='end' onClick={() => console.log('Clicked account button!')} color='inherit'>
-                  <AccountCircle />
-                </IconButton>
-              </a>
-            </Link>
-            {user.isAuthenticated && <Button onClick={handleSignout}>Logga ut</Button>}
-            <Link href={'/varukorg'}>
-              <a>
-                <IconButton edge='end' onClick={() => console.log('Clicked cart button!')} color='inherit'>
-                  <LocalMallOutlinedIcon />
-                </IconButton>
-              </a>
-            </Link>
+            <IconButton
+              edge='end'
+              onClick={handleAccountMenuOpen}
+              color='inherit'
+            >
+              <AccountCircle />
+            </IconButton>
+            <IconButton
+              edge='end'
+              onClick={() => console.log('Clicked cart button!')}
+              color='inherit'
+            >
+              <LocalMallOutlinedIcon />
+            </IconButton>
           </div>
         </Toolbar>
+        <Navbar />
       </AppBar>
+      {renderAccountDropdownMenu}
     </div>
   )
 }

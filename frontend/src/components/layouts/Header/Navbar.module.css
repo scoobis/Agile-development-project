@@ -1,0 +1,49 @@
+.mainMenu {
+    display: flex;
+    background: #f9f9f9;
+}
+
+.mainMenu ul {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    list-style-type: none;
+    padding-inline-start: 0;
+    width: 100%;
+}
+
+.mainMenu ul li {
+    padding: 10px 15px;
+}
+
+.mainMenu ul li a {
+    text-decoration: none;
+    font-weight: 600;
+    color: #313131;
+}
+
+.megaMenu {
+    width: 800px;
+    max-width: 800px;   
+}
+
+.megaMenu .parentCategory {
+    font-weight: 600;
+    border-bottom: 1px solid #dddddd;
+}
+
+.megaMenu .listItem {
+    border-bottom: 1px solid #f9f9f9;
+}
+
+.megaMenu .listItem a {
+    color: #313131;
+}
+
+.megaMenu a {
+    text-decoration: none;
+}
+
+.button {
+    text-transform: none !important;
+}

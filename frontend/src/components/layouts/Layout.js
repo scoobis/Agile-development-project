@@ -1,9 +1,13 @@
-import { Container } from '@material-ui/core'
 import React from 'react'
 
-function Layout ({ children }) {
+function Layout ({ children, pt = '60', pb = '60', mh = '60' }) {
   return (
-    <div style={{ paddingTop: '60px', paddingBottom: '60px', minHeight: '60vh' }}>
+    <div style={{
+      paddingTop: `${pt}px`,
+      paddingBottom: `${pb}px`,
+      minHeight: `${mh}vh`
+    }}
+    >
       {children}
     </div>
   )

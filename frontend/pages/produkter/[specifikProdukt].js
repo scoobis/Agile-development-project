@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router'
+import Layout from '../../src/components/layouts/Layout'
 import SpecificProduct from '../../src/components/products/SpecificProduct'
 import CartContextProvider from '../../src/context/CartContext'
 
@@ -7,9 +8,11 @@ const Post = () => {
   const { specifikProdukt } = router.query
 
   return (
-    <CartContextProvider>
-      <SpecificProduct productId={specifikProdukt} />
-    </CartContextProvider>
+    <Layout>
+      <CartContextProvider>
+        <SpecificProduct productId={specifikProdukt} />
+      </CartContextProvider>
+    </Layout>
   )
 }
 

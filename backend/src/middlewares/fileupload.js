@@ -3,7 +3,7 @@ const path = require('path')
 const createError = require('http-errors')
 const uuid4 = require('uuid').v4
 
-const imageUpload = {}
+const fileUpload = {}
 
 // General storage of uploads.
 const storage = multer.diskStorage({
@@ -16,7 +16,7 @@ const storage = multer.diskStorage({
 })
 
 // Multer object for product
-const productUpload = multer({
+const productImageUpload = multer({
   storage: storage,
   limits: { fileSize: 2000000, files: 3 },
   fileFilter: function (req, file, cb) {
@@ -33,8 +33,8 @@ const productUpload = multer({
 }).any()
 
 // product image uploader with error handling?
-imageUpload.product = function (req, res, next) {
-  productUpload(req, res, function (err) {
+fileUpload.product = function (req, res, next) {
+  productImageUpload(req, res, function (err) {
     if (err instanceof multer.MulterError) {
       if (err.code === 'LIMIT_FILE_COUNT') {
         return next(createError(400, 'Too many files!'))
@@ -47,4 +47,4 @@ imageUpload.product = function (req, res, next) {
   })
 }
 
-module.exports = imageUpload
+module.exports = fileUpload
