@@ -123,7 +123,7 @@ productDAO.get = async (productId) => {
     const [row] = await conn.query('SELECT * FROM product WHERE id=?', [productId])
     const { id, producer_org_no, name, description, price, unit, in_stock } = row
     // get categories
-    // const categoryArray? = await conn.query()
+    // const categoryArray? = await productDAO.getCategoriesByProductId(id)
     // get images
     // const imageArray = await.conn.query()
 
@@ -153,6 +153,8 @@ productDAO.getAll = async () => {
         const product = getProduct(row)
 
         product.categories = await productDAO.getCategoriesByProductId(product.id)
+
+        // getImages
 
         products.push(product)
       }
@@ -186,6 +188,8 @@ productDAO.getAllByOrgNumber = async (orgNumber) => {
         const product = getProduct(row)
 
         product.categories = await productDAO.getCategoriesByProductId(product.id)
+
+        // getImages
 
         products.push(product)
       }
@@ -223,6 +227,8 @@ productDAO.getAllByCategoryId = async (categoryId) => {
           const product = getProduct(row)
 
           product.categories = await productDAO.getCategoriesByProductId(product.id)
+
+          // getImages
 
           products.push(product)
         }
