@@ -1,12 +1,15 @@
 class product {
-  constructor (orgNumber, name, desc, price, unit, inStock, categories) {
+  constructor (id = null, orgNumber, name, description, price, salePrice = null, unit, inStock, categories = [], images = []) {
+    this.id = id
     this.orgNumber = orgNumber
     this.name = name
-    this.desc = desc
+    this.description = description
     this.price = price
+    this.salePrice = salePrice
     this.unit = unit
     this.inStock = inStock
     this.categories = categories
+    this.images = images
   }
 }
 
