@@ -31,16 +31,16 @@ const SummaryCard = () => {
         Order belopp
       </Typography>
       <Typography className={classes.test} variant='body1'>
-        200,00 SEK
+        200.00 SEK
       </Typography>
       <br />
       <br />
-      <br />
+      <hr />
       <Typography display='inline' variant='body1'>
         Frakt
       </Typography>
       <Typography className={classes.test} variant='body1'>
-        75,00 SEK
+        75.00 SEK
       </Typography>
       <br />
       <br />
@@ -50,7 +50,7 @@ const SummaryCard = () => {
         SubTotal
       </Typography>
       <Typography className={classes.test} variant='h4'>
-        275,00 SEK
+        275.00 SEK
       </Typography>
       <br />
       <br />

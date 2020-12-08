@@ -1,11 +1,11 @@
-import React, { useContext, createContext, useReducer } from 'react'
+import React, { useContext, createContext, useReducer, useEffect } from 'react'
 import { CartReducer } from './CartReducer'
 import { getInStorage } from '../utils/localStorage'
 
 export const CartContext = createContext()
 
-//const savedCartProducts = localStorage.getItem('cart') ? getInStorage('cart') : []
-const savedCartProducts = []
+let savedCartProducts
+if (typeof window !== 'undefined') savedCartProducts = window.localStorage.getItem('cart') ? getInStorage('cart') : []
 
 const initialState = {
   cartProducts: savedCartProducts,
