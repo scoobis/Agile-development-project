@@ -23,5 +23,6 @@ export const removeUserCookie = () => {
 }
 
 export const getUserToken = () => {
-  return getUserCookie().token || ''
+  const cookie = getUserCookie()
+  return cookie && cookie.token ? cookie.token : ''
 }
