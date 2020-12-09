@@ -12,29 +12,29 @@ const ProductCard = (props) => {
       cursor: 'pointer',
       '&:hover': {
         border: 4,
-        boxShadow: '0 2px 2px 2px black',
-      },
+        boxShadow: '0 2px 2px 2px black'
+      }
     },
     title: {
-      fontSize: 14,
+      fontSize: 14
     },
     pos: {
-      marginBottom: 12,
+      marginBottom: 12
     },
     img: {
       width: '260px',
       margin: 'auto',
-      display: 'block',
+      display: 'block'
     },
     a: {
       color: 'black',
-      textDecoration: 'none',
+      textDecoration: 'none'
     },
     media: {
-      height: 200,
+      height: 200
     },
     green: { color: 'green' },
-    yellow: { color: '#dee600' },
+    yellow: { color: '#dee600' }
   })
 
   const classes = useStyles()

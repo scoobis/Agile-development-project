@@ -1,7 +1,6 @@
 import { useRouter } from 'next/router'
 import Layout from '../../src/components/layouts/Layout'
 import SpecificProduct from '../../src/components/products/SpecificProduct'
-import CartContextProvider from '../../src/context/CartContext'
 
 const Post = () => {
   const router = useRouter()
@@ -9,9 +8,7 @@ const Post = () => {
 
   return (
     <Layout>
-      <CartContextProvider>
-        <SpecificProduct productId={specifikProdukt} />
-      </CartContextProvider>
+      <SpecificProduct productId={specifikProdukt} />
     </Layout>
   )
 }

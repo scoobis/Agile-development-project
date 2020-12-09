@@ -31,9 +31,9 @@ export default function MyApp(props) {
         <AuthProvider>
           <CartContextProvider>
             <Header />
+            <Component {...pageProps} />
+            <Footer />
           </CartContextProvider>
-          <Component {...pageProps} />
-          <Footer />
         </AuthProvider>
       </ThemeProvider>
     </>
