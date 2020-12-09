@@ -1,14 +1,15 @@
 const pool = require('./databaseConnection')
 const createError = require('http-errors')
 const Product = require('../models/product')
+const ProductImage = require('../models/productimage')
 
 const productDAO = {}
 
 /**
- * Registers a new product
+ * Registers a new product.
  *
- * @param {} product
- * @param {} categoryId
+ * @param {Product} product
+ * @throws {Error}
  */
 productDAO.create = async (product, files) => {
   let conn
@@ -92,14 +93,15 @@ productDAO.update = async (product) => {
 }
 
 /**
- * Deletes a product
+ * Deletes a product.
  *
- * @param {} productId
+ * @param {number} productId
  */
 productDAO.delete = async (productId) => {
   let conn
   try {
     conn = await pool.getConnection()
+    // TODO: Transaction; remove category relation and images.
 
     const deleteProductByIdQuery = 'DELETE FROM product WHERE id=?'
 
@@ -114,9 +116,9 @@ productDAO.delete = async (productId) => {
 }
 
 /**
- * Gets a product by its id
+ * Get product data.
  *
- * @param {} productId
+ * @param {number} productId
  *
  * @return {Product}
  */
@@ -130,7 +132,7 @@ productDAO.get = async (productId) => {
 
     const [row] = await conn.query(selectProductById, [productId])
 
-    const product = getProduct(row)
+    const product = parseProduct(row)
     product.categories = await productDAO.getCategoriesByProductId(product.id)
     product.images = await conn.query(selectImageByProductId, [product.id])
 
@@ -143,6 +145,7 @@ productDAO.get = async (productId) => {
 /**
  * Gets all products
  *
+ * @return {Product[]}
  */
 productDAO.getAll = async () => {
   let conn
@@ -156,7 +159,7 @@ productDAO.getAll = async () => {
 
     if (rows.length > 0) {
       for (const row of rows) {
-        const product = getProduct(row)
+        const product = parseProduct(row)
 
         product.categories = await productDAO.getCategoriesByProductId(product.id)
 
@@ -175,9 +178,10 @@ productDAO.getAll = async () => {
 }
 
 /**
- * Gets all products from a specific producer
+ * Get all products from a specific producer.
  *
- * @param {} orgNumber
+ * @param {number} orgNumber
+ * @return {Product[]}
  */
 productDAO.getAllByOrgNumber = async (orgNumber) => {
   let conn
@@ -191,7 +195,7 @@ productDAO.getAllByOrgNumber = async (orgNumber) => {
 
     if (rows.length > 0) {
       for await (const row of rows) {
-        const product = getProduct(row)
+        const product = parseProduct(row)
 
         product.categories = await productDAO.getCategoriesByProductId(product.id)
 
@@ -210,9 +214,10 @@ productDAO.getAllByOrgNumber = async (orgNumber) => {
 }
 
 /**
- * Gets all products from a specific category
+ * Gets all products from a specific category.
  *
- * @param {*} categoryId
+ * @param {number} categoryId
+ * @return {Product[]}
  */
 productDAO.getAllByCategoryId = async (categoryId) => {
   let conn
@@ -230,7 +235,7 @@ productDAO.getAllByCategoryId = async (categoryId) => {
         for (const key in productId) {
           const [row] = await conn.query(selectAllProductsById, [productId[key]])
 
-          const product = getProduct(row)
+          const product = parseProduct(row)
 
           product.categories = await productDAO.getCategoriesByProductId(product.id)
 
@@ -248,6 +253,10 @@ productDAO.getAllByCategoryId = async (categoryId) => {
   }
 }
 
+/**
+ * Get all categories.
+ * @return {*[]}
+ */
 productDAO.getAllCategories = async () => {
   let conn
   try {
@@ -259,6 +268,10 @@ productDAO.getAllCategories = async () => {
   }
 }
 
+/**
+ * Get all sub-categories.
+ * @return {*[]}
+ */
 productDAO.getAllSubCategories = async () => {
   let conn
   try {
@@ -273,7 +286,8 @@ productDAO.getAllSubCategories = async () => {
 /**
  * Gets a category by its id
  *
- * @param {*} id
+ * @param {number} id
+ * @return {*}
  */
 productDAO.getCategoryById = async (id) => {
   let conn
@@ -288,9 +302,10 @@ productDAO.getCategoryById = async (id) => {
 }
 
 /**
- * Gets all categories from a specific product
+ * Get all categories for a specific product.
  *
- * @param {*} productId
+ * @param {number} productId
+ * @return {*[]}
  */
 productDAO.getCategoriesByProductId = async (productId) => {
   // Maybe take conn as parameter, as its only used as help method at the moment
@@ -320,13 +335,37 @@ productDAO.getCategoriesByProductId = async (productId) => {
 }
 
 /**
- * Returns a Product
+ * Get the images belonging to a product.
+ * @param {number} productId - The associated productid.
+ * @return {ProductImage[]}
+ */
+productDAO.getImages = async (productId) => {
+  let conn
+  try {
+    conn = await pool.getConnection()
+    const images = []
+    const result = await conn.query('SELECT * FROM product_image WHERE product_id = ?', [productId])
+    result.forEach(
+      result => images.push(new ProductImage(result.id, result.product_id, result.image_name, result.alt_text))
+    )
+    return images
+  } finally { if (conn) conn.release() }
+}
+
+/**
+ *
+ * Private functions.
+ *
+ */
+
+/**
+ * Parses result set to a Product.
  *
  * @param {*} row
+ * @return {Product}
  */
-const getProduct = (row) => {
-  const { id, producer_org_no, name, description, price, unit, in_stock } = row
-  return new Product(id, producer_org_no, name, description, price, null, unit, in_stock, [], [])
+const parseProduct = (row) => {
+  return new Product(row.id, row.producer_org_no, row.name, row.description, row.price, null, row.unit, row.in_stock, [], [])
 }
 
 module.exports = productDAO
