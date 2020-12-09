@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
   iconMenu: {
     display: 'flex'
   },
-  activeCart: { background: '#81b23e', borderRadius: '10px', color: 'black', padding: '10px 40px 10px 40px' },
+  activeCart: { background: '#81b23e', borderRadius: '10px', padding: '10px 40px 10px 40px' },
   quantityCart: { fontSize: '16px', background: 'red', borderRadius: '50%', height: '20px', width: '20px' }
 }))
 
@@ -117,9 +117,15 @@ export default function Header() {
             </IconButton>
             <Link href='/varukorg'>
               <a>
-                <IconButton className={classes.activeCart} edge='end' onClick={() => console.log('Clicked cart button!')} color='inherit'>
+                <IconButton
+                  className={state.cartProducts.length ? classes.activeCart : ''}
+                  style={{ color: 'black' }}
+                  edge='end'
+                  onClick={() => console.log('Clicked cart button!')}
+                  color='inherit'
+                >
                   <LocalMallOutlinedIcon />
-                  <div className={classes.quantityCart}>{state.cartProducts.length}</div>
+                  <div className={state.cartProducts.length ? classes.quantityCart : ''}>{state.cartProducts.length ? state.cartProducts.length : ''}</div>
                 </IconButton>
               </a>
             </Link>
