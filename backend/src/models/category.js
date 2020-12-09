@@ -1,5 +1,5 @@
-class category {
-  constructor(name, desc) {
+class Category {
+  constructor (name, desc) {
     this.name = name
     this.desc = desc
   }
@@ -7,33 +7,35 @@ class category {
   /**
    * @param {any} id
    */
-  set id(id) {
+  set id (id) {
     this._id = id
   }
-  get id() {
+
+  get id () {
     return this._id
   }
 
   /**
    * @param {any} name
    */
-  set name(name) {
+  set name (name) {
     this._name = name
   }
-  get name() {
+
+  get name () {
     return this._name
   }
 
   /**
    * @param {any} desc
    */
-  set desc(desc) {
+  set desc (desc) {
     this._desc = desc
   }
-  get desc() {
+
+  get desc () {
     return this._desc
   }
-
 }
 
-module.exports = category
+module.exports = Category
