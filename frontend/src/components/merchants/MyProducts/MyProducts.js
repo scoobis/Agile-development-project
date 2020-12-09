@@ -11,6 +11,7 @@ import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import Paper from '@material-ui/core/Paper'
 import ProductTableItem from './ProductTableItem'
+import { Typography } from '@material-ui/core'
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -38,17 +39,21 @@ export default function MyProducts () {
   }, [])
 
   const getProducts = () =>
-    getProductsByProducer(user.user.orgNumber)
-      .then(setProducts)
+    getProductsByProducer(user.user.orgNumber).then((response) => {
+      if (response.status === 200) {
+        setProducts(response.data)
+      } else {
+        // setProducts([])
+      }
+    })
 
   const handleRemoveProduct = (id) => {
     removeProduct(id)
-      .then(response => response.success && (
-        setProducts(products.filter(product => product.id !== id))
-      )).catch(console.log)
+      .then((response) => response.success && setProducts(products.filter((product) => product.id !== id)))
+      .catch(console.log)
   }
 
-  return (
+  return products.length ? (
     <TableContainer component={Paper}>
       <Table className={classes.table} aria-label='customized table'>
         <TableHead>
@@ -65,15 +70,12 @@ export default function MyProducts () {
         </TableHead>
         <TableBody>
           {products.map((product) => (
-            <ProductTableItem
-              key={product.id}
-              product={product}
-              onEdit={getProducts}
-              onRemove={handleRemoveProduct}
-            />
+            <ProductTableItem key={product.id} product={product} onEdit={getProducts} onRemove={handleRemoveProduct} />
           ))}
         </TableBody>
       </Table>
     </TableContainer>
+  ) : (
+    <Typography>Inga produkter hittades</Typography>
   )
 }

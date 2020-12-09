@@ -23,16 +23,18 @@ const EMPTY_INITIAL_STATE = {
 
 function ProductForm ({ onSubmit, preFilled }) {
   const { user } = useAuth()
-  const [state, setState] = useState(preFilled
-    ? { ...EMPTY_INITIAL_STATE, product: { ...preFilled } }
-    : EMPTY_INITIAL_STATE)
+  const [state, setState] = useState(
+    preFilled ? { ...EMPTY_INITIAL_STATE, product: { ...preFilled } } : EMPTY_INITIAL_STATE
+  )
   const [categories, setCategories] = useState([])
 
   useEffect(() => {
-    getCategories().then(categories => {
-      const result = JSON.parse(JSON.stringify(categories)
-        .replace(/"name":/g, '"label":')
-        .replace(/"id":/g, '"value":'))
+    getCategories().then((categories) => {
+      const result = JSON.parse(
+        JSON.stringify(categories)
+          .replace(/"name":/g, '"label":')
+          .replace(/"id":/g, '"value":')
+      )
 
       setCategories(result)
     })
@@ -56,7 +58,7 @@ function ProductForm ({ onSubmit, preFilled }) {
     return [...new Set(arr)]
   }
 
-  const handleCategoryChange = categories => {
+  const handleCategoryChange = (categories) => {
     setState({
       ...state,
       product: {
@@ -66,7 +68,7 @@ function ProductForm ({ onSubmit, preFilled }) {
     })
   }
 
-  const handleImageChange = images => {
+  const handleImageChange = (images) => {
     setState({
       ...state,
       product: {
@@ -84,18 +86,20 @@ function ProductForm ({ onSubmit, preFilled }) {
       orgNumber: user.user.orgNumber,
       categories: getParentCategoriesForChildren() || [],
       description: state.product.description || ''
-    }).then(response => {
-      if (response.success) {
+    }).then((response) => {
+      if (response.success || response.status === 200) {
         preFilled
           ? setState({ ...state, message: response.message, errors: {} })
           : setState({ ...EMPTY_INITIAL_STATE, message: response.message, errors: {} })
+      } else if (response.status !== 200) {
+        setState({ ...state, message: response.data.message })
       } else {
         setState({ ...state, message: response.message })
       }
     })
   }
 
-  const handleChange = e => {
+  const handleChange = (e) => {
     e.target.setCustomValidity('')
 
     if (e.target.validity.valid) {
@@ -104,9 +108,7 @@ function ProductForm ({ onSubmit, preFilled }) {
       state.errors[e.target.name] = e.target.validationMessage
     }
 
-    const value = e.target.type === 'checkbox'
-      ? e.target.checked
-      : e.target.value
+    const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value
 
     setState({
       ...state,
@@ -115,7 +117,7 @@ function ProductForm ({ onSubmit, preFilled }) {
     })
   }
 
-  const handleError = e => {
+  const handleError = (e) => {
     setState({
       ...state,
       errors: {
@@ -252,26 +254,25 @@ function ProductForm ({ onSubmit, preFilled }) {
             />
           </Grid>
           <Grid item xs={12}>
-            <Typography variant='h5' style={{ marginBottom: '20px' }}>Kategorier</Typography>
+            <Typography variant='h5' style={{ marginBottom: '20px' }}>
+              Kategorier
+            </Typography>
             <Box style={{ maxHeight: '200px', overflow: 'auto' }}>
-              <MultipleSelect options={categories} checked={state.product.categories} onChecked={handleCategoryChange} />
+              <MultipleSelect
+                options={categories}
+                checked={state.product.categories}
+                onChecked={handleCategoryChange}
+              />
             </Box>
           </Grid>
           <Grid item xs={12}>
-            <Button
-              type='submit'
-              variant='contained'
-              color='primary'
-              fullWidth
-            >
+            <Button type='submit' variant='contained' color='primary' fullWidth>
               Skapa produkt
             </Button>
           </Grid>
         </Grid>
       </form>
-      {state.message && (
-        <Typography style={{ marginTop: '20px' }}>{state.message}</Typography>
-      )}
+      {state.message && <Typography style={{ marginTop: '20px' }}>{state.message}</Typography>}
     </Container>
   )
 }
