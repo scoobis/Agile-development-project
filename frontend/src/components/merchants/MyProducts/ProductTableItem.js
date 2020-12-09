@@ -10,23 +10,23 @@ import DeleteForeverIcon from '@material-ui/icons/DeleteForever'
 const StyledTableRow = withStyles((theme) => ({
   root: {
     '&:nth-of-type(odd)': {
-      backgroundColor: theme.palette.action.hover
-    }
-  }
+      backgroundColor: theme.palette.action.hover,
+    },
+  },
 }))(TableRow)
 
 const useStyles = makeStyles({
   thumbnail: {
-    maxHeight: 50
-  }
+    maxHeight: 50,
+  },
 })
 
 const ACTIONS = {
   REMOVE_PRODUCT: 'REMOVE_PRODUCT',
-  EDIT_PRODUCT: 'EDIT_PRODUCT'
+  EDIT_PRODUCT: 'EDIT_PRODUCT',
 }
 
-function ProductTableItem ({ product, onEdit, onRemove }) {
+function ProductTableItem({ product, onEdit, onRemove }) {
   const [action, setAction] = useState('')
   const classes = useStyles()
 
@@ -34,15 +34,15 @@ function ProductTableItem ({ product, onEdit, onRemove }) {
     <StyledTableRow>
       <TableCell component='th' scope='row'>
         <Link href={`/produkter/${product.id}`}>
-          <a>
-            {product.name}
-          </a>
+          <a>{product.name}</a>
         </Link>
       </TableCell>
       <TableCell align='right'>{product.price} kr</TableCell>
       <TableCell align='right'>{product.salePrice || ''}</TableCell>
       <TableCell align='right'>{product.unit}</TableCell>
-      <TableCell align='right'>{product.inStock} {product.unit}</TableCell>
+      <TableCell align='right'>
+        {product.inStock} {product.unit}
+      </TableCell>
       <TableCell align='right'>{product.categories || ''}</TableCell>
       <TableCell align='right'>
         <img className={classes.thumbnail} src={product.thumbnail || '/apples.jpg'} />
@@ -57,18 +57,21 @@ function ProductTableItem ({ product, onEdit, onRemove }) {
       </TableCell>
       {action === ACTIONS.EDIT_PRODUCT ? (
         <EditProductForm
-          product={product} onClose={() => {
+          product={product}
+          onClose={() => {
             setAction('')
             onEdit()
           }}
         />
-      ) : action === ACTIONS.REMOVE_PRODUCT && (
-        <ConfirmModal
-          title={`Vill du ta bort ${product.name}?`}
-          content='Den här åtgärden går inte att ångra.'
-          name={product.name}
-          isConfirmed={(shouldRemove => shouldRemove ? onRemove(product.id) : setAction(''))}
-        />
+      ) : (
+        action === ACTIONS.REMOVE_PRODUCT && (
+          <ConfirmModal
+            title={`Vill du ta bort ${product.name}?`}
+            content='Den här åtgärden går inte att ångra.'
+            name={product.name}
+            isConfirmed={(shouldRemove) => (shouldRemove ? onRemove(product.id) : setAction(''))}
+          />
+        )
       )}
     </StyledTableRow>
   )

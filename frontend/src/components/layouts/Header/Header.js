@@ -15,20 +15,20 @@ import Navbar from './Navbar'
 
 const useStyles = makeStyles((theme) => ({
   grow: {
-    flexGrow: 1
+    flexGrow: 1,
   },
   header: {
-    paddingTop: '10px'
+    paddingTop: '10px',
   },
   logo: {
-    maxWidth: '200px'
+    maxWidth: '200px',
   },
   iconMenu: {
-    display: 'flex'
-  }
+    display: 'flex',
+  },
 }))
 
-export default function Header () {
+export default function Header() {
   const classes = useStyles()
   const { signout, user, isCustomer, isProducer } = useContext(AuthContext)
   const [anchorEl, setAnchorEl] = useState(null)
@@ -77,12 +77,14 @@ export default function Header () {
           <LinkMenuItem href='/mitt-konto' title='Mitt konto' />
           <MenuItem onClick={handleSignout}>Logga ut</MenuItem>
         </div>
-      ) : isProducer && (
-        <div>
-          <LinkMenuItem href='/merchants' title='Mina produkter' />
-          <LinkMenuItem href='/merchants' title='Mitt konto' />
-          <MenuItem onClick={handleSignout}>Logga ut</MenuItem>
-        </div>
+      ) : (
+        isProducer && (
+          <div>
+            <LinkMenuItem href='/merchants' title='Mina produkter' />
+            <LinkMenuItem href='/merchants' title='Mitt konto' />
+            <MenuItem onClick={handleSignout}>Logga ut</MenuItem>
+          </div>
+        )
       )}
     </Menu>
   )
@@ -93,27 +95,25 @@ export default function Header () {
         <Toolbar>
           <div className={classes.logo}>
             <Link href='/'>
-              <a><img src='/logga-reko-cirkel.svg' height='60' /></a>
+              <a>
+                <img src='/logga-reko-cirkel.svg' height='60' />
+              </a>
             </Link>
           </div>
           <div className={classes.grow} />
           <SearchBar />
           <div className={classes.grow} />
           <div className={classes.iconMenu}>
-            <IconButton
-              edge='end'
-              onClick={handleAccountMenuOpen}
-              color='inherit'
-            >
+            <IconButton edge='end' onClick={handleAccountMenuOpen} color='inherit'>
               <AccountCircle />
             </IconButton>
-            <IconButton
-              edge='end'
-              onClick={() => console.log('Clicked cart button!')}
-              color='inherit'
-            >
-              <LocalMallOutlinedIcon />
-            </IconButton>
+            <Link href='/varukorg'>
+              <a>
+                <IconButton edge='end' onClick={() => console.log('Clicked cart button!')} color='inherit'>
+                  <LocalMallOutlinedIcon />
+                </IconButton>
+              </a>
+            </Link>
           </div>
         </Toolbar>
         <Navbar />

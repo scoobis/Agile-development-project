@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useContext, useState } from 'react'
 import { Card, CardContent, Typography, Button, Grid } from '@material-ui/core'
+import { CartContext } from '../../context/CartContext'
 
 import { makeStyles } from '@material-ui/core/styles'
 import PickAmount from './PickAmount'
@@ -8,12 +9,18 @@ const SpecificProductCard = (props) => {
   const useStyles = makeStyles({
     root: { backgroundColor: 'white' },
     center: { textAlign: 'center' },
-    bold: { fontWeight: 'bold' }
+    bold: { fontWeight: 'bold' },
   })
 
-  const { name, price, unit, inStock } = props
+  const [amount, setAmount] = useState(1)
+
+  const { name, price, unit, inStock, id } = props
+
+  const { addProduct } = useContext(CartContext)
 
   const classes = useStyles()
+
+  const handleAmountChange = (value) => setAmount(value)
 
   return (
     <Card className={classes.root}>
@@ -32,16 +39,11 @@ const SpecificProductCard = (props) => {
             <br />
             <br />
           </Grid>
-          {/*
           <Grid item xs={12}>
-            <SelectOption />
-          </Grid>
-          */}
-          <Grid item xs={12}>
-            <PickAmount inStock={inStock} />
+            <PickAmount inStock={inStock} handleAmountChange={handleAmountChange} />
           </Grid>
           <Grid item xs={12}>
-            <Button size='large' fullWidth variant='contained' color='primary' onClick={() => console.log('Add one to basket?')}>
+            <Button size='large' fullWidth variant='contained' color='primary' onClick={() => addProduct({ id, amountm, name, price })}>
               Lägg i kundvagn
             </Button>
           </Grid>
