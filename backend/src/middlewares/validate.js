@@ -142,7 +142,6 @@ validate.product = async (req, res, next) => {
     }
   }
 
-  // TODO Check if category exists
   /**
    * Categories
    */

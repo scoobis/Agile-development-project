@@ -1,7 +1,6 @@
 const pool = require('./databaseConnection')
 const createError = require('http-errors')
 const Product = require('../models/product')
-const product = require('../models/product')
 
 const productDAO = {}
 
