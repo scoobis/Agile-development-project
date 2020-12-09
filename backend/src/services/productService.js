@@ -50,7 +50,12 @@ service.update = async (req, res, next) => {
  */
 service.delete = async (req, res, next) => {
   const productId = await req.params.id
+  const images = await productDAO.getImages(productId)
+
+  // Delete product from database
   await productDAO.delete(productId)
+  // Delete pictures belonging to product
+  images.forEach(image => fs.unlinkSync('uploads/' + image.imageName))
 }
 
 /**

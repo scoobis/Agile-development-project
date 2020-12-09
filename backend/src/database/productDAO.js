@@ -1,6 +1,7 @@
 const pool = require('./databaseConnection')
 const createError = require('http-errors')
 const Product = require('../models/product')
+const ProductImage = require('../models/productimage')
 
 const productDAO = {}
 
@@ -100,6 +101,7 @@ productDAO.delete = async (productId) => {
   let conn
   try {
     conn = await pool.getConnection()
+    // TODO: Transaction; remove category relation and images.
 
     const deleteProductByIdQuery = 'DELETE FROM product WHERE id=?'
 
@@ -130,7 +132,7 @@ productDAO.get = async (productId) => {
 
     const [row] = await conn.query(selectProductById, [productId])
 
-    const product = getProduct(row)
+    const product = parseProduct(row)
     product.categories = await productDAO.getCategoriesByProductId(product.id)
     product.images = await conn.query(selectImageByProductId, [product.id])
 
@@ -157,7 +159,7 @@ productDAO.getAll = async () => {
 
     if (rows.length > 0) {
       for (const row of rows) {
-        const product = getProduct(row)
+        const product = parseProduct(row)
 
         product.categories = await productDAO.getCategoriesByProductId(product.id)
 
@@ -193,7 +195,7 @@ productDAO.getAllByOrgNumber = async (orgNumber) => {
 
     if (rows.length > 0) {
       for await (const row of rows) {
-        const product = getProduct(row)
+        const product = parseProduct(row)
 
         product.categories = await productDAO.getCategoriesByProductId(product.id)
 
@@ -233,7 +235,7 @@ productDAO.getAllByCategoryId = async (categoryId) => {
         for (const key in productId) {
           const [row] = await conn.query(selectAllProductsById, [productId[key]])
 
-          const product = getProduct(row)
+          const product = parseProduct(row)
 
           product.categories = await productDAO.getCategoriesByProductId(product.id)
 
@@ -332,13 +334,32 @@ productDAO.getCategoriesByProductId = async (productId) => {
   }
 }
 
+productDAO.getImages = async (productId) => {
+  let conn
+  try {
+    conn = await pool.getConnection()
+    const images = []
+    const result = await conn.query('SELECT * FROM product_image WHERE product_id = ?', [productId])
+    result.forEach(
+      result => images.push(new ProductImage(result.id, result.product_id, result.image_name, result.alt_text))
+    )
+    return images
+  } finally { if (conn) conn.release() }
+}
+
+/**
+ *
+ * Private functions.
+ *
+ */
+
 /**
  * Parses result set to a Product.
  *
  * @param {*} row
  * @return {Product}
  */
-const getProduct = (row) => {
+const parseProduct = (row) => {
   return new Product(row.id, row.producer_org_no, row.name, row.description, row.price, null, row.unit, row.in_stock, [], [])
 }
 
