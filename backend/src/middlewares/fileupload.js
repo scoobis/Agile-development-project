@@ -48,6 +48,10 @@ fileUpload.product = function (req, res, next) {
   })
 }
 
+/**
+ * Error Middleware for deleting saved files belonging to a product creation request
+ * that couldn't be saved to the database.
+ */
 fileUpload.errorHandler = function (err, req, res, next) {
   if (req.files) {
     req.files.forEach(file => fs.unlinkSync(file.path))

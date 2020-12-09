@@ -334,6 +334,11 @@ productDAO.getCategoriesByProductId = async (productId) => {
   }
 }
 
+/**
+ * Get the images belonging to a product.
+ * @param {number} productId - The associated productid.
+ * @return {ProductImage[]}
+ */
 productDAO.getImages = async (productId) => {
   let conn
   try {
