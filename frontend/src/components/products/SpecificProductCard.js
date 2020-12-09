@@ -9,14 +9,14 @@ const SpecificProductCard = (props) => {
   const useStyles = makeStyles({
     root: { backgroundColor: 'white' },
     center: { textAlign: 'center' },
-    bold: { fontWeight: 'bold' },
+    bold: { fontWeight: 'bold' }
   })
 
   const [amount, setAmount] = useState(1)
 
   const { name, price, unit, inStock, id } = props
 
-  const { addProduct } = useContext(CartContext)
+  const { addProduct, state } = useContext(CartContext)
 
   const classes = useStyles()
 
@@ -43,7 +43,7 @@ const SpecificProductCard = (props) => {
             <PickAmount inStock={inStock} handleAmountChange={handleAmountChange} />
           </Grid>
           <Grid item xs={12}>
-            <Button size='large' fullWidth variant='contained' color='primary' onClick={() => addProduct({ id, amountm, name, price })}>
+            <Button size='large' fullWidth variant='contained' color='primary' onClick={() => addProduct({ id, amount, name, price })}>
               Lägg i kundvagn
             </Button>
           </Grid>
