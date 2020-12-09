@@ -10,23 +10,23 @@ import DeleteForeverIcon from '@material-ui/icons/DeleteForever'
 const StyledTableRow = withStyles((theme) => ({
   root: {
     '&:nth-of-type(odd)': {
-      backgroundColor: theme.palette.action.hover,
-    },
-  },
+      backgroundColor: theme.palette.action.hover
+    }
+  }
 }))(TableRow)
 
 const useStyles = makeStyles({
   thumbnail: {
-    maxHeight: 50,
-  },
+    maxHeight: 50
+  }
 })
 
 const ACTIONS = {
   REMOVE_PRODUCT: 'REMOVE_PRODUCT',
-  EDIT_PRODUCT: 'EDIT_PRODUCT',
+  EDIT_PRODUCT: 'EDIT_PRODUCT'
 }
 
-function ProductTableItem({ product, onEdit, onRemove }) {
+function ProductTableItem ({ product, onEdit, onRemove }) {
   const [action, setAction] = useState('')
   const classes = useStyles()
 
@@ -43,7 +43,7 @@ function ProductTableItem({ product, onEdit, onRemove }) {
       <TableCell align='right'>
         {product.inStock} {product.unit}
       </TableCell>
-      <TableCell align='right'>{product.categories || ''}</TableCell>
+      <TableCell align='right'>{product.categories.map(category => <div key={category}> {category.name} </div>) || ''}</TableCell>
       <TableCell align='right'>
         <img className={classes.thumbnail} src={product.thumbnail || '/apples.jpg'} />
       </TableCell>
