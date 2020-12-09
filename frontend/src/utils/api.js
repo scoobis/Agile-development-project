@@ -1,4 +1,4 @@
-import axios, { setAuthToken } from './axios-wrapper'
+import axios from './axios-wrapper'
 
 export const signup = (data) =>
   axios
@@ -9,12 +9,7 @@ export const signup = (data) =>
 export const login = (user) =>
   axios
     .post('/user/login', user)
-    .then((response) => {
-      if (response.status === 200) {
-        setAuthToken(response.data.token)
-      }
-      return response
-    })
+    .then((response) => response)
     .catch((err) => err.response)
 
 export const addProduct = (product) => {
@@ -22,14 +17,12 @@ export const addProduct = (product) => {
 
   fd.append('name', product.name)
   fd.append('description', product.description)
-  product.images.forEach(image => fd.append('images', image.file))
-  // fd.append('images', JSON.stringify(product.images))
+  product.images.forEach((image) => fd.append('images[]', image.file))
   fd.append('price', product.price)
   fd.append('unit', product.unit)
   fd.append('salePrice', product.salePrice)
   fd.append('inStock', product.inStock)
-  product.categories.forEach(category => fd.append('categories', category))
-  // fd.append('categories', JSON.stringify(product.categories))
+  product.categories.forEach((category) => fd.append('categories[]', category))
   fd.append('orgNumber', product.orgNumber)
 
   return axios
@@ -47,7 +40,7 @@ export const getAllProducts = () =>
 export const getProductsByProducer = (orgNumber) =>
   axios
     .get(`/products/fromProducer/${orgNumber}`)
-    .then((response) => response.data)
+    .then((response) => response)
     .catch((err) => err.response)
 
 export const getAllProductsFromCategory = (id) =>
@@ -69,11 +62,13 @@ export const removeProduct = (id) =>
     .catch((err) => err.response)
 
 export const getCategories = () =>
-  axios.get('/products/categories')
-    .then(response => response.data)
-    .catch(err => err.response)
+  axios
+    .get('/products/categories')
+    .then((response) => response.data)
+    .catch((err) => err.response)
 
-export const editProduct = product =>
-  axios.put(`/product/${product.id}`, product)
-    .then(response => response.data)
-    .catch(err => err.response)
+export const editProduct = (product) =>
+  axios
+    .put(`/product/${product.id}`, product)
+    .then((response) => response.data)
+    .catch((err) => err.response)

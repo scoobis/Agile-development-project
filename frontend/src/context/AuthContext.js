@@ -6,7 +6,7 @@ import Router from 'next/router'
 
 export const AuthContext = createContext()
 
-const AuthProvider = props => {
+const AuthProvider = (props) => {
   const [user, setUser] = useState({
     isAuthenticated: false,
     user: {}
@@ -22,7 +22,7 @@ const AuthProvider = props => {
   }, [])
 
   const authenticate = (user) => {
-    return login(user).then(response => {
+    return login(user).then((response) => {
       if (response.status === 200) {
         const userToSave = {
           name: response.data.name,
@@ -50,14 +50,15 @@ const AuthProvider = props => {
   const isCustomer = user.isAuthenticated && user.user.role === Customer
 
   return (
-    <AuthContext.Provider value={{
-      authenticate,
-      signout,
-      user,
-      setUser,
-      isProducer,
-      isCustomer
-    }}
+    <AuthContext.Provider
+      value={{
+        authenticate,
+        signout,
+        user,
+        setUser,
+        isProducer,
+        isCustomer
+      }}
     >
       {props.children}
     </AuthContext.Provider>
