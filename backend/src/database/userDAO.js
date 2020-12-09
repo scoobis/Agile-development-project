@@ -12,10 +12,8 @@ userDAO.createCustomer = async (user) => {
   let conn
   try {
     conn = await pool.getConnection()
-    let password = await bcrypt.hash(user.password, 8)
-    await conn.query(`INSERT INTO user (email, password, full_name) VALUES ('${user.email}', '${password}', '${user.name}')`)
-  } catch (error) {
-    throw error
+    const password = await bcrypt.hash(user.password, 8)
+    await conn.query('INSERT INTO user (email, password, full_name) VALUES (?, ?, ?)', [user.email, password, user.name])
   } finally {
     if (conn) conn.release()
   }
@@ -31,18 +29,16 @@ userDAO.createProducer = async (user, address) => {
   try {
     console.log(user.orgNumber)
     conn = await pool.getConnection()
-    let password = await bcrypt.hash(user.password, 8)
-    const userResponse = await conn.query(`INSERT INTO user (email, password, full_name, phone_no) VALUES ('${user.email}', '${password}', '${user.name}', '${user.phone}')`)
+    const password = await bcrypt.hash(user.password, 8)
+    const userResponse = await conn.query('INSERT INTO user (email, password, full_name, phone_no) VALUES (?, ?, ?, ?)', [user.email, password, user.name, user.phone])
     const userId = userResponse.insertId
 
-    const addressResponse = await conn.query(`INSERT INTO address (street_address, zip, city) VALUES ('${address.streetAddress}', '${address.zip}', '${address.city}')`)
+    const addressResponse = await conn.query('INSERT INTO address (street_address, zip, city) VALUES (?, ?, ?)', [address.streetAddress, address.zip, address.city])
     const addressId = addressResponse.insertId
 
-    await conn.query(`INSERT INTO user_address (user_id, address_id, type) VALUES ('${userId}', '${addressId}', '${address.type}')`)
+    await conn.query('INSERT INTO user_address (user_id, address_id, type) VALUES (?, ?, ?)', [userId, addressId, address.type])
 
-    await conn.query(`INSERT INTO producer (org_no, user_id) VALUES ('${user.orgNumber}', '${userId}')`)
-  } catch (error) {
-    throw error
+    await conn.query('INSERT INTO producer (org_no, user_id) VALUES (?, ?)', [user.orgNumber, userId])
   } finally {
     if (conn) conn.release()
   }
@@ -58,10 +54,8 @@ userDAO.findByEmail = async (email) => {
   let conn
   try {
     conn = await pool.getConnection()
-    let [user] = await conn.query(`SELECT * FROM user WHERE email=('${email}')`)
+    const [user] = await conn.query('SELECT * FROM user WHERE email=?', [email])
     return user
-  } catch (error) {
-    throw error
   } finally {
     if (conn) conn.release()
   }
@@ -77,10 +71,8 @@ userDAO.getProducerByOrgNumber = async (orgNumber) => {
   let conn
   try {
     conn = await pool.getConnection()
-    let [producer] = await conn.query(`SELECT * FROM producer WHERE org_no=('${orgNumber}')`)
+    const [producer] = await conn.query('SELECT * FROM producer WHERE org_no=?', [orgNumber])
     return producer
-  } catch (error) {
-    throw error
   } finally {
     if (conn) conn.release()
   }
@@ -90,16 +82,14 @@ userDAO.login = async (userToLogIn) => {
   let conn
   try {
     conn = await pool.getConnection()
-    let user = await userDAO.findByEmail(userToLogIn.email)
+    const user = await userDAO.findByEmail(userToLogIn.email)
     // console.log(userDAO)
-    if (typeof user != 'undefined') {
-      let userFound = await bcrypt.compare(userToLogIn.password, user.password)
+    if (typeof user !== 'undefined') {
+      const userFound = await bcrypt.compare(userToLogIn.password, user.password)
       if (userFound) {
         return user
       }
     }
-  } catch (error) {
-    throw error
   } finally {
     if (conn) conn.release()
   }
@@ -114,7 +104,7 @@ userDAO.getRoleByUserId = async (userId) => {
   let conn
   try {
     conn = await pool.getConnection()
-    let [producer] = await conn.query(`SELECT * FROM producer WHERE user_id=('${userId}')`)
+    const [producer] = await conn.query('SELECT * FROM producer WHERE user_id=?', [userId])
 
     let role = 'customer'
 
@@ -123,8 +113,6 @@ userDAO.getRoleByUserId = async (userId) => {
     }
 
     return role
-  } catch (error) {
-    throw error
   } finally {
     if (conn) conn.release()
   }
@@ -139,10 +127,8 @@ userDAO.getProducerByUserId = async (userId) => {
   let conn
   try {
     conn = await pool.getConnection()
-    let [producer] = await conn.query(`SELECT * FROM producer WHERE user_id=('${userId}')`)
+    const [producer] = await conn.query('SELECT * FROM producer WHERE user_id=?', [userId])
     return producer
-  } catch (error) {
-    throw error
   } finally {
     if (conn) conn.release()
   }

@@ -1,75 +1,80 @@
 class user {
-  constructor(email, password, name) {
+  constructor (email, password, name) {
     this.email = email
     this.password = password
     this.name = name
     this._role = 'customer'
   }
 
-  get role() {
+  get role () {
     return this._role
   }
-  
+
   /**
    * @param {any} id
    */
-  set id(id) {
+  set id (id) {
     this._id = id
   }
-  get id() {
+
+  get id () {
     return this._id
   }
-  
+
   /**
    * @param {string} email
    */
-  set email(email) {
+  set email (email) {
     this._email = email
   }
-  get email() {
+
+  get email () {
     return this._email
   }
-  
+
   /**
    * @param {string} password
    */
-  set password(password) {
+  set password (password) {
     this._password = password
   }
-  get password() {
+
+  get password () {
     return this._password
   }
-  
+
   /**
    * @param {string} name
    */
-  set name(name) {
+  set name (name) {
     this._name = name
   }
-  get name() {
+
+  get name () {
     return this._name
   }
 
   /**
    * @param {*} phone
    */
-  set phone(phone) {
+  set phone (phone) {
     this._phone = phone
   }
-  get phone() {
+
+  get phone () {
     return this._phone
   }
 
   /**
    * @param {string} orgNumber
    */
-  set orgNumber(orgNumber) {
+  set orgNumber (orgNumber) {
     this._orgNumber = orgNumber
   }
-  get orgNumber() {
+
+  get orgNumber () {
     return this._orgNumber
   }
-  
 }
 
 module.exports = user
