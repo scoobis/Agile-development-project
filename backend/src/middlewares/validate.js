@@ -1,5 +1,6 @@
 const createError = require('http-errors')
-const service = require('../services/userService')
+const userService = require('../services/userService')
+const productService = require('../services/validateProductService')
 
 const validate = {}
 
@@ -10,10 +11,10 @@ validate.user = async (req, res, next) => {
     return next(error)
   }
 
-  const isValidPassword = service.isValidPassword(password)
-  const isValidName = service.isValidName(name)
-  const isValidEmail = service.isValidEmail(email)
-  const isAlreadyRegistered = service.isAlreadyRegistered(email)
+  const isValidPassword = userService.isValidPassword(password)
+  const isValidName = userService.isValidName(name)
+  const isValidEmail = userService.isValidEmail(email)
+  const isAlreadyRegistered = userService.isAlreadyRegistered(email)
 
   if (!isValidPassword) {
     const error = createError(400, 'Password needs to be at least 6 characters long!')
@@ -33,19 +34,18 @@ validate.user = async (req, res, next) => {
 }
 
 validate.producer = async (req, res, next) => {
-  if (req.body.role === 'producer') { //If statement could be removed if verified from other place
-
+  if (req.body.role === 'producer') {
     const { orgNumber, phone, zip } = req.body
 
-    const isValidOrganizationNumber = service.isValidOrganizationNumber(orgNumber)
-    const isValidPhoneNumber = service.isValidPhoneNumber(phone)
-    const isValidZipCode = service.isValidZipCode(zip)
-    const isOrgNumberAlreadyInUse = service.isOrgNumberAlreadyInUse(orgNumber)
+    const isValidOrganizationNumber = userService.isValidOrganizationNumber(orgNumber)
+    const isValidPhoneNumber = userService.isValidPhoneNumber(phone)
+    const isValidZipCode = userService.isValidZipCode(zip)
+    const isOrgNumberAlreadyInUse = userService.isOrgNumberAlreadyInUse(orgNumber)
 
     if (!isValidOrganizationNumber) {
       const error = createError(400, 'Not a valid organization number')
       return next(error)
-    } else if (!isValidPhoneNumber){
+    } else if (!isValidPhoneNumber) {
       const error = createError(400, 'Not a valid phone number')
       return next(error)
     } else if (!isValidZipCode) {
@@ -60,8 +60,111 @@ validate.producer = async (req, res, next) => {
   next()
 }
 
+/**
+ * Validates a product
+ *
+ * @param {*} req
+ * @param {*} res
+ * @param {*} next
+ */
 validate.product = async (req, res, next) => {
-  console.log('VALIDATION TO BE ADDED?')
+  const { orgNumber, name, description, price, salePrice, unit, inStock, categories, images } = req.body
+  /**
+   * OrgNumber
+   */
+  if (productService.isUndefined(orgNumber)) {
+    return next(createError(400, 'Organisation number is "undefined"'))
+  } else {
+    if (!await productService.isValidOrgNumber(orgNumber)) {
+      return next(createError(400, 'Producer does not exist'))
+    }
+  }
+
+  /**
+   * Name
+   */
+  if (productService.isUndefined(name)) {
+    return next(createError(400, 'Name is "undefined"'))
+  } else {
+    if (!productService.isValidName(name)) {
+      return next(createError(400, 'The length of the product name must be within the range of 1-20'))
+    }
+  }
+
+  /**
+   * Description
+   */
+  if (productService.isUndefined(description)) {
+    return next(createError(400, 'The description is "undefined"'))
+  }
+
+  /**
+   * Price
+   */
+  if (productService.isUndefined(price)) {
+    return next(createError(400, 'Price is "undefined"'))
+  } else {
+    if (!productService.isValidPrice(price)) {
+      return next(createError(400, 'Try to be more reasonable when setting the price'))
+    }
+  }
+
+  /**
+   * SalePrice
+   */
+  if (productService.isUndefined(salePrice)) {
+    return next(createError(400, 'The salePrice is "undefined"'))
+  } else {
+    if (!productService.isValidSalePrice(parseInt(salePrice), parseInt(price))) {
+      return next(createError(400, 'The sale price must be lower than the original price'))
+    }
+  }
+
+  /**
+   * Unit
+   */
+  if (productService.isUndefined(unit)) {
+    return next(createError(400, 'Unit is "undefined"'))
+  } else {
+    if (!productService.isValidUnit(unit)) {
+      return next(createError(400, 'The length of the product unit name must be within the range of 1-20'))
+    }
+  }
+
+  /**
+   * InStock
+   */
+  if (productService.isUndefined(inStock)) {
+    return next(createError(400, 'inStock is "undefined"'))
+  } else {
+    if (!productService.isValidInStock(inStock)) {
+      return next(createError(400, 'The number of units in stock must be at least 0 and at most 999999'))
+    }
+  }
+
+  /**
+   * Categories
+   */
+  if (productService.isUndefined(categories)) {
+    return next(createError(400, 'Categories is "undefined"'))
+  } else {
+    if (!productService.isArray(categories)) {
+      return next(createError(400, 'Categories must be an array'))
+    } else if (!productService.isValidCategories(categories)) {
+      return next(createError(400, 'The product must belong to at least 1 category'))
+    } else if (!await productService.isValidCategory(categories)) {
+      return next(createError(400, 'One of the categories choosen does not exist'))
+    }
+  }
+
+  // Wait for implementation to see whats needed
+  /**
+   * Images
+   */
+  if (!images) {
+    // return next(createError(400, 'The image array is "undefined"'))
+  }
+
   next()
 }
 

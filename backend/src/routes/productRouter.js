@@ -4,7 +4,7 @@ const validate = require('../middlewares/validate')
 const authorize = require('../middlewares/authorize')
 const fileUpload = require('../middlewares/fileupload')
 
-router.post('/', validate.product, fileUpload.product, controller.create)
+router.post('/', fileUpload.product, validate.product, controller.create, fileUpload.errorHandler)
 router.get('/:id', authorize.ownerOfProduct, controller.get)
 router.put('/:id', authorize.ownerOfProduct, controller.update)
 router.delete('/:id', authorize.ownerOfProduct, controller.delete)

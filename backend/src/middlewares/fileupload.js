@@ -2,6 +2,7 @@ const multer = require('multer')
 const path = require('path')
 const createError = require('http-errors')
 const uuid4 = require('uuid').v4
+const fs = require('fs')
 
 const fileUpload = {}
 
@@ -45,6 +46,13 @@ fileUpload.product = function (req, res, next) {
       next(err)
     }
   })
+}
+
+fileUpload.errorHandler = function (err, req, res, next) {
+  if (req.files) {
+    req.files.forEach(file => fs.unlinkSync(file.path))
+  }
+  next(err)
 }
 
 module.exports = fileUpload
