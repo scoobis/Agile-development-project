@@ -138,4 +138,15 @@ service.isOrgNumberAlreadyInUse = async (orgNumber) => {
   }
 }
 
+service.getOrgNumberByEmail = async (email) => {
+  const user = await userDAO.findByEmail(email)
+  if (typeof user === 'object') {
+    const id = user.id
+    const userToReturn = await userDAO.getProducerByUserId(id)
+    return userToReturn.org_no
+  } else {
+    return false
+  }
+}
+
 module.exports = service
