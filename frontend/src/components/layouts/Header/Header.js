@@ -1,5 +1,6 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { AuthContext } from '../../../context/AuthContext'
+import { CartContext } from '../../../context/CartContext'
 import Link from 'next/link'
 import Router from 'next/router'
 
@@ -15,22 +16,25 @@ import Navbar from './Navbar'
 
 const useStyles = makeStyles((theme) => ({
   grow: {
-    flexGrow: 1,
+    flexGrow: 1
   },
   header: {
-    paddingTop: '10px',
+    paddingTop: '10px'
   },
   logo: {
-    maxWidth: '200px',
+    maxWidth: '200px'
   },
   iconMenu: {
-    display: 'flex',
+    display: 'flex'
   },
+  activeCart: { background: '#81b23e', borderRadius: '10px', color: 'black', padding: '10px 40px 10px 40px' },
+  quantityCart: { fontSize: '16px', background: 'red', borderRadius: '50%', height: '20px', width: '20px' }
 }))
 
 export default function Header() {
   const classes = useStyles()
   const { signout, user, isCustomer, isProducer } = useContext(AuthContext)
+  const { state } = useContext(CartContext)
   const [anchorEl, setAnchorEl] = useState(null)
 
   const isMenuOpen = Boolean(anchorEl)
@@ -47,6 +51,10 @@ export default function Header() {
     Router.push('/')
     signout()
   }
+
+  useEffect(() => {
+    console.log('www')
+  }, [state])
 
   const LinkMenuItem = (props) => (
     <Link href={props.href}>
@@ -109,8 +117,9 @@ export default function Header() {
             </IconButton>
             <Link href='/varukorg'>
               <a>
-                <IconButton edge='end' onClick={() => console.log('Clicked cart button!')} color='inherit'>
+                <IconButton className={classes.activeCart} edge='end' onClick={() => console.log('Clicked cart button!')} color='inherit'>
                   <LocalMallOutlinedIcon />
+                  <div className={classes.quantityCart}>{state.cartProducts.length}</div>
                 </IconButton>
               </a>
             </Link>

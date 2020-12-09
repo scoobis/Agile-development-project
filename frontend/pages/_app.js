@@ -6,8 +6,9 @@ import theme from '../src/theme'
 import Header from '../src/components/layouts/Header/Header'
 import Footer from '../src/components/layouts/Footer'
 import AuthProvider from '../src/context/AuthContext'
+import CartContextProvider from '../src/context/CartContext'
 
-export default function MyApp (props) {
+export default function MyApp(props) {
   const { Component, pageProps } = props
 
   useEffect(() => {
@@ -28,7 +29,9 @@ export default function MyApp (props) {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <AuthProvider>
-          <Header />
+          <CartContextProvider>
+            <Header />
+          </CartContextProvider>
           <Component {...pageProps} />
           <Footer />
         </AuthProvider>

@@ -10,7 +10,7 @@ const CartContextProvider = (props) => {
 
   const initialState = {
     cartProducts: savedCartProducts || [],
-    ...totoalSum(savedCartProducts),
+    ...totoalSum(savedCartProducts)
   }
   const [state, dispatch] = useReducer(CartReducer, initialState)
 

@@ -9,7 +9,7 @@ const SpecificProductCard = (props) => {
   const useStyles = makeStyles({
     root: { backgroundColor: 'white' },
     center: { textAlign: 'center' },
-    bold: { fontWeight: 'bold' },
+    bold: { fontWeight: 'bold' }
   })
 
   const [amount, setAmount] = useState(1)
