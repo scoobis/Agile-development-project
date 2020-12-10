@@ -6,6 +6,7 @@ import { withStyles } from '@material-ui/core/styles'
 import { IconButton, makeStyles, TableCell, TableRow } from '@material-ui/core'
 import EditIcon from '@material-ui/icons/Edit'
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever'
+import { API_URL } from '../../../utils/config'
 
 const StyledTableRow = withStyles((theme) => ({
   root: {
@@ -26,6 +27,15 @@ const ACTIONS = {
   EDIT_PRODUCT: 'EDIT_PRODUCT'
 }
 
+const getFirstImageURL = (images) => {
+  console.log(images)
+  if (images.length) {
+    return `${API_URL}/static/${images[0].image_name}`
+  }
+
+  return '/apples.jpg'
+}
+
 function ProductTableItem ({ product, onEdit, onRemove }) {
   const [action, setAction] = useState('')
   const classes = useStyles()
@@ -43,9 +53,11 @@ function ProductTableItem ({ product, onEdit, onRemove }) {
       <TableCell align='right'>
         {product.inStock} {product.unit}
       </TableCell>
-      <TableCell align='right'>{product.categories.map(category => <div key={category}> {category.name} </div>) || ''}</TableCell>
       <TableCell align='right'>
-        <img className={classes.thumbnail} src={product.thumbnail || '/apples.jpg'} />
+        {product.categories.map((category) => <div key={category.name}> {category.name} </div>) || ''}
+      </TableCell>
+      <TableCell align='right'>
+        <img className={classes.thumbnail} src={getFirstImageURL(product.images)} />
       </TableCell>
       <TableCell align='right'>
         <IconButton onClick={() => setAction(ACTIONS.EDIT_PRODUCT)}>
