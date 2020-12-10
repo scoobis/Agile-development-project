@@ -72,3 +72,9 @@ export const editProduct = (product) =>
     .put(`/product/${product.id}`, product)
     .then((response) => response.data)
     .catch((err) => err.response)
+
+export const addToCart = () =>
+  axios
+    .post('/cart/product')
+    .then((response) => response.data)
+    .catch((err) => err.response)
