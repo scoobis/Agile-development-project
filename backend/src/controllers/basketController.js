@@ -16,4 +16,17 @@ controller.save = async (req, res, next) => {
   }
 }
 
+controller.get = async (req, res, next) => {
+  try {
+    const basket = await service.get(req)
+    if (basket) {
+      res.status(200).json(basket)
+    } else {
+      throw createError(400, 'Basket does not exist')
+    }
+  } catch (error) {
+    return next(error)
+  }
+}
+
 module.exports = controller

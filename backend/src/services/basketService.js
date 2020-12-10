@@ -11,10 +11,17 @@ const service = {}
  */
 service.save = async (req) => {
   const basket = parseBasket(req.body)
-  const result = basketCache.set(basket.id, basket)
-  const hej = basketCache.get(basket.id)
-  console.log(hej)
-  return result
+  return basketCache.set(basket.id, basket)
+}
+
+/**
+ * Gets a backet
+ *
+ * @param {object} req
+ */
+service.get = async (req) => {
+  const id = req.params.id
+  return parseBasket(basketCache.get(id))
 }
 
 /**
@@ -24,6 +31,7 @@ service.save = async (req) => {
  * @returns {Basket} basket
  */
 const parseBasket = (object) => {
+  console.log(object)
   return new Basket(
     parseInt(object.id),
     parseInt(object.productId),
