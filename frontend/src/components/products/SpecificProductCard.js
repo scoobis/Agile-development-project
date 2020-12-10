@@ -1,9 +1,9 @@
 import React, { useContext, useState } from 'react'
+import { makeStyles } from '@material-ui/core/styles'
 import { Card, CardContent, Typography, Button, Grid } from '@material-ui/core'
 import { CartContext } from '../../context/CartContext'
-
-import { makeStyles } from '@material-ui/core/styles'
 import PickAmount from './PickAmount'
+import { useSnackbar } from 'notistack'
 
 const SpecificProductCard = (props) => {
   const useStyles = makeStyles({
@@ -12,15 +12,25 @@ const SpecificProductCard = (props) => {
     bold: { fontWeight: 'bold' }
   })
 
-  const [amount, setAmount] = useState(1)
-
   const { name, price, unit, inStock, id } = props
-
-  const { addProduct, state } = useContext(CartContext)
-
+  const [amount, setAmount] = useState(1)
+  const { addProduct } = useContext(CartContext)
   const classes = useStyles()
+  const { enqueueSnackbar } = useSnackbar()
 
   const handleAmountChange = (value) => setAmount(value)
+
+  const handleAddToCart = () => {
+    addProduct({ id, amount, name, price })
+
+    enqueueSnackbar(`${name} har lagts till i varukorgen`, {
+      variant: 'success',
+      anchorOrigin: {
+        vertical: 'bottom',
+        horizontal: 'right'
+      }
+    })
+  }
 
   return (
     <Card className={classes.root}>
@@ -43,7 +53,7 @@ const SpecificProductCard = (props) => {
             <PickAmount inStock={inStock} handleAmountChange={handleAmountChange} />
           </Grid>
           <Grid item xs={12}>
-            <Button size='large' fullWidth variant='contained' color='primary' onClick={() => addProduct({ id, amount, name, price })}>
+            <Button size='large' fullWidth variant='contained' color='primary' onClick={handleAddToCart}>
               Lägg i kundvagn
             </Button>
           </Grid>

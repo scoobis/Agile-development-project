@@ -4,29 +4,30 @@ import { Container, Typography, Grid } from '@material-ui/core'
 import SpecificProductCard from './SpecificProductCard'
 import { getOneProduct } from '../../utils/api'
 
+const useStyles = makeStyles({
+  img: {
+    borderRadius: '20px',
+    width: '500px'
+  },
+  container: { boxShadow: '0 1px 1px 1px black' },
+  gridContainer: { paddingTop: '40px' }
+})
+
 const SpecificProduct = (props) => {
-  const useStyles = makeStyles({
-    img: {
-      borderRadius: '20px',
-      width: '500px',
-    },
-    container: { boxShadow: '0 1px 1px 1px black' },
-    gridContainer: { paddingTop: '40px' },
-  })
-
+  const classes = useStyles()
   const [product, setProduct] = useState({})
+  const { productId, onLoad } = props
 
-  const { productId } = props
   useEffect(() => {
     getOneProduct(productId).then((response) => {
       setProduct(response)
+      onLoad(response.name)
     })
   }, [props])
 
   const { name, description, price, unit, inStock, id } = product
   const imgSrc = 'apples.JPG' // TODO: Get img from backend
 
-  const classes = useStyles()
   return (
     <Container className={classes.container}>
       <Grid className={classes.gridContainer} container spacing={2}>

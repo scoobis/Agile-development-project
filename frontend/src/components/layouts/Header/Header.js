@@ -11,7 +11,7 @@ import IconButton from '@material-ui/core/IconButton'
 import AccountCircle from '@material-ui/icons/AccountCircle'
 import LocalMallOutlinedIcon from '@material-ui/icons/LocalMallOutlined'
 import SearchBar from '../../SearchBar'
-import { Menu, MenuItem } from '@material-ui/core'
+import { Badge, Menu, MenuItem } from '@material-ui/core'
 import Navbar from './Navbar'
 
 const useStyles = makeStyles((theme) => ({
@@ -25,10 +25,15 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: '200px'
   },
   iconMenu: {
-    display: 'flex'
+    display: 'flex',
+    '& > *': {
+      color: theme.palette.common.black
+    }
   },
-  activeCart: { background: '#81b23e', borderRadius: '10px', padding: '10px 40px 10px 40px' },
-  quantityCart: { fontSize: '16px', background: 'red', borderRadius: '50%', height: '20px', width: '20px' }
+  cart: {
+    right: -3,
+    top: -7
+  }
 }))
 
 export default function Header() {
@@ -117,15 +122,17 @@ export default function Header() {
             </IconButton>
             <Link href='/varukorg'>
               <a>
-                <IconButton
-                  className={state.cartProducts.length ? classes.activeCart : ''}
-                  style={{ color: 'black' }}
-                  edge='end'
-                  onClick={() => console.log('Clicked cart button!')}
-                  color='inherit'
-                >
+                <IconButton edge='end' color='inherit'>
                   <LocalMallOutlinedIcon />
-                  <div className={state.cartProducts.length ? classes.quantityCart : ''}>{state.cartProducts.length ? state.cartProducts.length : ''}</div>
+                  <Badge
+                    className={classes.cart}
+                    color='secondary'
+                    anchorOrigin={{
+                      vertical: 'top',
+                      horizontal: 'left'
+                    }}
+                    badgeContent={state.cartProducts.length ? state.cartProducts.length : 0}
+                  />
                 </IconButton>
               </a>
             </Link>
