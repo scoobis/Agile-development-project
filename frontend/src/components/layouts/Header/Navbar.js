@@ -7,7 +7,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 const Navbar = () => {
   const [anchorElMenu, setAnchorElMenu] = useState(null)
 
-  const handleClickMenu = e => {
+  const handleClickMenu = (e) => {
     setAnchorElMenu(e.currentTarget)
   }
 
@@ -15,7 +15,7 @@ const Navbar = () => {
     setAnchorElMenu(null)
   }
 
-  const MenuLinkItem = props => (
+  const MenuLinkItem = (props) => (
     <li>
       <Link href={props.href}>
         <a>{props.title}</a>
@@ -49,6 +49,13 @@ const Navbar = () => {
     >
       <div className={styles.megaMenu}>
         <Grid container spacing={0}>
+          <Grid item xs={12}>
+            <List component='div'>
+              <Typography component='div' className={styles.parentCategory}>
+                <ListItemLink href='/produkter' title='Alla produkter' />
+              </Typography>
+            </List>
+          </Grid>
           <Grid item xs={3}>
             <List component='div'>
               <Typography component='div' className={styles.parentCategory}>
@@ -92,7 +99,6 @@ const Navbar = () => {
               <ListItemLink href='#' title='Kyckling & fågel' />
             </List>
           </Grid>
-          <Grid item xs={12} />
         </Grid>
       </div>
     </Popover>
@@ -104,7 +110,7 @@ const Navbar = () => {
         <nav className={styles.mainMenu}>
           <ul>
             <Button onClick={handleClickMenu} className={styles.button}>
-                Handla
+              Handla
               <ExpandMoreIcon />
             </Button>
             <ProductSubMenu />
