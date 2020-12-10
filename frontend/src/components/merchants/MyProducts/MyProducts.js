@@ -49,7 +49,7 @@ export default function MyProducts () {
     })
 
   const handleRemoveProduct = (id) => {
-    removeProduct(id)
+    removeProduct({ id, orgNumber: user.user.orgNumber })
       .then((response) => response.success && setProducts(products.filter((product) => product.id !== id)))
       .catch(console.log)
   }

@@ -55,11 +55,12 @@ export const getOneProduct = (id) =>
     .then((response) => response.data)
     .catch((err) => err.response)
 
-export const removeProduct = (id) =>
-  axios
-    .delete(`/product/${id}`)
+export const removeProduct = ({ id, orgNumber }) => {
+  return axios
+    .delete(`/product/${id}`, { data: { orgNumber } })
     .then((response) => response.data)
     .catch((err) => err.response)
+}
 
 export const getCategories = () =>
   axios
