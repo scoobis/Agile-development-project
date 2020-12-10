@@ -109,3 +109,25 @@ CREATE TABLE product_image (
 INSERT INTO product_image (product_id, image_name, alt_text)
 VALUES
   (1,'test.jpg', 'Image of a test.jpg')
+
+
+CREATE TABLE order (
+  id INT NOT NULL AUTO_INCREMENT,
+  producer_org_no INT,
+  customer_name VARCHAR(100),
+  customer_phone_no VARCHAR(10),
+  customer_street_address VARCHAR(100),
+  customer_zip INT(5),
+  customer_city VARCHAR(40),
+  price INT,
+  PRIMARY KEY (id),
+  FOREIGN KEY (producer_org_no) REFERENCES producer(org_no)
+)
+
+CREATE TABLE order_product (
+  order_id INT NOT NULL,
+  product_id INT NOT NULL,
+  quantity INT,
+  price INT,
+  PRIMARY KEY (order_id, product_id)
+)
