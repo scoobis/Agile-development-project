@@ -25,7 +25,7 @@ const FilterMenu = (props) => {
   const [categoryId, setCategoryId] = useState('')
   const [subCategoryId, setSubCategoryId] = useState('')
   const [secondSubCategoryId, setSecondSubCategoryId] = useState('')
-  const [availableCategories, setAvailableCategories] = useState([{}])
+  const [availableCategories, setAvailableCategories] = useState([])
   const [hasSubCategory, setHasSubCategory] = useState({
     cat1: false,
     cat2: false
@@ -73,7 +73,6 @@ const FilterMenu = (props) => {
     setSecondSubCategoryId(e.target.value)
   }
 
-  // TODO: why does availableCategories map twice????
   return (
     <Grid item xs={12}>
       <Box pb={2}>
@@ -85,11 +84,12 @@ const FilterMenu = (props) => {
         </InputLabel>
         <Select native value={categoryId} onChange={handleChangeCategory}>
           <option value={-1}>Alla</option>
-          {availableCategories.map((category) => (
-            <option key={category.id} value={category.id}>
-              {category.name}
-            </option>
-          ))}
+          {availableCategories.length &&
+            availableCategories.map((category) => (
+              <option key={category.id} value={category.id}>
+                {category.name}
+              </option>
+            ))}
         </Select>
       </FormControl>
 
