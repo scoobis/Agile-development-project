@@ -57,7 +57,6 @@ const Cart = () => {
                   </TableBody>
                 </Table>
               </TableContainer>
-              )
             </Grid>
             <Grid item xs={4}>
               <SummaryCard total={state.total} />

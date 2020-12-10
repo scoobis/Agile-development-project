@@ -7,10 +7,11 @@ import { API_URL } from '../../utils/config'
 
 const useStyles = makeStyles({
   img: {
-    borderRadius: '20px',
-    width: '500px'
+    maxWidth: '100%',
+    maxHeight: '60vh',
+    margin: '0 auto'
   },
-  container: { boxShadow: '0 1px 1px 1px black' },
+  container: { boxShadow: '0 0 3px 2px rgb(0,0,0,.2)' },
   gridContainer: { paddingTop: '40px' }
 })
 
