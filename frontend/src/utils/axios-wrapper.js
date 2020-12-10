@@ -1,10 +1,9 @@
 import axios from 'axios'
 import { getUserToken } from './auth-cookies'
-
-const BASE_URL = 'http://localhost:5001'
+import { API_URL } from './config'
 
 const axiosInstance = axios.create({
-  baseURL: BASE_URL,
+  baseURL: API_URL,
   headers: {
     Accept: 'application/json',
     Authorization: process.browser && getUserToken()

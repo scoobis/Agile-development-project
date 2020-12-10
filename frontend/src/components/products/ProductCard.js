@@ -5,45 +5,42 @@ import { CartContext } from '../../context/CartContext'
 import Link from 'next/link'
 import PickAmount from './PickAmount'
 
+const useStyles = makeStyles({
+  root: {
+    minWidth: 275,
+    cursor: 'pointer',
+    '&:hover': {
+      border: 4,
+      boxShadow: '0 2px 2px 2px rgb(0,0,0,0.2)'
+    }
+  },
+  title: {
+    fontSize: 14
+  },
+  pos: {
+    marginBottom: 12
+  },
+  img: {
+    width: '260px',
+    margin: 'auto',
+    display: 'block'
+  },
+  a: {
+    color: 'black',
+    textDecoration: 'none'
+  },
+  media: {
+    height: 200
+  },
+  green: { color: 'green' },
+  yellow: { color: '#dee600' }
+})
+
 const ProductCard = (props) => {
-  const useStyles = makeStyles({
-    root: {
-      minWidth: 275,
-      cursor: 'pointer',
-      '&:hover': {
-        border: 4,
-        boxShadow: '0 2px 2px 2px black'
-      }
-    },
-    title: {
-      fontSize: 14
-    },
-    pos: {
-      marginBottom: 12
-    },
-    img: {
-      width: '260px',
-      margin: 'auto',
-      display: 'block'
-    },
-    a: {
-      color: 'black',
-      textDecoration: 'none'
-    },
-    media: {
-      height: 200
-    },
-    green: { color: 'green' },
-    yellow: { color: '#dee600' }
-  })
-
-  const classes = useStyles()
-
-  const { addProduct } = useContext(CartContext)
-
-  const [amount, setAmount] = useState(1)
-
   const { id, name, price, unit, inStock, imgSrc } = props
+  const { addProduct } = useContext(CartContext)
+  const [amount, setAmount] = useState(1)
+  const classes = useStyles()
 
   const handleAmountChange = (value) => setAmount(value)
 
