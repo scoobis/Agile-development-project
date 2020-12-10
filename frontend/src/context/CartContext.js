@@ -4,10 +4,10 @@ import { getInStorage } from '../utils/localStorage'
 
 export const CartContext = createContext()
 
-const CartContextProvider = (props) => {
-  let savedCartProducts
-  if (typeof window !== 'undefined') savedCartProducts = window.localStorage.getItem('cart') ? getInStorage('cart') : []
+// TDO: Get savedCartProducts from api
+const savedCartProducts = []
 
+const CartContextProvider = (props) => {
   const initialState = {
     cartProducts: savedCartProducts || [],
     ...totoalSum(savedCartProducts)
