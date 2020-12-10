@@ -75,7 +75,7 @@ validate.product = async (req, res, next) => {
   if (productService.isUndefined(orgNumber)) {
     return next(createError(400, 'Organisation number is "undefined"'))
   } else {
-    if (!await productService.isValidOrgNumber(orgNumber)) {
+    if (!(await productService.isValidOrgNumber(orgNumber))) {
       return next(createError(400, 'Producer does not exist'))
     }
   }
@@ -112,12 +112,8 @@ validate.product = async (req, res, next) => {
   /**
    * SalePrice
    */
-  if (productService.isUndefined(salePrice)) {
-    return next(createError(400, 'The salePrice is "undefined"'))
-  } else {
-    if (!productService.isValidSalePrice(parseInt(salePrice), parseInt(price))) {
-      return next(createError(400, 'The sale price must be lower than the original price'))
-    }
+  if (salePrice && !productService.isValidSalePrice(parseInt(salePrice), parseInt(price))) {
+    return next(createError(400, 'The sale price must be lower than the original price'))
   }
 
   /**
@@ -152,7 +148,7 @@ validate.product = async (req, res, next) => {
       return next(createError(400, 'Categories must be an array'))
     } else if (!productService.isValidCategories(categories)) {
       return next(createError(400, 'The product must belong to at least 1 category'))
-    } else if (!await productService.isValidCategory(categories)) {
+    } else if (!(await productService.isValidCategory(categories))) {
       return next(createError(400, 'One of the categories choosen does not exist'))
     }
   }
