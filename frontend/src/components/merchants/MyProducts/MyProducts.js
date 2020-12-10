@@ -12,6 +12,7 @@ import TableRow from '@material-ui/core/TableRow'
 import Paper from '@material-ui/core/Paper'
 import ProductTableItem from './ProductTableItem'
 import { Typography } from '@material-ui/core'
+import { replaceNullsWithEmptyStr } from '../../../utils/helpers'
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -41,7 +42,7 @@ export default function MyProducts () {
   const getProducts = () =>
     getProductsByProducer(user.user.orgNumber).then((response) => {
       if (response.status === 200) {
-        setProducts(response.data)
+        setProducts(response.data.map(replaceNullsWithEmptyStr))
       } else {
         // setProducts([])
       }

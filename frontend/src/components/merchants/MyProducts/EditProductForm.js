@@ -49,7 +49,10 @@ export default function EditProductForm ({ product, onClose }) {
         )}
       </DialogTitle>
       <DialogContent dividers className={classes.dialogContent}>
-        <ProductForm preFilled={product} onSubmit={handleEditProduct} />
+        <ProductForm
+          preFilled={{ ...product, categories: product.categories.map((c) => c.id) }}
+          onSubmit={handleEditProduct}
+        />
       </DialogContent>
     </Dialog>
   )

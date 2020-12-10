@@ -7,7 +7,7 @@ export const findParents = (obj, id, paths = []) => {
     paths.push(obj.value)
     let found = false
 
-    obj.children.forEach(child => {
+    obj.children.forEach((child) => {
       const temPaths = findParents(child, id)
 
       if (temPaths) {
@@ -21,3 +21,5 @@ export const findParents = (obj, id, paths = []) => {
     }
   }
 }
+
+export const replaceNullsWithEmptyStr = (data) => JSON.parse(JSON.stringify(data).replace(/null/g, '""'))
