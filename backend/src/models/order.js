@@ -3,7 +3,7 @@
  * @class Order
  */
 module.exports = class Order {
-  constructor (id = null, orgNumber, customerName = null, customerPhone = null, customerStreetAddress = null, customerZip = null, customerCity = null, price = 0, ) {
+  constructor (id = null, orgNumber, customerName = null, customerPhone = null, customerStreetAddress = null, customerZip = null, customerCity = null, price = 0) {
     this.id = id
     this.orgNumber = orgNumber
     this.customerName = customerName
