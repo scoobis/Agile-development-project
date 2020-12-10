@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Grid, Container, Typography, Box } from '@material-ui/core'
+import { Grid, Container, Typography } from '@material-ui/core'
 import ProductCard from './ProductCard'
 import FilterMenu from './FiliterMenu'
 import { getAllProducts, getAllProductsFromCategory } from '../../utils/api'
