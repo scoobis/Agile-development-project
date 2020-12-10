@@ -1,5 +1,3 @@
-const Order = require("./order")
-
 /**
  * Model representing a OrderProduct. (An product in an order)
  * @class OrderProduct
