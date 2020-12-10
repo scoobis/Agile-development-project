@@ -1,16 +1,32 @@
-import React, { createContext, useReducer } from 'react'
+import React, { createContext, useEffect, useReducer, useState } from 'react'
 import { CartReducer, totoalSum } from './CartReducer'
-import { getInStorage } from '../utils/localStorage'
+import { getInStorage, saveInStorage } from '../utils/localStorage'
+import { v4 as uuidv4 } from 'uuid'
+import { saveToCart, getCart } from '../utils/api'
 
 export const CartContext = createContext()
 
-// TDO: Get savedCartProducts from api
-const savedCartProducts = []
-
 const CartContextProvider = (props) => {
+  let cartId = ''
+  if (process.browser && localStorage.getItem('cartId')) {
+    cartId = getInStorage('cartId')
+  } else if (process.browser) {
+    cartId = uuidv4()
+    saveInStorage('cartId', cartId)
+  }
+
+  const [savedCartProducts, setSavedCartProducts] = useState('') // TODO: do not use useState
+
+  useEffect(() => {
+    getCart(cartId).then((response) => setSavedCartProducts(response))
+  })
+
+  console.log(savedCartProducts)
+
   const initialState = {
     cartProducts: savedCartProducts || [],
-    ...totoalSum(savedCartProducts)
+    ...totoalSum(savedCartProducts),
+    id: cartId || 0
   }
   const [state, dispatch] = useReducer(CartReducer, initialState)
 

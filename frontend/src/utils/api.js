@@ -74,8 +74,14 @@ export const editProduct = (product) =>
     .then((response) => response.data)
     .catch((err) => err.response)
 
-export const addToCart = () =>
+export const saveToCart = (products) =>
   axios
-    .post('/cart/product')
+    .post('/basket', products)
+    .then((response) => response.data)
+    .catch((err) => err.response)
+
+export const getCart = (id) =>
+  axios
+    .get(`/basket/${id}`)
     .then((response) => response.data)
     .catch((err) => err.response)
