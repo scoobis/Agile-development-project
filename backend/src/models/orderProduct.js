@@ -1,12 +1,19 @@
+const Order = require("./order")
+
 /**
  * Model representing a OrderProduct. (An product in an order)
  * @class OrderProduct
  */
-module.exports = class OrderProduct {
-  constructor (orderId = null, productId, quantity, price) {
+class OrderProduct {
+  constructor (orderId, productId, name, unit, price, quantity, id = null) {
     this.orderId = orderId
     this.productId = productId
-    this.quantity = quantity
+    this.name = name
+    this.unit = unit
     this.price = price
+    this.quantity = quantity
+    this.id = id
   }
 }
+
+module.exports = OrderProduct

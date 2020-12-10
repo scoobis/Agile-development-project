@@ -110,7 +110,7 @@ INSERT INTO product_image (product_id, image_name, alt_text)
 VALUES
   (1,'test.jpg', 'Image of a test.jpg')
 
-
+-- ORDER --
 CREATE TABLE order (
   id INT NOT NULL AUTO_INCREMENT,
   producer_org_no INT,
@@ -120,14 +120,19 @@ CREATE TABLE order (
   customer_zip INT(5),
   customer_city VARCHAR(40),
   price INT,
-  PRIMARY KEY (id),
-  FOREIGN KEY (producer_org_no) REFERENCES producer(org_no)
+  created DATE,
+  PRIMARY KEY (id)
 )
 
+-- ORDER_PRODUCT --
 CREATE TABLE order_product (
+  id INT NOT NULL AUTO_INCREMENT,
   order_id INT NOT NULL,
   product_id INT NOT NULL,
-  quantity INT,
+  name VARCHAR(100),
+  unit VARCHAR(20),
   price INT,
-  PRIMARY KEY (order_id, product_id)
+  quantity INT,
+  PRIMARY KEY (id),
+  FOREIGN KEY (order_id) REFERENCES order(id)
 )
