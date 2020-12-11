@@ -12,11 +12,6 @@ CREATE TABLE user (
   UNIQUE (email)
 );
 
-INSERT INTO user (email, password, full_name, phone_no) 
-VALUES
-  ('prod@mail.com', 'prodprod', 'Prod', '1234567897');
-
-
 -- ADDRESS --
 CREATE TABLE address (
   id INT NOT NULL AUTO_INCREMENT,
@@ -25,10 +20,6 @@ CREATE TABLE address (
   city VARCHAR(40),
   PRIMARY KEY (id)
 );
-
-INSERT INTO address (street_address, zip, city) 
-VALUES
-  ('Prodstreet 1', '12345', 'Prodcity');
 
 -- USER_ADDRESS --
 CREATE TABLE user_address (
@@ -40,10 +31,6 @@ CREATE TABLE user_address (
   FOREIGN KEY (address_id) REFERENCES address(id)
 );
 
-INSERT INTO user_address (user_id, address_id, type) 
-VALUES
-  ('1', '1', 'business');
-
 -- PRODUCER --
 CREATE TABLE producer (
   org_no VARCHAR(10) NOT NULL,
@@ -52,10 +39,6 @@ CREATE TABLE producer (
   FOREIGN KEY (user_id) REFERENCES user(id)
 );
 
-INSERT INTO producer (org_no, user_id) 
-VALUES
-  ('1234567897', '1');
-
 -- PRODUCT --
 CREATE TABLE product (
   id INT NOT NULL AUTO_INCREMENT,
@@ -63,14 +46,12 @@ CREATE TABLE product (
   name VARCHAR(100) NOT NULL,
   description TEXT,
   price INT NOT NULL,
+  sale_price INT,
   unit VARCHAR(20) NOT NULL,
   in_stock INT NOT NULL,
   PRIMARY KEY (id),
   FOREIGN KEY (producer_org_no) REFERENCES producer(org_no)
 );
-INSERT INTO product (producer_org_no, name, description, price, unit, in_stock) 
-VALUES
-  ('1234567897', 'Name', 'Description', 55, 'kg', 25);
 
 -- CATEGORY --
 CREATE TABLE category (
@@ -80,12 +61,6 @@ CREATE TABLE category (
   description VARCHAR(200) NOT NULL,
   PRIMARY KEY (id)
 );
-
-
-INSERT INTO category (name, description, parent_id) 
-VALUES 
-  ('Grönsaker', 'Färska grönsaker', NULL), ('Frukter', 'Färska frukter', NULL), ('Kött', 'Variation av köttprodukter', NULL), ('Nötkött', 'Nötkött', 3), ('Styckningsdetaljer', 'Styckningsdetaljer', 4), ('Rostbiff', 'Rostbiff', 5), ('Innanlår', 'Innanlår', 5), ('Bananer', 'Bananer', 2), ('Ekologiska bananer', 'Ekologiska bananer', 8);
-
 
 -- PRODUCT_CATEGORY --
 CREATE TABLE product_category (
@@ -105,10 +80,6 @@ CREATE TABLE product_image (
   PRIMARY KEY(id),
   FOREIGN KEY (product_id) REFERENCES product(id) ON DELETE CASCADE
 );
-
-INSERT INTO product_image (product_id, image_name, alt_text)
-VALUES
-  (1,'test.jpg', 'Image of a test.jpg');
 
 -- ORDER --
 CREATE TABLE orders (
@@ -136,3 +107,73 @@ CREATE TABLE order_product (
   PRIMARY KEY (id),
   FOREIGN KEY (order_id) REFERENCES orders(id)
 );
+
+-- Inserting categories --
+INSERT INTO category (name, description, parent_id) 
+VALUES 
+  ('Grönsaker', 'Färska grönsaker', null),
+    ('Tomat', 'Tomater', 1),
+    ('Gurka', 'Gurkor', 1),
+    ('Sallat', 'Bladsallat', 1),
+  ('Potatis & Rotfrukter', 'Potatis & Rotfrukter', null),
+    ('Potatis', 'Potatisar', 5),
+    ('Morötter', 'Morötter', 5), 
+    ('Kål', 'Kål', 5),
+    ('Rotfrukter', 'Rotfrukter', 5),
+  ('Frukt', 'Färska Frukter', null),
+    ('Äpplen', 'Äpplen', 10),
+    ('Päron', 'Päron', 10),
+    ('Plommon', 'Plommon', 10),
+  ('Kött & Fisk', 'Kött & Fisk', null),
+    ('Nötkött', 'Kokött', 14),
+    ('Fläskkött', 'Griskött', 14),
+    ('Viltkött', 'Viltkött', 14),
+    ('Kyckling & Fågel', 'Kyckling & Fågel', 14),
+      ('Kyckling', 'Kyckling', 18),
+      ('Kalkon', 'Kalkon', 18),
+    ('Fisk', 'Fisk', 14),
+  ('Dryck', 'Drycker', null),
+    ('Must', 'Muster', 22),
+    ('Öl', 'Öler', 22),
+  ('Mejeri', 'Mejeriprodukter', null),
+    ('Mjölk', 'Mjölk', 25),
+    ('Smör', 'Smör', 25),
+    ('Ost', 'Ostar', 25),
+    ('Ägg', 'Ägg', 25),
+  ('Spannmål', 'Spannmål', null),
+    ('Hö', 'Hö', 30),
+  ('Nyhet', 'Nyhet', null),
+  ('Ny skörd', 'Senaste skörden', null),
+  ('Nyslaktat', 'Färskt kött', null),
+  ('Utgående', 'Sista vändan', null);
+
+
+-- Inserting test users --
+INSERT INTO user (email, password, full_name, phone_no) 
+VALUES
+  ('producent@mail.com', '$2b$08$lVhyWkKWCeDcJv9RfvtfbuRwGGwVzojsigohV0IS14t1UFK25zXwO', 'Produ Centen', '0701111111'), -- Password: producent
+  ('konsument@mail.com', '$2b$08$OH9SBfMYS9ml1KUIMkve4umW4dvytpPe.lxzuNWq3u0sJpq9Hg/lG', 'Konsu Menten', '0702222222'); -- Password: konsument
+
+INSERT INTO address (street_address, zip, city) 
+VALUES
+  ('Producentgatan 1', '11111', 'Produstan');
+
+INSERT INTO user_address (user_id, address_id, type) 
+VALUES
+  ('1', '1', 'business');
+
+INSERT INTO producer (org_no, user_id) 
+VALUES
+  ('1111111111', '1');
+
+INSERT INTO product (producer_org_no, name, description, price, sale_price, unit, in_stock) 
+VALUES
+  ('1111111111', 'Tomat', 'Röd', 29, 19, 'kg', 10);
+
+INSERT INTO product_category (product_id, category_id) 
+VALUES
+  ('1', '1');
+
+--INSERT INTO product_image (product_id, image_name, alt_text)
+--VALUES
+--  (1,'test.jpg', 'Image of a test.jpg');

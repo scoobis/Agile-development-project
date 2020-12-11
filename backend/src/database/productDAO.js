@@ -17,13 +17,13 @@ productDAO.create = async (product, files) => {
     conn = await pool.getConnection()
     await conn.beginTransaction()
 
-    const insertProductQuery = 'INSERT INTO product (producer_org_no, name, description, price, unit, in_stock) VALUES (?, ?, ?, ?, ?, ?)'
+    const insertProductQuery = 'INSERT INTO product (producer_org_no, name, description, price, sale_price, unit, in_stock) VALUES (?, ?, ?, ?, ?, ?, ?)'
     const insertProductImgQuery = 'INSERT INTO product_image (product_id, image_name, alt_text) VALUES (?, ?, ?)'
     const insertProductCategoryQuery = 'INSERT INTO product_category value (?, ?)'
-    const { orgNumber, name, description, price, unit, inStock, categories } = product
+    const { orgNumber, name, description, price, unit, salePrice, inStock, categories } = product
     const queryResults = []
 
-    const productResponse = await conn.query(insertProductQuery, [orgNumber, name, description, price, unit, inStock])
+    const productResponse = await conn.query(insertProductQuery, [orgNumber, name, description, price, salePrice, unit, inStock])
     const productId = productResponse.insertId
 
     files.forEach(
@@ -63,14 +63,14 @@ productDAO.update = async (product) => {
     conn = await pool.getConnection()
     await conn.beginTransaction()
 
-    const { id, orgNumber, name, description, price, unit, inStock, categories } = product
+    const { id, orgNumber, name, description, price, salePrice, unit, inStock, categories } = product
     const queryResults = []
 
-    const updateProductQuery = 'UPDATE product SET producer_org_no=?, name=?, description=?, price=?, unit=?, in_stock=? WHERE id=?'
+    const updateProductQuery = 'UPDATE product SET producer_org_no=?, name=?, description=?, price=?, sale_price=?, unit=?, in_stock=? WHERE id=?'
     const deleteAllOldCategoriesFromProductQuery = 'DELETE FROM product_category WHERE product_id=?'
     const insertNewCategoryToProductQuery = 'INSERT INTO product_category value (?, ?)'
 
-    await conn.query(updateProductQuery, [orgNumber, name, description, price, unit, inStock, id])
+    await conn.query(updateProductQuery, [orgNumber, name, description, price, salePrice, unit, inStock, id])
 
     await conn.query(deleteAllOldCategoriesFromProductQuery, [id])
 
@@ -152,7 +152,7 @@ productDAO.getAll = async () => {
   try {
     conn = await pool.getConnection()
 
-    const selectAllProducts = 'SELECT id, producer_org_no, name, description, price, unit, in_stock FROM product' // LIMIT 100?
+    const selectAllProducts = 'SELECT id, producer_org_no, name, description, price, sale_price, unit, in_stock FROM product' // LIMIT 100?
     const products = []
 
     const rows = await conn.query(selectAllProducts)
@@ -188,7 +188,7 @@ productDAO.getAllByOrgNumber = async (orgNumber) => {
   try {
     conn = await pool.getConnection()
 
-    const selectAllProductsByOrgNumber = 'SELECT id, producer_org_no, name, description, price, unit, in_stock FROM product WHERE producer_org_no=?'
+    const selectAllProductsByOrgNumber = 'SELECT id, producer_org_no, name, description, price, sale_price, unit, in_stock FROM product WHERE producer_org_no=?'
     const products = []
 
     const rows = await conn.query(selectAllProductsByOrgNumber, [orgNumber])
@@ -225,7 +225,7 @@ productDAO.getAllByCategoryId = async (categoryId) => {
     conn = await pool.getConnection()
 
     const selectAllProductsByCategoryId = 'SELECT product_id FROM product_category WHERE category_id=?'
-    const selectAllProductsById = 'SELECT id, producer_org_no, name, description, price, unit, in_stock FROM product WHERE id=?'
+    const selectAllProductsById = 'SELECT id, producer_org_no, name, description, price, sale_price, unit, in_stock FROM product WHERE id=?'
     const products = []
 
     const productIds = await conn.query(selectAllProductsByCategoryId, [categoryId])
@@ -365,7 +365,7 @@ productDAO.getImages = async (productId) => {
  * @return {Product}
  */
 const parseProduct = (row) => {
-  return new Product(row.id, row.producer_org_no, row.name, row.description, row.price, null, row.unit, row.in_stock, [], [])
+  return new Product(row.id, row.producer_org_no, row.name, row.description, row.price, row.sale_price, row.unit, row.in_stock, [], [])
 }
 
 module.exports = productDAO
