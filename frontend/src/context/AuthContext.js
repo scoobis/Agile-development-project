@@ -2,7 +2,7 @@ import React, { useState, createContext, useEffect } from 'react'
 import { setUserCookie, getUserCookie, removeUserCookie } from '../utils/auth-cookies'
 import { login } from '../utils/api'
 import { Producer, Customer } from '../utils/roles'
-import Router from 'next/router'
+import { useRouter } from 'next/router'
 
 export const AuthContext = createContext()
 
@@ -11,6 +11,8 @@ const AuthProvider = (props) => {
     isAuthenticated: false,
     user: {}
   })
+
+  const router = useRouter()
 
   useEffect(() => {
     if (!user.isAuthenticated) {
@@ -41,7 +43,7 @@ const AuthProvider = (props) => {
   }
 
   const signout = () => {
-    Router.push('/')
+    router.push('/')
     setUser({ ...user, isAuthenticated: false, user: {} })
     removeUserCookie()
   }

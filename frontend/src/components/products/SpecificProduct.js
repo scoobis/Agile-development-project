@@ -22,7 +22,6 @@ const SpecificProduct = (props) => {
 
   useEffect(() => {
     getOneProduct(productId).then((response) => {
-      console.log(response)
       setProduct(response)
       onLoad(response.name)
     })

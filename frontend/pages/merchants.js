@@ -1,9 +1,12 @@
 import React from 'react'
 import Layout from '../src/components/layouts/Layout'
-import ProducerDashboard from '../src/components/merchants/ProducerDashboard'
 import withProducer from '../src/components/hocs/withProducer'
 import useAuth from '../src/utils/useAuth'
 import Head from 'next/head'
+import dynamic from 'next/dynamic'
+const ProducerDashboard = dynamic(() => import('../src/components/merchants/ProducerDashboard'), {
+  ssr: false
+})
 
 function Merchants () {
   const { isProducer } = useAuth()

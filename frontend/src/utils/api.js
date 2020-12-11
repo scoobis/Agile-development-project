@@ -13,7 +13,7 @@ export const login = (user) =>
     .catch((err) => err.response)
 
 export const addProduct = (product) => {
-  const fd = new FormData()
+  const fd = new window.FormData()
 
   fd.append('name', product.name)
   fd.append('description', product.description)
