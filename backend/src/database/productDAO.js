@@ -199,7 +199,7 @@ productDAO.getAllByOrgNumber = async (orgNumber) => {
 
         product.categories = await productDAO.getCategoriesByProductId(product.id)
 
-        // getImages
+        product.images = await conn.query('SELECT * FROM product_image WHERE product_id = ?', [product.id])
 
         products.push(product)
       }
@@ -239,7 +239,7 @@ productDAO.getAllByCategoryId = async (categoryId) => {
 
           product.categories = await productDAO.getCategoriesByProductId(product.id)
 
-          // getImages
+          product.images = await conn.query('SELECT * FROM product_image WHERE product_id = ?', [product.id])
 
           products.push(product)
         }
