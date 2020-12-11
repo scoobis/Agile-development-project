@@ -32,7 +32,7 @@ const OrderCard = (props) => {
 
       {state.cartProducts.map((product) => {
         return (
-          <Box pb={1} mb={3} display='flex' justifyContent='space-between'>
+          <Box pb={1} mb={3} display='flex' justifyContent='space-between' key={product.id}>
             <Typography variant='body1'>
               {product.name} x {product.quantity}
             </Typography>
