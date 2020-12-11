@@ -1,9 +1,11 @@
-import { saveInStorage } from '../utils/localStorage'
+import { saveToCart } from '../utils/api'
 
 export const CartReducer = (state, action) => {
   switch (action.type) {
     case 'ADD_PRODUCT':
       return addProduct(state, action.payload)
+    case 'UPDATE':
+      return updateState(state, action.payload)
     case 'INCREASE':
       return increase(state, action.payload)
     case 'DECREASE':
@@ -13,6 +15,10 @@ export const CartReducer = (state, action) => {
     default:
       return { ...state }
   }
+}
+
+export const updateState = (state, payload) => {
+  return { cartProducts: payload.cartProducts, ...totoalSum(payload.cartProducts), id: state.id }
 }
 
 const addProduct = (state, payload) => {
@@ -25,35 +31,35 @@ const addProduct = (state, payload) => {
       id: payload.id,
       quantity: payload.amount,
       name: payload.name,
-      price: payload.price,
+      price: payload.price
     })
   }
-  saveInStorage('cart', state.cartProducts)
+  saveToCart(state)
   return { ...state, cartProducts: [...state.cartProducts], ...totoalSum(state.cartProducts) }
 }
 
 const increase = (state, payload) => {
   const increaseIndex = state.cartProducts.findIndex((product) => product.id === payload.id)
   state.cartProducts[increaseIndex].quantity++
-  saveInStorage('cart', state.cartProducts)
+  saveToCart(state)
   return { ...state, cartProducts: [...state.cartProducts], ...totoalSum(state.cartProducts) }
 }
 
 const decrease = (state, payload) => {
   const decreaseIndex = state.cartProducts.findIndex((product) => product.id === payload.id)
   state.cartProducts[decreaseIndex].quantity--
-  saveInStorage('cart', state.cartProducts)
+  saveToCart(state)
   return { ...state, cartProducts: [...state.cartProducts], ...totoalSum(state.cartProducts) }
 }
 
 const removeProduct = (state, payload) => {
   const removeIndex = state.cartProducts.findIndex((product) => product.id === payload.id)
   state.cartProducts.splice(removeIndex, 1)
-  saveInStorage('cart', state.cartProducts)
+  saveToCart(state)
   return { ...state, cartProducts: [...state.cartProducts], ...totoalSum(state.cartProducts) }
 }
 
-export const totoalSum = (cartProducts) => {
+const totoalSum = (cartProducts) => {
   let total
   cartProducts ? (total = cartProducts.reduce((sum, item) => sum + item.price * item.quantity, 0)) : 0
   return { total }

@@ -131,7 +131,7 @@ export default function Header() {
                       vertical: 'top',
                       horizontal: 'left'
                     }}
-                    badgeContent={state.cartProducts.length ? state.cartProducts.length : 0}
+                    badgeContent={state.cartProducts ? state.cartProducts.length : 0}
                   />
                 </IconButton>
               </a>

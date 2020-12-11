@@ -108,4 +108,31 @@ CREATE TABLE product_image (
 
 INSERT INTO product_image (product_id, image_name, alt_text)
 VALUES
-  (1,'test.jpg', 'Image of a test.jpg')
+  (1,'test.jpg', 'Image of a test.jpg');
+
+-- ORDER --
+CREATE TABLE orders (
+  id INT NOT NULL AUTO_INCREMENT,
+  producer_org_no INT,
+  customer_name VARCHAR(100),
+  customer_phone_no VARCHAR(10),
+  customer_street_address VARCHAR(100),
+  customer_zip INT(5),
+  customer_city VARCHAR(40),
+  price INT,
+  created DATE,
+  PRIMARY KEY (id)
+);
+
+-- ORDER_PRODUCT --
+CREATE TABLE order_product (
+  id INT NOT NULL AUTO_INCREMENT,
+  order_id INT NOT NULL,
+  product_id INT NOT NULL,
+  name VARCHAR(100),
+  unit VARCHAR(20),
+  price INT,
+  quantity INT,
+  PRIMARY KEY (id),
+  FOREIGN KEY (order_id) REFERENCES orders(id)
+);
