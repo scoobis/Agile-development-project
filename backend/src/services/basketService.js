@@ -10,8 +10,9 @@ const service = {}
  * @param {object} req
  */
 service.save = async (req) => {
-  const basket = parseBasket(req.body)
-  return basketCache.set(basket.id, basket)
+  //const basket = parseBasket(req.body)
+  console.log('SAVE', req.body)
+  return basketCache.set(req.body.id, req.body, 10000)
 }
 
 /**
@@ -21,7 +22,13 @@ service.save = async (req) => {
  */
 service.get = async (req) => {
   const id = req.params.id
-  return parseBasket(basketCache.get(id))
+  const cart = basketCache.get(id)
+
+  console.log('id', id)
+  console.log('CART', cart)
+  console.log(typeof cart === 'undefined')
+
+  return typeof cart === 'undefined' ? { cartProducts: [], totoal: 0, id: '' } : cart
 }
 
 /**
@@ -32,13 +39,7 @@ service.get = async (req) => {
  */
 const parseBasket = (object) => {
   console.log(object)
-  return new Basket(
-    parseInt(object.id),
-    parseInt(object.productId),
-    object.name,
-    parseInt(object.price),
-    parseInt(object.quantity)
-  )
+  return new Basket(parseInt(object.id), parseInt(object.productId), object.name, parseInt(object.price), parseInt(object.quantity))
 }
 
 module.exports = service

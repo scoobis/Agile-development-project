@@ -1,18 +1,36 @@
-import React, { createContext, useReducer } from 'react'
-import { CartReducer, totoalSum } from './CartReducer'
-import { getInStorage } from '../utils/localStorage'
+import React, { createContext, useEffect, useReducer, useState, up } from 'react'
+import { CartReducer, totoalSum, updateState } from './CartReducer'
+import { getInStorage, saveInStorage } from '../utils/localStorage'
+import { v4 as uuidv4 } from 'uuid'
+import { getCart } from '../utils/api'
 
 export const CartContext = createContext()
 
-// TDO: Get savedCartProducts from api
-const savedCartProducts = []
-
 const CartContextProvider = (props) => {
-  const initialState = {
-    cartProducts: savedCartProducts || [],
-    ...totoalSum(savedCartProducts)
+  let cartId = ''
+  if (process.browser && localStorage.getItem('cartId')) cartId = getInStorage('cartId')
+  else if (process.browser) {
+    cartId = uuidv4()
+    saveInStorage('cartId', cartId)
   }
-  const [state, dispatch] = useReducer(CartReducer, initialState)
+
+  const [savedCartProducts, setSavedCartProducts] = useState({
+    cartProducts: [],
+    totoal: 0,
+    id: cartId
+  })
+
+  useEffect(() => {
+    getCart(cartId).then((response) => {
+      setSavedCartProducts(response)
+      updateState(response)
+    })
+  }, [])
+
+  const [state, dispatch] = useReducer(CartReducer, savedCartProducts)
+
+  // Sets intitial value
+  const updateState = (payload) => dispatch({ type: 'UPDATE', payload })
 
   const addProduct = (payload) => dispatch({ type: 'ADD_PRODUCT', payload })
   const increase = (payload) => dispatch({ type: 'INCREASE', payload })

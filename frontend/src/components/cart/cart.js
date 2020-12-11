@@ -46,13 +46,7 @@ const Cart = () => {
                   </TableHead>
                   <TableBody>
                     {state.cartProducts.map((product) => (
-                      <ProductTable
-                        product={product}
-                        increase={increase}
-                        decrease={decrease}
-                        removeProduct={removeProduct}
-                        key={product.id}
-                      />
+                      <ProductTable product={product} increase={increase} decrease={decrease} removeProduct={removeProduct} key={product.id} />
                     ))}
                   </TableBody>
                 </Table>
