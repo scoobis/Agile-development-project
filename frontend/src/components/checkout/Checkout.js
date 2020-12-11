@@ -1,8 +1,10 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import OrderCard from './OrderCard'
 import { Grid, Container } from '@material-ui/core'
+import { CartContext } from '../../context/CartContext'
 
 const Checkout = () => {
+  const { state } = useContext(CartContext)
   return (
     <Container>
       <Grid container spacing={2}>
@@ -10,7 +12,7 @@ const Checkout = () => {
           Din Information
         </Grid>
         <Grid item xs={4}>
-          <OrderCard />
+          <OrderCard state={state} />
         </Grid>
       </Grid>
     </Container>
