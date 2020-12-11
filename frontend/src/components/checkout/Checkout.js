@@ -6,7 +6,12 @@ const Checkout = () => {
   return (
     <Container>
       <Grid container spacing={2}>
-        <OrderCard />
+        <Grid item xs={8}>
+          Din Information
+        </Grid>
+        <Grid item xs={4}>
+          <OrderCard />
+        </Grid>
       </Grid>
     </Container>
   )
