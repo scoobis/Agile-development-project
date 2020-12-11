@@ -14,6 +14,7 @@ import {
 import MultipleSelect from './MultipleSelect'
 import { getCategories } from '../../utils/api'
 import UploadImages from './UploadImages'
+import SelectTags from './SelectTags'
 import useAuth from '../../utils/useAuth'
 import { findParents } from '../../utils/helpers'
 
@@ -26,6 +27,7 @@ const EMPTY_INITIAL_STATE = {
     unit: '',
     salePrice: '',
     inStock: '',
+    tags: [],
     categories: []
   },
   errors: {},
@@ -134,6 +136,13 @@ function ProductForm ({ onSubmit, preFilled }) {
     setState({
       ...state,
       product: { ...state.product, [e.target.name]: e.target.value }
+    })
+  }
+
+  const handleTagsChange = (tags) => {
+    setState({
+      ...state,
+      product: { ...state.product, tags }
     })
   }
 
@@ -263,9 +272,17 @@ function ProductForm ({ onSubmit, preFilled }) {
             />
           </Grid>
           <Grid item xs={12}>
-            <Typography variant='h5' style={{ marginBottom: '20px' }}>
-              Kategorier
-            </Typography>
+            <Box mb={2}>
+              <Typography variant='h5'>Taggar</Typography>
+            </Box>
+            <Box pb={2}>
+              <SelectTags onChange={handleTagsChange} defaultValues={state.tags} max={15} />
+            </Box>
+          </Grid>
+          <Grid item xs={12}>
+            <Box mb={2}>
+              <Typography variant='h5'>Kategorier</Typography>
+            </Box>
             <Box style={{ maxHeight: '200px', overflow: 'auto' }}>
               <MultipleSelect
                 options={categories}
