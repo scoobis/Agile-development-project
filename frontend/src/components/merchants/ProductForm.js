@@ -72,12 +72,15 @@ function ProductForm ({ onSubmit, preFilled }) {
   }
 
   const handleCategoryChange = (categories) => {
+    delete state.errors.categories
+
     setState({
       ...state,
       product: {
         ...state.product,
         categories: categories
-      }
+      },
+      errors: { ...state.errors }
     })
   }
 
@@ -94,22 +97,29 @@ function ProductForm ({ onSubmit, preFilled }) {
   const handleSubmit = (e) => {
     e.preventDefault()
 
-    onSubmit({
-      ...state.product,
-      orgNumber: user.user.orgNumber,
-      categories: getParentCategoriesForChildren() || [],
-      description: state.product.description || ''
-    }).then((response) => {
-      if (response.success || response.status === 200) {
-        preFilled
-          ? setState({ ...state, message: response.message, errors: {} })
-          : setState({ ...EMPTY_INITIAL_STATE, message: response.message, errors: {} })
-      } else if (response.status !== 200) {
-        setState({ ...state, message: response.data.message })
-      } else {
-        setState({ ...state, message: response.message })
-      }
-    })
+    if (!state.product.categories.length) {
+      setState({
+        ...state,
+        errors: { ...state.errors, categories: 'Minst en kategori måste väljas' }
+      })
+    } else {
+      onSubmit({
+        ...state.product,
+        orgNumber: user.user.orgNumber,
+        categories: getParentCategoriesForChildren() || [],
+        description: state.product.description || ''
+      }).then((response) => {
+        if (response.success || response.status === 200) {
+          preFilled
+            ? setState({ ...state, message: response.message, errors: {} })
+            : setState({ ...EMPTY_INITIAL_STATE, message: response.message, errors: {} })
+        } else if (response.status !== 200) {
+          setState({ ...state, message: response.data.message })
+        } else {
+          setState({ ...state, message: response.message })
+        }
+      })
+    }
   }
 
   const handleChange = (e) => {
@@ -282,6 +292,7 @@ function ProductForm ({ onSubmit, preFilled }) {
           <Grid item xs={12}>
             <Box mb={2}>
               <Typography variant='h5'>Kategorier</Typography>
+              {state.errors.categories && <Typography color='error'>{state.errors.categories}</Typography>}
             </Box>
             <Box style={{ maxHeight: '200px', overflow: 'auto' }}>
               <MultipleSelect
