@@ -1,8 +1,8 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { AuthContext } from '../../../context/AuthContext'
 import { CartContext } from '../../../context/CartContext'
 import Link from 'next/link'
-import Router from 'next/router'
+import { useRouter } from 'next/router'
 
 import { makeStyles } from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
@@ -36,11 +36,12 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
-export default function Header() {
+export default function Header () {
   const classes = useStyles()
   const { signout, user, isCustomer, isProducer } = useContext(AuthContext)
   const { state } = useContext(CartContext)
   const [anchorEl, setAnchorEl] = useState(null)
+  const router = useRouter()
 
   const isMenuOpen = Boolean(anchorEl)
 
@@ -53,13 +54,9 @@ export default function Header() {
   }
 
   const handleSignout = () => {
-    Router.push('/')
+    router.push('/')
     signout()
   }
-
-  useEffect(() => {
-    console.log('www')
-  }, [state])
 
   const LinkMenuItem = (props) => (
     <Link href={props.href}>

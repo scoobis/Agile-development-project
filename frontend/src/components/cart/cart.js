@@ -12,11 +12,11 @@ import {
   TableRow,
   Typography,
   Button,
-  Link,
   Box
 } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { CartContext } from '../../context/CartContext'
+import Link from 'next/link'
 
 import ProductTable from './ProductTable'
 
@@ -46,7 +46,13 @@ const Cart = () => {
                   </TableHead>
                   <TableBody>
                     {state.cartProducts.map((product) => (
-                      <ProductTable product={product} increase={increase} decrease={decrease} removeProduct={removeProduct} key={product.id} />
+                      <ProductTable
+                        product={product}
+                        increase={increase}
+                        decrease={decrease}
+                        removeProduct={removeProduct}
+                        key={product.id}
+                      />
                     ))}
                   </TableBody>
                 </Table>

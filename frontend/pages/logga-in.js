@@ -2,17 +2,18 @@ import React, { useEffect } from 'react'
 import Layout from '../src/components/layouts/Layout'
 import LoginForm from '../src/components/LoginForm'
 import useAuth from '../src/utils/useAuth'
-import Router from 'next/router'
+import { useRouter } from 'next/router'
 import Head from 'next/head'
 
 function Login () {
   const { isProducer, isCustomer, user } = useAuth()
+  const router = useRouter()
 
   useEffect(() => {
     if (isProducer) {
-      Router.push('/merchants')
+      router.push('/merchants')
     } else if (isCustomer) {
-      Router.push('/produkter')
+      router.push('/produkter')
     }
   }, [isProducer, isCustomer])
 
@@ -21,7 +22,7 @@ function Login () {
       <Head>
         <title>Logga in</title>
       </Head>
-      <Layout>{!user.isAuthenticated ? <LoginForm /> : <p>Du är redan inloggad.</p>}</Layout>
+      <Layout>{!user.isAuthenticated && <LoginForm />}</Layout>
     </>
   )
 }

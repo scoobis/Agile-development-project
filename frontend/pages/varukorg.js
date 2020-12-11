@@ -1,6 +1,10 @@
 import Head from 'next/head'
-import Cart from '../src/components/cart/cart'
 import Layout from '../src/components/layouts/Layout'
+
+import dynamic from 'next/dynamic'
+const Cart = dynamic(() => import('../src/components/cart/cart'), {
+  ssr: false
+})
 
 const CartPage = () => {
   return (

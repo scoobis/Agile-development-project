@@ -5,12 +5,19 @@ import CssBaseline from '@material-ui/core/CssBaseline'
 import theme from '../src/styles/theme'
 import Header from '../src/components/layouts/Header/Header'
 import Footer from '../src/components/layouts/Footer'
-import AuthProvider from '../src/context/AuthContext'
-import CartContextProvider from '../src/context/CartContext'
 import { SnackbarProvider } from 'notistack'
 import { IconButton } from '@material-ui/core'
 import CloseIcon from '@material-ui/icons/Close'
 // import '../src/styles/style.css'
+
+import dynamic from 'next/dynamic'
+const AuthProvider = dynamic(() => import('../src/context/AuthContext'), {
+  ssr: false
+})
+
+const CartProvider = dynamic(() => import('../src/context/CartContext'), {
+  ssr: false
+})
 
 export default function MyApp (props) {
   const { Component, pageProps } = props
@@ -38,7 +45,7 @@ export default function MyApp (props) {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <AuthProvider>
-          <CartContextProvider>
+          <CartProvider>
             <Header />
             <SnackbarProvider
               maxSnack={3}
@@ -52,7 +59,7 @@ export default function MyApp (props) {
               <Component {...pageProps} />
             </SnackbarProvider>
             <Footer />
-          </CartContextProvider>
+          </CartProvider>
         </AuthProvider>
       </ThemeProvider>
     </>
