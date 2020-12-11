@@ -1,5 +1,16 @@
 import React, { useEffect, useState } from 'react'
-import { Box, Button, Container, Grid, TextField, Typography } from '@material-ui/core'
+import {
+  Box,
+  Button,
+  Container,
+  FormControl,
+  Grid,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+  Typography
+} from '@material-ui/core'
 import MultipleSelect from './MultipleSelect'
 import { getCategories } from '../../utils/api'
 import UploadImages from './UploadImages'
@@ -117,6 +128,15 @@ function ProductForm ({ onSubmit, preFilled }) {
     })
   }
 
+  const handleSelectChange = (e) => {
+    delete state.errors[e.target.name]
+
+    setState({
+      ...state,
+      product: { ...state.product, [e.target.name]: e.target.value }
+    })
+  }
+
   const handleError = (e) => {
     setState({
       ...state,
@@ -172,7 +192,7 @@ function ProductForm ({ onSubmit, preFilled }) {
           <Grid item xs={12}>
             <UploadImages images={state.product.images} setImages={handleImageChange} />
           </Grid>
-          <Grid item xs={12} sm={6} md={4}>
+          <Grid item xs={12} sm={6} md={3}>
             <TextField
               placeholder='Pris'
               name='price'
@@ -194,7 +214,7 @@ function ProductForm ({ onSubmit, preFilled }) {
               onChange={handleChange}
             />
           </Grid>
-          <Grid item xs={12} sm={6} md={4}>
+          <Grid item xs={12} sm={6} md={3}>
             <TextField
               placeholder='Rabatterat pris'
               name='salePrice'
@@ -210,28 +230,17 @@ function ProductForm ({ onSubmit, preFilled }) {
               onChange={handleChange}
             />
           </Grid>
-          <Grid item xs={12} sm={6} md={4}>
-            <TextField
-              placeholder='kg/l/st'
-              name='unit'
-              label='Enhet'
-              value={state.product.unit}
-              variant='outlined'
-              margin='normal'
-              InputLabelProps={{
-                shrink: true
-              }}
-              inputProps={{
-                minLength: 1,
-                maxLength: 20
-              }}
-              required
-              error={!!state.errors.unit}
-              fullWidth
-              onChange={handleChange}
-            />
+          <Grid item xs={12} sm={6} md={3}>
+            <FormControl required variant='outlined' margin='normal' fullWidth error={!!state.errors.unit}>
+              <InputLabel id='name'>Enhet</InputLabel>
+              <Select label='Enhet' id='name' name='unit' value={state.product.unit} onChange={handleSelectChange}>
+                <MenuItem value='st'>st</MenuItem>
+                <MenuItem value='kg'>kg</MenuItem>
+                <MenuItem value='l'>liter</MenuItem>
+              </Select>
+            </FormControl>
           </Grid>
-          <Grid item xs={12}>
+          <Grid item xs={12} sm={6} md={3}>
             <TextField
               placeholder='Antal enheter i lager'
               name='inStock'
