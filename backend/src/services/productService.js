@@ -184,7 +184,7 @@ service.getProductFromRequest = async (req) => {
     req.body.name,
     req.body.description,
     req.body.price,
-    null,
+    req.body.salePrice,
     req.body.unit,
     req.body.inStock,
     req.body.categories,

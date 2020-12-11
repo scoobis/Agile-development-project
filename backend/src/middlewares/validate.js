@@ -1,5 +1,5 @@
 const createError = require('http-errors')
-const userService = require('../services/userService')
+const userService = require('../services/validateUserService')
 const productService = require('../services/validateProductService')
 
 const validate = {}

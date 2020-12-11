@@ -8,36 +8,36 @@ const service = {}
 /**
  * Creates a new customer
  *
- * @param {*} req
- * @param {*} res
- * @param {*} next
+ * @param {object} req
+ * @param {object} res
+ * @param {object} next
  */
 service.createCustomer = async (req, res, next) => {
-  const userToRegister = new User(
-    req.body.email, req.body.password, req.body.name
-  )
-
+  const userToRegister = await service.parseUserFromRequest(req)
   await userDAO.createCustomer(userToRegister)
 }
 
 /**
  * Creates a new producer
  *
- * @param {*} req
- * @param {*} res
- * @param {*} next
+ * @param {object} req
+ * @param {object} res
+ * @param {object} next
  */
 service.createProducer = async (req, res, next) => {
-  const userToRegister = new Producer(
-    req.body.email, req.body.password, req.body.name, req.body.phone, req.body.orgNumber
-  )
-  const addressToRegister = new Address(
-    req.body.streetAddress, req.body.zip, req.body.city, 'business'
-  )
-
+  const userToRegister = await service.parseProducerFromRequest(req)
+  const addressToRegister = await service.parseAddressFromRequest(req)
   await userDAO.createProducer(userToRegister, addressToRegister)
 }
 
+/**
+ * Logs in a user
+ *
+ * @param {object} req
+ * @param {object} res
+ * @param {object} next
+ * @returns {object} user //TODO Return Producer/User instead?
+ */
 service.login = async (req, res, next) => {
   const user = await userDAO.login(req)
   if (user) {
@@ -53,91 +53,11 @@ service.login = async (req, res, next) => {
   return user
 }
 
-// Placera funkionerna här under i delad mapp med frontend? Vad sa vi om det?
 /**
- * Checks if name is long enough
+ * Returns an orgNumber from an email
  *
- * @param {*} name
- * @returns {boolean} - True if valid / False if not valid.
+ * @param {String} email
  */
-service.isValidName = (name) => name.length >= 3
-
-/**
- * Checks if password is long enough
- *
- * @param {*} pwd
- * @returns {boolean} - True if valid / False if not valid.
- */
-service.isValidPassword = (pwd) => pwd.length >= 6
-
-/**
- * Uses a regex to check if the email is valid.
- *
- * @param {string} email - Email address.
- * @returns {boolean} - True if valid / False if not valid.
- */
-service.isValidEmail = (email) =>
-  /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email)
-
-/**
- * Checks if the provided email address is already in use.
- *
- * @param {string} email - Email address.
- * @returns {boolean} - True if already in use/False if not
- */
-service.isAlreadyRegistered = async (email) => {
-  const user = await userDAO.findByEmail(email)
-  if (typeof user === 'object') {
-    return true
-  } else {
-    return false
-  }
-}
-
-/**
- * Checks if organization number is valid
- *
- * @param {*} num
- */
-service.isValidOrganizationNumber = (num) => {
-  let n = num
-
-  if (typeof num === 'string') {
-    n = num.replace(/\D/g, '')
-  }
-
-  return n.length === 10
-}
-
-/**
- * Checks if zip code is valid
- *
- * @param {*} code
- */
-service.isValidZipCode = (code) => code.length === 5
-
-/**
- * Checks if phone number is valid
- *
- * @param {*} number
- */
-service.isValidPhoneNumber = number => number.length === 10
-
-/**
- * Checks if the provided organisation number is already in use.
- *
- * @param {*} orgNumber - Email address.
- * @returns {boolean} - True if already in use/False if not
- */
-service.isOrgNumberAlreadyInUse = async (orgNumber) => {
-  const producer = await userDAO.getProducerByOrgNumber(orgNumber)
-  if (typeof producer === 'object') {
-    return true
-  } else {
-    return false
-  }
-}
-
 service.getOrgNumberByEmail = async (email) => {
   const user = await userDAO.findByEmail(email)
   if (typeof user === 'object') {
@@ -147,6 +67,56 @@ service.getOrgNumberByEmail = async (email) => {
   } else {
     return false
   }
+}
+
+/**
+ * Parses and returns a User from the request
+ *
+ * @param {object} req
+ * @returns {User} user
+ */
+service.parseUserFromRequest = async (req) => {
+  return new User(
+    null,
+    req.body.email,
+    req.body.password,
+    req.body.name,
+    'customer'
+  )
+}
+
+/**
+ * Parses and returns a Producer from the request
+ *
+ * @param {object} req
+ * @returns {Producer} producer
+ */
+service.parseProducerFromRequest = async (req) => {
+  return new Producer(
+    null,
+    req.body.email,
+    req.body.password,
+    req.body.name,
+    req.body.phone,
+    req.body.orgNumber,
+    'producer'
+  )
+}
+
+/**
+ * Parses and returns an Address from the request
+ *
+ * @param {object} req
+ * @returns {Address} address
+ */
+service.parseAddressFromRequest = async (req) => {
+  return new Address(
+    null,
+    req.body.streetAddress,
+    req.body.zip,
+    req.body.city,
+    'business'
+  )
 }
 
 module.exports = service

@@ -1,23 +1,16 @@
-const user = require("./user")
+const User = require('./user')
 
-class producer extends user {
-  constructor(email, password, name, phone, orgNumber) {
-    super(email, password, name)
+/**
+ * Model representing a Producer that extends a User.
+ * @class Producer
+ */
+class Producer extends User {
+  constructor (id = null, email, password, name, phone, orgNumber, role = 'producer') {
+    super(id, email, password, name)
     this.phone = phone
     this.orgNumber = orgNumber
-    this._role = 'producer'
+    this.role = role
   }
-
-  /**
-   * @param {string} orgNumber
-   */
-  set orgNumber(orgNumber) {
-    this._orgNumber = orgNumber
-  }
-  get orgNumber() {
-    return this._orgNumber
-  }
-  
 }
 
-module.exports = producer
+module.exports = Producer
