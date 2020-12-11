@@ -1,34 +1,36 @@
-import React, { createContext, useEffect, useReducer, useState } from 'react'
-import { CartReducer, totoalSum } from './CartReducer'
+import React, { createContext, useEffect, useReducer, useState, up } from 'react'
+import { CartReducer, totoalSum, updateState } from './CartReducer'
 import { getInStorage, saveInStorage } from '../utils/localStorage'
 import { v4 as uuidv4 } from 'uuid'
-import { saveToCart, getCart } from '../utils/api'
+import { getCart } from '../utils/api'
 
 export const CartContext = createContext()
 
 const CartContextProvider = (props) => {
   let cartId = ''
-  if (process.browser && localStorage.getItem('cartId')) {
-    cartId = getInStorage('cartId')
-  } else if (process.browser) {
+  if (process.browser && localStorage.getItem('cartId')) cartId = getInStorage('cartId')
+  else if (process.browser) {
     cartId = uuidv4()
     saveInStorage('cartId', cartId)
   }
 
-  const [savedCartProducts, setSavedCartProducts] = useState('') // TODO: do not use useState
-
-  useEffect(() => {
-    getCart(cartId).then((response) => setSavedCartProducts(response))
+  const [savedCartProducts, setSavedCartProducts] = useState({
+    cartProducts: [],
+    totoal: 0,
+    id: cartId
   })
 
-  console.log(savedCartProducts)
+  useEffect(() => {
+    getCart(cartId).then((response) => {
+      setSavedCartProducts(response)
+      updateState(response)
+    })
+  }, [])
 
-  const initialState = {
-    cartProducts: savedCartProducts || [],
-    ...totoalSum(savedCartProducts),
-    id: cartId || 0
-  }
-  const [state, dispatch] = useReducer(CartReducer, initialState)
+  const [state, dispatch] = useReducer(CartReducer, savedCartProducts)
+
+  // Sets intitial value
+  const updateState = (payload) => dispatch({ type: 'UPDATE', payload })
 
   const addProduct = (payload) => dispatch({ type: 'ADD_PRODUCT', payload })
   const increase = (payload) => dispatch({ type: 'INCREASE', payload })
