@@ -8,36 +8,35 @@ const service = {}
 /**
  * Creates a new customer
  *
- * @param {*} req
- * @param {*} res
- * @param {*} next
+ * @param {object} req
+ * @param {object} res
+ * @param {object} next
  */
 service.createCustomer = async (req, res, next) => {
-  const userToRegister = new User(
-    req.body.email, req.body.password, req.body.name
-  )
-
+  const userToRegister = await service.parseUserFromRequest(req)
   await userDAO.createCustomer(userToRegister)
 }
 
 /**
  * Creates a new producer
  *
- * @param {*} req
- * @param {*} res
- * @param {*} next
+ * @param {object} req
+ * @param {object} res
+ * @param {object} next
  */
 service.createProducer = async (req, res, next) => {
-  const userToRegister = new Producer(
-    req.body.email, req.body.password, req.body.name, req.body.phone, req.body.orgNumber
-  )
-  const addressToRegister = new Address(
-    req.body.streetAddress, req.body.zip, req.body.city, 'business'
-  )
-
+  const userToRegister = await service.parseProducerFromRequest(req)
+  const addressToRegister = await service.parseAddressFromRequest(req)
   await userDAO.createProducer(userToRegister, addressToRegister)
 }
 
+/**
+ * Logs in a user
+ *
+ * @param {object} req
+ * @param {object} res
+ * @param {object} next
+ */
 service.login = async (req, res, next) => {
   const user = await userDAO.login(req)
   if (user) {
@@ -53,7 +52,56 @@ service.login = async (req, res, next) => {
   return user
 }
 
-// Placera funkionerna här under i delad mapp med frontend? Vad sa vi om det?
+/**
+ * Parses and returns a User from the request
+ *
+ * @param {object} req
+ * @returns {User} user
+ */
+service.parseUserFromRequest = async (req) => {
+  return new User(
+    null,
+    req.body.email,
+    req.body.password,
+    req.body.name,
+    'customer'
+  )
+}
+
+/**
+ * Parses and returns a Producer from the request
+ *
+ * @param {object} req
+ * @returns {Producer} producer
+ */
+service.parseProducerFromRequest = async (req) => {
+  return new Producer(
+    null,
+    req.body.email,
+    req.body.password,
+    req.body.name,
+    req.body.phone,
+    req.body.orgNumber,
+    'producer'
+  )
+}
+
+/**
+ * Parses and returns an Address from the request
+ *
+ * @param {object} req
+ * @returns {Address} address
+ */
+service.parseAddressFromRequest = async (req) => {
+  return new Address(
+    null,
+    req.body.streetAddress,
+    req.body.zip,
+    req.body.city,
+    'business'
+  )
+}
+
 /**
  * Checks if name is long enough
  *
@@ -138,6 +186,11 @@ service.isOrgNumberAlreadyInUse = async (orgNumber) => {
   }
 }
 
+/**
+ * Returns an orgNumber from an email
+ *
+ * @param {*} email
+ */
 service.getOrgNumberByEmail = async (email) => {
   const user = await userDAO.findByEmail(email)
   if (typeof user === 'object') {
