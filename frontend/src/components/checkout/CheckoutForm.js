@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import { isValidName, isValidEmail, isValidZipCode, isValidPhoneNumber } from '../../utils/user'
-import { Button, TextField, FormControlLabel, Container, Grid, Typography, FormControl, FormHelperText } from '@material-ui/core'
+import { Button, FormControl, TextField, FormLabel, RadioGroup, FormControlLabel, Container, Grid, Typography, Radio } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -161,11 +161,6 @@ const CheckoutForm = () => {
                 error={city.hasError && city.helperText}
               />
             </Grid>
-            <FormLabel component='legend'>Pop quiz: Material-UI is...</FormLabel>
-            <RadioGroup aria-label='quiz' name='quiz' value={value} onChange={handleRadioChange}>
-              <FormControlLabel value='best' control={<Radio />} label='The best!' />
-              <FormControlLabel value='worst' control={<Radio />} label='The worst.' />
-            </RadioGroup>
             <Button type='submit' fullWidth variant='contained' color='primary' className={classes.submit} onClick={handleSubmit}>
               Slutför order
             </Button>
