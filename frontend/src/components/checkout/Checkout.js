@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import OrderCard from './OrderCard'
-import { Grid, Container } from '@material-ui/core'
+import { Grid, Container, Typography } from '@material-ui/core'
 import { CartContext } from '../../context/CartContext'
 import CheckoutForm from './CheckoutForm'
 

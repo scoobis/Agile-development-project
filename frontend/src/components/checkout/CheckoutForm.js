@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
+import { isValidName, isValidEmail, isValidZipCode, isValidPhoneNumber } from '../../utils/user'
 import { Button, TextField, FormControlLabel, Checkbox, Container, Grid, Typography, FormControl, FormHelperText } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => ({
@@ -22,17 +23,39 @@ const useStyles = makeStyles((theme) => ({
 
 const CheckoutForm = () => {
   const [state, setState] = useState({
-    name: { value: '', hasError: false, helperText: '' },
+    firstName: { value: '', hasError: false, helperText: '' },
+    lastName: { value: '', hasError: false, helperText: '' },
     email: { value: '', hasError: false, helperText: '' },
     phone: { value: '', hasError: false, helperText: '' },
     streetAddress: { value: '', hasError: false, helperText: '' },
     zip: { value: '', hasError: false, helperText: '' },
     city: { value: '', hasError: false, helperText: '' }
   })
-  const { name, email, streetAddress, zip, city, phone } = state
+  const { firstName, lastName, email, streetAddress, zip, city, phone } = state
 
-  const handleSubmit = () => {}
-  const handleChange = () => {}
+  const handleChange = (e) => {
+    const name = e.target.name
+    const value = e.target.value
+
+    setState({
+      ...state,
+      [name]: { ...state[name], value: value, hasError: false }
+    })
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    setState({
+      ...state,
+      firstName: { ...firstName, hasError: firstName.value.length < 3 },
+      lastName: { ...firstName, hasError: lastName.value.length < 3 },
+      email: { ...email, hasError: !isValidEmail(email.value) },
+      phone: { ...phone, hasError: !isValidPhoneNumber(phone.value) },
+      zip: { ...zip, hasError: !isValidZipCode(zip.value) }
+    })
+
+    // TODO: Submit form
+  }
 
   const classes = useStyles()
   return (
@@ -52,10 +75,10 @@ const CheckoutForm = () => {
                 fullWidth
                 autoFocus
                 required
-                value={name.value}
+                value={firstName.value}
                 onChange={handleChange}
-                error={name.hasError}
-                helperText={name.hasError && name.helperText}
+                error={firstName.hasError}
+                helperText={firstName.hasError && firstName.helperText}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -66,10 +89,10 @@ const CheckoutForm = () => {
                 fullWidth
                 autoFocus
                 required
-                value={name.value}
+                value={lastName.value}
                 onChange={handleChange}
-                error={name.hasError}
-                helperText={name.hasError && name.helperText}
+                error={lastName.hasError}
+                helperText={lastName.hasError && lastName.helperText}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
