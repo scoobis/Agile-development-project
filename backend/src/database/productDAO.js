@@ -128,13 +128,12 @@ productDAO.get = async (productId) => {
     conn = await pool.getConnection()
 
     const selectProductById = 'SELECT * FROM product WHERE id=?'
-    const selectImageByProductId = 'SELECT * FROM product_image WHERE product_id = ?'
 
     const [row] = await conn.query(selectProductById, [productId])
 
     const product = parseProduct(row)
     product.categories = await productDAO.getCategoriesByProductId(product.id)
-    product.images = await conn.query(selectImageByProductId, [product.id])
+    product.images = await productDAO.getImages(product.id)
 
     return product
   } finally {
@@ -163,7 +162,7 @@ productDAO.getAll = async () => {
 
         product.categories = await productDAO.getCategoriesByProductId(product.id)
 
-        product.images = await conn.query('SELECT * FROM product_image WHERE product_id = ?', [product.id])
+        product.images = await productDAO.getImages(product.id)
 
         products.push(product)
       }
