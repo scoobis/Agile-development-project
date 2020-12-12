@@ -44,11 +44,13 @@ function ProductForm ({ onSubmit, preFilled }) {
 
   useEffect(() => {
     convertInitialImagesToFiles().then((files) => {
-      setState({
-        ...state,
-        product: { ...state.product, images: [...files] },
-        preFilledImages: [...files]
-      })
+      if (files) {
+        setState({
+          ...state,
+          product: { ...state.product, images: [...files] },
+          preFilledImages: [...files]
+        })
+      }
     })
   }, [])
 
