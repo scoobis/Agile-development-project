@@ -10,7 +10,7 @@ const Products = () => {
 
   useEffect(() => {
     getAllProducts().then((response) => {
-      setProducts([...response])
+      response.length && setProducts([...response])
     })
   }, [])
 
