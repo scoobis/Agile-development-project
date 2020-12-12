@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import { isValidName, isValidEmail, isValidZipCode, isValidPhoneNumber } from '../../utils/user'
-import { Button, TextField, FormControlLabel, Checkbox, Container, Grid, Typography, FormControl, FormHelperText } from '@material-ui/core'
+import { Button, FormControl, TextField, FormLabel, RadioGroup, FormControlLabel, Container, Grid, Typography, Radio } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -87,7 +87,6 @@ const CheckoutForm = () => {
                 label='Efternamn'
                 variant='outlined'
                 fullWidth
-                autoFocus
                 required
                 value={lastName.value}
                 onChange={handleChange}
