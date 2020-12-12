@@ -22,4 +22,18 @@ export const findParents = (obj, id, paths = []) => {
   }
 }
 
-export const replaceNullsWithEmptyStr = (data) => JSON.parse(JSON.stringify(data).replace(/null/g, '""'))
+export const replaceNullsWithEmptyStr = (object) => {
+  const keys = Object.keys(object)
+  keys.forEach((key) => {
+    if (isNull(object, key)) {
+      object[key] = ''
+    }
+
+    if (typeof object[key] === 'object') {
+      replaceNullsWithEmptyStr(object[key])
+    }
+  })
+  return object
+}
+
+const isNull = (obj, key) => obj[key] === null || obj[key] === undefined || obj[key] === 'null'

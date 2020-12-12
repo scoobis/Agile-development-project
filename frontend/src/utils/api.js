@@ -20,7 +20,11 @@ export const addProduct = (product) => {
   product.images.forEach((image) => fd.append('images[]', image.file))
   fd.append('price', product.price)
   fd.append('unit', product.unit)
-  fd.append('salePrice', product.salePrice)
+
+  if (product.salePrice) {
+    fd.append('salePrice', product.salePrice)
+  }
+
   fd.append('inStock', product.inStock)
   product.categories.forEach((category) => fd.append('categories[]', category))
   fd.append('orgNumber', product.orgNumber)

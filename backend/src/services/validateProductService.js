@@ -3,7 +3,7 @@ const userDAO = require('../database/userDAO')
 
 const service = {}
 
-service.isUndefined = (object) => typeof object === 'undefined'
+service.isUndefined = (object) => typeof object === 'undefined' || object === null
 
 service.isArray = (array) => Array.isArray(array)
 
