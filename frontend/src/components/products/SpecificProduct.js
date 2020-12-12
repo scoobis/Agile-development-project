@@ -27,7 +27,7 @@ const SpecificProduct = (props) => {
     })
   }, [props])
 
-  const { name, description, price, unit, inStock, id, images } = product
+  const { name, description, price, salePrice, unit, inStock, id, images } = product
   const DEFAULT_IMG_SRC = '/apples.JPG'
 
   return (
@@ -35,17 +35,32 @@ const SpecificProduct = (props) => {
       <Grid className={classes.gridContainer} container spacing={2}>
         <Grid item xs={7}>
           {images && images.length ? (
-            images.map((img) => <img alt={img.alt_text} key={img.id} src={`${API_URL}/static/${img.image_name}`} />)
+            images.map((img) => (
+              <img
+                className={classes.img}
+                alt={img.alt_text}
+                key={img.id}
+                src={`${API_URL}/static/${img.image_name}`}
+              />
+            ))
           ) : (
             <img className={classes.img} alt='Produkt bild' src={DEFAULT_IMG_SRC} />
           )}
         </Grid>
         <Grid item xs={5}>
-          <SpecificProductCard inStock={inStock} price={price} name={name} unit={unit} id={id} />
+          <SpecificProductCard
+            inStock={inStock}
+            price={price}
+            salePrice={salePrice}
+            name={name}
+            unit={unit}
+            id={id}
+            description={description}
+          />
         </Grid>
         <Grid item xs={12}>
           <Typography className={classes.pos} variant='h6' color='textSecondary'>
-            {description}
+            Om producenten
           </Typography>
         </Grid>
       </Grid>
