@@ -2,13 +2,13 @@ import React from 'react'
 import { DropzoneAreaBase } from 'material-ui-dropzone'
 
 export default function UploadImages ({ images, setImages }) {
-  const handleAdd = newImages => {
-    newImages = newImages.filter(image => !images.find(i => i.data === image.data))
+  const handleAdd = (newImages) => {
+    newImages = newImages.filter((image) => !images.find((i) => i.data === image.data))
     setImages([...images, ...newImages])
   }
 
-  const handleDelete = deleted => {
-    setImages(images.filter(i => i !== deleted))
+  const handleDelete = (deleted) => {
+    setImages(images.filter((i) => i !== deleted))
   }
 
   return (
