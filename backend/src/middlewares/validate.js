@@ -112,7 +112,11 @@ validate.product = async (req, res, next) => {
   /**
    * SalePrice
    */
-  if (salePrice && !productService.isValidSalePrice(parseInt(salePrice), parseInt(price))) {
+
+  if (
+    !productService.isUndefined(salePrice) &&
+    !productService.isValidSalePrice(parseInt(salePrice), parseInt(price))
+  ) {
     return next(createError(400, 'The sale price must be lower than the original price'))
   }
 
