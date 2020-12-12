@@ -1,5 +1,5 @@
 import React from 'react'
-import { Typography, Button, Grid, Box } from '@material-ui/core'
+import { Typography, Button, Grid, Box, Link } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 
 const useStyles = makeStyles({
@@ -37,19 +37,23 @@ const SummaryCard = (props) => {
       <Box pb={1} mb={1} borderBottom='1px solid #999' display='flex' justifyContent='space-between'>
         <Typography variant='body1'>Frakt</Typography>
         <Typography className={classes.price} variant='body1'>
-          75.00 SEK
+          Hämtas på plats
         </Typography>
       </Box>
       <Box pt={4} pb={4} display='flex' justifyContent='space-between'>
         <Typography variant='body1'>Totalsumma</Typography>
         <Typography className={classes.price} variant='h4'>
-          {total + 75}.00 SEK
+          {total}.00 SEK
         </Typography>
       </Box>
       <Box>
-        <Button size='large' fullWidth variant='contained' color='primary'>
-          Till betalning
-        </Button>
+        <Link style={{ textDecoration: 'none' }} href='/kassa'>
+          <a>
+            <Button size='large' fullWidth variant='contained' color='primary'>
+              Till kassan
+            </Button>
+          </a>
+        </Link>
       </Box>
     </Grid>
   )
