@@ -17,6 +17,7 @@ import UploadImages from './UploadImages'
 import SelectTags from './SelectTags'
 import useAuth from '../../utils/useAuth'
 import { findParents } from '../../utils/helpers'
+import { API_URL } from '../../utils/config'
 
 const EMPTY_INITIAL_STATE = {
   product: {
@@ -37,9 +38,13 @@ const EMPTY_INITIAL_STATE = {
 function ProductForm ({ onSubmit, preFilled }) {
   const { user } = useAuth()
   const [state, setState] = useState(
-    preFilled ? { ...EMPTY_INITIAL_STATE, product: { ...preFilled } } : EMPTY_INITIAL_STATE
+    preFilled ? { ...EMPTY_INITIAL_STATE, product: { ...preFilled, images: [] } } : EMPTY_INITIAL_STATE
   )
   const [categories, setCategories] = useState([])
+
+  useEffect(() => {
+    convertInitialImagesToFiles()
+  }, [])
 
   useEffect(() => {
     getCategories().then((categories) => {
@@ -52,6 +57,37 @@ function ProductForm ({ onSubmit, preFilled }) {
       setCategories(result)
     })
   }, [])
+
+  const convertInitialImagesToFiles = () => {
+    if (preFilled && preFilled.images) {
+      preFilled.images.map((image) => {
+        const url = `${API_URL}/static/${image.image_name}`
+        window.fetch(url).then((response) => {
+          response.blob().then((blob) => {
+            blobToBase64(blob).then((finalResult) => {
+              const file = {}
+              file.data = finalResult
+              file.file = new window.File([blob], image.image_name, { type: blob.type })
+              setState({
+                ...state,
+                product: { ...state.product, images: [...state.product.images, file] }
+              })
+            })
+          })
+        })
+      })
+    }
+  }
+
+  const blobToBase64 = (blob) => {
+    const reader = new window.FileReader()
+    reader.readAsDataURL(blob)
+    return new Promise((resolve) => {
+      reader.onloadend = () => {
+        resolve(reader.result)
+      }
+    })
+  }
 
   const getParentCategoriesForChildren = () => {
     const arr = []
@@ -107,7 +143,8 @@ function ProductForm ({ onSubmit, preFilled }) {
         ...state.product,
         orgNumber: user.user.orgNumber,
         categories: getParentCategoriesForChildren() || [],
-        description: state.product.description || ''
+        description: state.product.description || null,
+        salePrice: state.product.salePrice || null
       }).then((response) => {
         if (response.success || response.status === 200) {
           preFilled
