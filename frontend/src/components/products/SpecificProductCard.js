@@ -1,18 +1,21 @@
 import React, { useContext, useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
-import { Card, CardContent, Typography, Button, Grid } from '@material-ui/core'
+import { Card, CardContent, Typography, Button, Grid, Box } from '@material-ui/core'
 import { CartContext } from '../../context/CartContext'
 import PickAmount from './PickAmount'
 import { useSnackbar } from 'notistack'
+import { isNull } from '../../utils/helpers'
 
 const SpecificProductCard = (props) => {
   const useStyles = makeStyles({
     root: { backgroundColor: 'white' },
     center: { textAlign: 'center' },
-    bold: { fontWeight: 'bold' }
+    bold: { fontWeight: 'bold' },
+    oldPrice: { textDecoration: 'line-through', fontSize: 16 },
+    salePrice: { color: 'red' }
   })
 
-  const { name, price, unit, inStock, id } = props
+  const { name, price, salePrice, unit, inStock, id, description } = props
   const [amount, setAmount] = useState(1)
   const { addProduct } = useContext(CartContext)
   const classes = useStyles()
@@ -39,13 +42,20 @@ const SpecificProductCard = (props) => {
           <Grid item xs={12}>
             <Typography variant='h3'>{name}</Typography>
           </Grid>
-          <Grid xs={12} item>
-            <Typography variant='body1'>Some short deescription?</Typography>
-          </Grid>
+          {!isNull(description) && (
+            <Grid xs={12} item>
+              <Typography variant='body1'>{description}</Typography>
+            </Grid>
+          )}
           <Grid item xs={12}>
-            <Typography className={classes.bold} variant='h4'>
+            <Typography className={`${classes.bold} ${salePrice && classes.oldPrice}`} variant='h4'>
               {price} SEK/{unit}
             </Typography>
+            {salePrice && (
+              <Typography className={` ${classes.bold} ${classes.salePrice} `} variant='h4'>
+                {salePrice} SEK/{unit}
+              </Typography>
+            )}
             <br />
             <br />
           </Grid>
