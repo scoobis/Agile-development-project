@@ -9,6 +9,7 @@ import DialogContent from '@material-ui/core/DialogContent'
 import IconButton from '@material-ui/core/IconButton'
 import CloseIcon from '@material-ui/icons/Close'
 import Typography from '@material-ui/core/Typography'
+import useAuth from '../../../utils/useAuth'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -29,6 +30,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function EditProductForm ({ product, onClose }) {
   const [open, setOpen] = React.useState(true)
+  const { user } = useAuth()
   const classes = useStyles()
 
   const handleClose = () => {
@@ -36,7 +38,7 @@ export default function EditProductForm ({ product, onClose }) {
     onClose()
   }
 
-  const handleEditProduct = (toEdit) => editProduct({ ...toEdit, id: product.id })
+  const handleEditProduct = (toEdit) => editProduct({ ...toEdit, id: product.id, orgNumber: user.user.orgNumber })
 
   return (
     <Dialog onClose={handleClose} aria-labelledby='edit-product' open={open}>

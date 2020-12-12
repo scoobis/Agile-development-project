@@ -43,7 +43,13 @@ function ProductForm ({ onSubmit, preFilled }) {
   const [categories, setCategories] = useState([])
 
   useEffect(() => {
-    convertInitialImagesToFiles()
+    convertInitialImagesToFiles().then((files) => {
+      setState({
+        ...state,
+        product: { ...state.product, images: [...files] },
+        preFilledImages: [...files]
+      })
+    })
   }, [])
 
   useEffect(() => {
@@ -58,24 +64,21 @@ function ProductForm ({ onSubmit, preFilled }) {
     })
   }, [])
 
-  const convertInitialImagesToFiles = () => {
+  async function convertInitialImagesToFiles () {
     if (preFilled && preFilled.images) {
-      preFilled.images.map((image) => {
-        const url = `${API_URL}/static/${image.image_name}`
-        window.fetch(url).then((response) => {
-          response.blob().then((blob) => {
-            blobToBase64(blob).then((finalResult) => {
-              const file = {}
-              file.data = finalResult
-              file.file = new window.File([blob], image.image_name, { type: blob.type })
-              setState({
-                ...state,
-                product: { ...state.product, images: [...state.product.images, file] }
-              })
-            })
-          })
+      const files = await Promise.all(
+        preFilled.images.map(async (image) => {
+          const url = `${API_URL}/static/${image.image_name}`
+          const response = await window.fetch(url)
+          const blob = await response.blob()
+          const finalResult = await blobToBase64(blob)
+          const file = {}
+          file.data = finalResult
+          file.file = new window.File([blob], image.image_name, { type: blob.type })
+          return file
         })
-      })
+      )
+      return files
     }
   }
 
@@ -139,13 +142,21 @@ function ProductForm ({ onSubmit, preFilled }) {
         errors: { ...state.errors, categories: 'Minst en kategori måste väljas' }
       })
     } else {
-      onSubmit({
+      const toSave = {
         ...state.product,
         orgNumber: user.user.orgNumber,
         categories: getParentCategoriesForChildren() || [],
         description: state.product.description || null,
         salePrice: state.product.salePrice || null
-      }).then((response) => {
+      }
+
+      if (preFilled) {
+        const { imagesToRemove, imagesToAdd } = getUpdatedImages()
+        toSave.imagesToRemove = imagesToRemove
+        toSave.imagesToAdd = imagesToAdd
+      }
+
+      onSubmit(toSave).then((response) => {
         if (response.success || response.status === 200) {
           preFilled
             ? setState({ ...state, message: response.message, errors: {} })
@@ -156,6 +167,19 @@ function ProductForm ({ onSubmit, preFilled }) {
           setState({ ...state, message: response.message })
         }
       })
+    }
+  }
+
+  const getUpdatedImages = () => {
+    if (preFilled && preFilled.images) {
+      const images = state.product.images
+      const preFilledImages = state.preFilledImages
+
+      const imagesToRemove = preFilledImages.filter((img) => !images.find((i) => i.data === img.data))
+      const nameOfImagesToRemove = imagesToRemove.map((img) => img.file.name)
+      const imagesToAdd = images.filter((img) => !preFilledImages.find((i) => i.data === img.data))
+
+      return { imagesToRemove: nameOfImagesToRemove, imagesToAdd }
     }
   }
 

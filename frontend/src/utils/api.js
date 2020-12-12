@@ -72,20 +72,33 @@ export const getCategories = () =>
     .then((response) => response.data)
     .catch((err) => err.response)
 
-export const editProduct = (product) =>
-  axios
-    .put(`/product/${product.id}`, product)
-    .then((response) => response.data)
-    .catch((err) => err.response)
+export const editProduct = (product) => {
+  const fd = new window.FormData()
 
-export const saveToCart = (products) =>
-  axios
-    .post('/basket', products)
-    .then((response) => response.data)
-    .catch((err) => err.response)
+  fd.append('name', product.name)
+  fd.append('description', product.description)
 
-export const getCart = (id) =>
-  axios
-    .get(`/basket/${id}`)
+  if (product.imagesToAdd.length) {
+    product.imagesToAdd.forEach((image) => fd.append('images[]', image.file))
+  }
+
+  if (product.imagesToRemove.length) {
+    product.imagesToRemove.forEach((name) => fd.append('imagesToRemove[]', name))
+  }
+
+  fd.append('price', product.price)
+  fd.append('unit', product.unit)
+
+  if (product.salePrice) {
+    fd.append('salePrice', product.salePrice)
+  }
+
+  fd.append('inStock', product.inStock)
+  product.categories.forEach((category) => fd.append('categories[]', category))
+  fd.append('orgNumber', product.orgNumber)
+
+  return axios
+    .put(`/product/${product.id}`, fd)
     .then((response) => response.data)
     .catch((err) => err.response)
+}

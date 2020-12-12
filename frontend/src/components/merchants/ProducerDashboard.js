@@ -37,20 +37,18 @@ function ProducerDashboard () {
     }
   }
 
-  const getActiveComponentHeading = title => (
-    <Typography variant='h3' component='h2' style={{ marginBottom: '20px' }}>{title}</Typography>
+  const getActiveComponentHeading = (title) => (
+    <Typography variant='h3' component='h2' style={{ marginBottom: '20px' }}>
+      {title}
+    </Typography>
   )
 
   return (
     <Container>
       <Grid container spacing={3}>
         <Grid item xs={12}>
-          <Typography>
-            Producenter
-          </Typography>
-          <Typography variant='h5'>
-            Välkommen {user.user.name}
-          </Typography>
+          <Typography>Producenter</Typography>
+          <Typography variant='h5'>Välkommen {user.user.name}</Typography>
         </Grid>
       </Grid>
       <Grid container spacing={3}>
@@ -60,12 +58,14 @@ function ProducerDashboard () {
               <MenuItem
                 selected={activeComponent === OPTIONS.ADD_PRODUCT}
                 onClick={() => setActiveComponent(OPTIONS.ADD_PRODUCT)}
-              >Lägg till produkt
+              >
+                Lägg till produkt
               </MenuItem>
               <MenuItem
                 selected={activeComponent === OPTIONS.VIEW_PRODUCTS}
                 onClick={() => setActiveComponent(OPTIONS.VIEW_PRODUCTS)}
-              >Mina produkter
+              >
+                Mina produkter
               </MenuItem>
             </MenuList>
           </Paper>
