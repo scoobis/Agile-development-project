@@ -28,7 +28,6 @@ const ACTIONS = {
 }
 
 const getFirstImageURL = (images) => {
-  console.log(images)
   if (images.length) {
     return `${API_URL}/static/${images[0].image_name}`
   }
