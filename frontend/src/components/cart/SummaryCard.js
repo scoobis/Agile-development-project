@@ -1,6 +1,7 @@
 import React from 'react'
-import { Typography, Button, Grid, Box, Link } from '@material-ui/core'
+import { Typography, Button, Grid, Box } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
+import Link from 'next/link'
 
 const useStyles = makeStyles({
   summaryContainer: {
