@@ -25,7 +25,7 @@ export const findParents = (obj, id, paths = []) => {
 export const replaceNullsWithEmptyStr = (object) => {
   const keys = Object.keys(object)
   keys.forEach((key) => {
-    if (isNull(object, key)) {
+    if (isObjectValueNull(object, key)) {
       object[key] = ''
     }
 
@@ -36,4 +36,6 @@ export const replaceNullsWithEmptyStr = (object) => {
   return object
 }
 
-const isNull = (obj, key) => obj[key] === null || obj[key] === undefined || obj[key] === 'null'
+const isObjectValueNull = (obj, key) => obj[key] === null || obj[key] === undefined || obj[key] === 'null'
+
+export const isNull = (str) => str === null || str === undefined || str === 'null'
