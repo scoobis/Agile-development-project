@@ -96,22 +96,13 @@ productDAO.update = async (product) => {
  * Deletes a product.
  *
  * @param {number} productId
+ * @throws {SqlError|HttpError} - SqlError|HttpError|Error
  */
 productDAO.delete = async (productId) => {
-  let conn
-  try {
-    conn = await pool.getConnection()
-    // TODO: Transaction; remove category relation and images.
-
-    const deleteProductByIdQuery = 'DELETE FROM product WHERE id=?'
-
-    const result = await conn.query(deleteProductByIdQuery, [productId])
-
-    if (!result.affectedRows) {
-      throw createError(400, 'Product not found!')
-    }
-  } finally {
-    if (conn) conn.release()
+  const deleteProductByIdQuery = 'DELETE FROM product WHERE id=?'
+  const result = await pool.query(deleteProductByIdQuery, [productId])
+  if (!result.affectedRows) {
+    throw createError(400, 'Product not found!')
   }
 }
 
