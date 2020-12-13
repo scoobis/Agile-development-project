@@ -4,6 +4,7 @@ import DeleteForeverIcon from '@material-ui/icons/DeleteForever'
 import { makeStyles, withStyles } from '@material-ui/core/styles'
 import { IconButton, TableCell, TableRow } from '@material-ui/core'
 import Link from 'next/link'
+import { CURRENCY } from '../../utils/config'
 
 const StyledTableRow = withStyles((theme) => ({
   root: {
@@ -41,7 +42,7 @@ const ProductTable = (props) => {
         {/* TODO: Set inStock */}
       </TableCell>
       <TableCell align='right' className={classes.bold}>
-        {price * quantity}.00 SEK
+        {price * quantity} {CURRENCY}
       </TableCell>
       <TableCell>
         <IconButton onClick={() => removeProduct({ id })}>
