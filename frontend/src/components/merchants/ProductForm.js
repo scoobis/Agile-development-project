@@ -35,7 +35,7 @@ const EMPTY_INITIAL_STATE = {
   message: ''
 }
 
-function ProductForm ({ onSubmit, preFilled }) {
+const ProductForm = ({ onSubmit, preFilled }) => {
   const { user } = useAuth()
   const [state, setState] = useState(
     preFilled ? { ...EMPTY_INITIAL_STATE, product: { ...preFilled, images: [] } } : EMPTY_INITIAL_STATE
@@ -97,17 +97,22 @@ function ProductForm ({ onSubmit, preFilled }) {
   const getParentCategoriesForChildren = () => {
     const arr = []
     const selectedCategories = state.product.categories
-    if (selectedCategories.length > 1) {
-      for (const selectedCatId of selectedCategories) {
-        for (const category of categories) {
-          const parents = findParents(category, parseInt(selectedCatId))
-          if (parents) {
-            arr.push(...parents)
+
+    if (selectedCategories.length) {
+      for (const id of selectedCategories) {
+        const isTopLevelCategory = categories.find((c) => parseInt(c.id) === parseInt(id))
+
+        if (isTopLevelCategory) {
+          arr.push(parseInt(id))
+        } else {
+          for (const category of categories) {
+            const parents = findParents(category, parseInt(id))
+            if (parents) {
+              arr.push(...parents)
+            }
           }
         }
       }
-    } else if (selectedCategories.length === 1) {
-      arr.push(parseInt(selectedCategories[0]))
     }
     return [...new Set(arr)]
   }
