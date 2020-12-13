@@ -1,8 +1,24 @@
 import React, { useState } from 'react'
 import Link from 'next/link'
-import { Button, TextField, FormControlLabel, Checkbox, Container, Grid, Typography, FormControl, FormHelperText } from '@material-ui/core'
+import {
+  Button,
+  TextField,
+  FormControlLabel,
+  Checkbox,
+  Container,
+  Grid,
+  Typography,
+  FormControl
+} from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-import { isValidName, isValidEmail, isValidPassword } from '../../utils/user'
+import {
+  isValidName,
+  isValidEmail,
+  isValidPassword,
+  MIN_NAME_LENGTH,
+  MIN_EMAIL_LENGTH,
+  MIN_PWD_LENGTH
+} from '../../utils/user'
 import { signup } from '../../utils/api'
 import { Customer } from '../../utils/roles'
 
@@ -26,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
-export default function CustomerSignupForm () {
+const CustomerSignupForm = () => {
   const [state, setState] = useState({
     name: { value: '', hasError: false, helperText: '' },
     email: { value: '', hasError: false, helperText: '' },
@@ -64,19 +80,16 @@ export default function CustomerSignupForm () {
         email: email.value,
         password: password.value,
         role: Customer
-      })
-        .then(res => setNotice({
+      }).then((res) =>
+        setNotice({
           message: res && res.data ? res.data.message : res && res.message ? res.message : '',
           isError: res && res.status !== 200
-        }))
+        })
+      )
     }
   }
 
-  const hasValidCredentials = () =>
-    !name.hasError &&
-    !email.hasError &&
-    !password.hasError &&
-    checked
+  const hasValidCredentials = () => !name.hasError && !email.hasError && !password.hasError && checked
 
   const classes = useStyles()
 
@@ -84,10 +97,10 @@ export default function CustomerSignupForm () {
     <Container component='main' maxWidth='xs'>
       <div className={classes.paper}>
         <Typography component='h1' variant='h5'>
-           Registrera kundkonto
+          Registrera kundkonto
         </Typography>
         <Typography>
-           När du registrerar ett konto får du ta del av fördelar som att kunna spara din adress, se orderhistorik etc.
+          När du registrerar ett konto får du ta del av fördelar som att kunna spara din adress, se orderhistorik etc.
         </Typography>
 
         <form className={classes.form} onSubmit={handleSubmit}>
@@ -104,6 +117,9 @@ export default function CustomerSignupForm () {
                 onChange={handleChange}
                 error={name.hasError}
                 helperText={name.hasError && name.helperText}
+                inputProps={{
+                  minLength: MIN_NAME_LENGTH
+                }}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -116,6 +132,9 @@ export default function CustomerSignupForm () {
                 onChange={handleChange}
                 error={email.hasError}
                 helperText={email.hasError && email.helperText}
+                inputProps={{
+                  minLength: MIN_EMAIL_LENGTH
+                }}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -130,6 +149,9 @@ export default function CustomerSignupForm () {
                 onChange={handleChange}
                 error={password.hasError}
                 helperText={password.hasError && email.helperText}
+                inputProps={{
+                  minLength: MIN_PWD_LENGTH
+                }}
               />
             </Grid>
             <Grid item xs={12}>
@@ -139,38 +161,32 @@ export default function CustomerSignupForm () {
                     <Checkbox
                       color='primary'
                       checked={checked}
-                      onChange={(e) => { setChecked(e.target.checked) }}
+                      onChange={(e) => {
+                        setChecked(e.target.checked)
+                      }}
+                      required
                     />
                   }
-                  label={<Typography variant='body2'>Jag har läst och godkänner villkoren för producenter</Typography>}
+                  label={<Typography variant='body2'>Jag har läst och godkänner villkoren</Typography>}
                 />
-                {!checked && (
-                  <FormHelperText>Obligatoriskt</FormHelperText>
-                )}
               </FormControl>
             </Grid>
             <Grid item xs={12}>
               {notice.message && (
-                <Typography color={notice.isError ? 'error' : 'secondary'}>
-                  {notice.message}
-                </Typography>
+                <Typography color={notice.isError ? 'error' : 'secondary'}>{notice.message}</Typography>
               )}
             </Grid>
           </Grid>
-          <Button
-            type='submit'
-            fullWidth
-            variant='contained'
-            color='primary'
-            className={classes.submit}
-            onClick={handleSubmit}
-          >
+          <Button type='submit' fullWidth variant='contained' color='primary' className={classes.submit}>
             Registrera
           </Button>
           <Grid container justify='center'>
             <Grid item>
               <Typography variant='body2'>
-              Är du redan kund? <Link href='/logga-in'><a>Logga in</a></Link>
+                Är du redan kund?{' '}
+                <Link href='/logga-in'>
+                  <a>Logga in</a>
+                </Link>
               </Typography>
             </Grid>
           </Grid>
@@ -179,3 +195,5 @@ export default function CustomerSignupForm () {
     </Container>
   )
 }
+
+export default CustomerSignupForm

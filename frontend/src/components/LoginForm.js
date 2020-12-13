@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react'
 import { Button, Container, Grid, TextField, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import Link from 'next/link'
-import { isValidEmail, isValidPassword } from '../utils/user'
+import { isValidEmail, isValidPassword, MIN_EMAIL_LENGTH, MIN_PWD_LENGTH } from '../utils/user'
 import { AuthContext } from '../context/AuthContext'
 
 const useStyles = makeStyles((theme) => ({
@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
-function LoginForm () {
+const LoginForm = () => {
   const classes = useStyles()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -47,19 +47,19 @@ function LoginForm () {
     } else if (!validPassword) {
       setMessage('Ogiltigt lösenord')
     } else {
-      authenticate({ email, password })
-        .then(response => {
-          response.status !== 200 &&
-          setMessage(response.data.message)
-        })
+      authenticate({ email, password }).then((response) => {
+        response.status !== 200 && setMessage(response.data.message)
+      })
     }
   }
 
   return (
     <Container component='main' maxWidth='xs'>
       <div className={classes.paper}>
-        <Typography component='h1' variant='h5'>Logga in</Typography>
-        <form className={classes.form} onSubmit={handleSubmit}>
+        <Typography component='h1' variant='h5'>
+          Logga in
+        </Typography>
+        <form className={classes.form} onSubmit={handleSubmit} onChange={() => setMessage('')}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
@@ -69,6 +69,9 @@ function LoginForm () {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                inputProps={{
+                  minLength: MIN_EMAIL_LENGTH
+                }}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -81,30 +84,25 @@ function LoginForm () {
                 fullWidth
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                inputProps={{
+                  minLength: MIN_PWD_LENGTH
+                }}
               />
             </Grid>
             <Grid item xs={12}>
-              {message && (
-                <Typography color='error'>
-                  {message}
-                </Typography>
-              )}
+              {message && <Typography color='error'>{message}</Typography>}
             </Grid>
           </Grid>
-          <Button
-            type='submit'
-            fullWidth
-            variant='contained'
-            color='primary'
-            className={classes.submit}
-            onClick={handleSubmit}
-          >
+          <Button type='submit' fullWidth variant='contained' color='primary' className={classes.submit}>
             Logga in
           </Button>
           <Grid container justify='center'>
             <Grid item>
               <Typography variant='body2'>
-              Inte kund? <Link href='/registrera'><a>Registrera konto</a></Link>
+                Inte kund?{' '}
+                <Link href='/registrera'>
+                  <a>Registrera konto</a>
+                </Link>
               </Typography>
             </Grid>
           </Grid>

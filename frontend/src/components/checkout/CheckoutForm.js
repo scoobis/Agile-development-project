@@ -1,7 +1,18 @@
 import React, { useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
-import { isValidName, isValidEmail, isValidZipCode, isValidPhoneNumber } from '../../utils/user'
-import { Button, FormControl, TextField, FormLabel, RadioGroup, FormControlLabel, Container, Grid, Typography, Radio } from '@material-ui/core'
+import {
+  isValidName,
+  isValidEmail,
+  isValidZipCode,
+  isValidPhoneNumber,
+  MIN_CITY_LENGTH,
+  ZIPCODE_LENGTH,
+  MIN_ADDRESS_LENGTH,
+  PHONE_LENGTH,
+  MIN_EMAIL_LENGTH,
+  MIN_NAME_LENGTH
+} from '../../utils/user'
+import { Button, TextField, Container, Grid, Typography } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -23,15 +34,14 @@ const useStyles = makeStyles((theme) => ({
 
 const CheckoutForm = () => {
   const [state, setState] = useState({
-    firstName: { value: '', hasError: false, helperText: '' },
-    lastName: { value: '', hasError: false, helperText: '' },
+    name: { value: '', hasError: false, helperText: '' },
     email: { value: '', hasError: false, helperText: '' },
     phone: { value: '', hasError: false, helperText: '' },
     streetAddress: { value: '', hasError: false, helperText: '' },
     zip: { value: '', hasError: false, helperText: '' },
     city: { value: '', hasError: false, helperText: '' }
   })
-  const { firstName, lastName, email, streetAddress, zip, city, phone } = state
+  const { name, email, streetAddress, zip, city, phone } = state
 
   const handleChange = (e) => {
     const name = e.target.name
@@ -47,8 +57,7 @@ const CheckoutForm = () => {
     e.preventDefault()
     setState({
       ...state,
-      firstName: { ...firstName, hasError: firstName.value.length < 3 },
-      lastName: { ...firstName, hasError: lastName.value.length < 3 },
+      name: { ...name, hasError: !isValidName(name.value) },
       email: { ...email, hasError: !isValidEmail(email.value) },
       phone: { ...phone, hasError: !isValidPhoneNumber(phone.value) },
       zip: { ...zip, hasError: !isValidZipCode(zip.value) }
@@ -62,36 +71,26 @@ const CheckoutForm = () => {
     <Container component='main' maxWidth='lg' style={{ maxWidth: '750px' }}>
       <div className={classes.paper}>
         <Typography component='h1' variant='h5'>
-          Din Information?
+          Din information
         </Typography>
 
         <form className={classes.form} onSubmit={handleSubmit}>
           <Grid container spacing={3}>
             <Grid item xs={12} sm={6}>
               <TextField
-                name='firstName'
-                label='Förstnamn'
+                name='name'
+                label='Fullständigt namn'
                 variant='outlined'
                 fullWidth
                 autoFocus
                 required
-                value={firstName.value}
+                value={name.value}
                 onChange={handleChange}
-                error={firstName.hasError}
-                helperText={firstName.hasError && firstName.helperText}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                name='lastName'
-                label='Efternamn'
-                variant='outlined'
-                fullWidth
-                required
-                value={lastName.value}
-                onChange={handleChange}
-                error={lastName.hasError}
-                helperText={lastName.hasError && lastName.helperText}
+                error={name.hasError}
+                helperText={name.hasError && name.helperText}
+                inputProps={{
+                  minLength: MIN_NAME_LENGTH
+                }}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -105,6 +104,9 @@ const CheckoutForm = () => {
                 onChange={handleChange}
                 error={email.hasError}
                 helperText={email.hasError && email.helperText}
+                inputProps={{
+                  minLength: MIN_EMAIL_LENGTH
+                }}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -118,9 +120,13 @@ const CheckoutForm = () => {
                 onChange={handleChange}
                 error={phone.hasError}
                 helperText={phone.hasError && phone.helperText}
+                inputProps={{
+                  minLength: PHONE_LENGTH,
+                  maxLength: PHONE_LENGTH
+                }}
               />
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={12} sm={6}>
               <TextField
                 name='streetAddress'
                 label='Gatuadress'
@@ -132,9 +138,12 @@ const CheckoutForm = () => {
                 onChange={handleChange}
                 error={streetAddress.hasError}
                 helperText={streetAddress.hasError && streetAddress.helperText}
+                inputProps={{
+                  minLength: MIN_ADDRESS_LENGTH
+                }}
               />
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={12} sm={6}>
               <TextField
                 name='zip'
                 label='Postnummer'
@@ -146,9 +155,13 @@ const CheckoutForm = () => {
                 onChange={handleChange}
                 error={zip.hasError}
                 helperText={zip.hasError && zip.helperText}
+                inputProps={{
+                  minLength: ZIPCODE_LENGTH,
+                  maxLength: ZIPCODE_LENGTH
+                }}
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={12} sm={6}>
               <TextField
                 name='city'
                 label='Ort'
@@ -159,9 +172,12 @@ const CheckoutForm = () => {
                 value={city.value}
                 onChange={handleChange}
                 error={city.hasError && city.helperText}
+                inputProps={{
+                  minLength: MIN_CITY_LENGTH
+                }}
               />
             </Grid>
-            <Button type='submit' fullWidth variant='contained' color='primary' className={classes.submit} onClick={handleSubmit}>
+            <Button type='submit' fullWidth variant='contained' color='primary' className={classes.submit}>
               Slutför order
             </Button>
           </Grid>
