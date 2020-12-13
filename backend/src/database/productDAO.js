@@ -137,35 +137,27 @@ productDAO.get = async (productId) => {
 /**
  * Gets all products
  *
- * @return {Product[]}
+ * @return {Promise<Product[]>}
+ * @throws {( HttpError | SqlError )} - HttpError|SqlError|Error
  */
 productDAO.getAll = async () => {
-  let conn
-  try {
-    conn = await pool.getConnection()
+  const selectAllProducts = 'SELECT id, producer_org_no, name, description, price, sale_price, unit, in_stock FROM product' // LIMIT 100?
+  const products = []
 
-    const selectAllProducts = 'SELECT id, producer_org_no, name, description, price, sale_price, unit, in_stock FROM product' // LIMIT 100?
-    const products = []
+  const rows = await pool.query(selectAllProducts)
 
-    const rows = await conn.query(selectAllProducts)
-
-    if (rows.length > 0) {
-      for (const row of rows) {
-        const product = parseProduct(row)
-
-        product.categories = await productDAO.getCategoriesByProductId(product.id)
-
-        product.images = await productDAO.getImages(product.id)
-
-        products.push(product)
-      }
-
-      return products
-    } else {
-      throw createError(400, 'No products found!')
+  if (rows.length > 0) {
+    for (const row of rows) {
+      const product = parseProduct(row)
+      product.categories = await productDAO.getCategoriesByProductId(product.id)
+      product.images = await productDAO.getImages(product.id)
+      products.push(product)
     }
-  } finally {
-    if (conn) conn.release()
+
+    return products
+  } else {
+    // TODO: Should we really throw when nothing went wrong?
+    throw createError(400, 'No products found!')
   }
 }
 
