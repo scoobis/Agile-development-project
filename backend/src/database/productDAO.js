@@ -153,19 +153,15 @@ productDAO.getAllByOrgNumber = async (orgNumber) => {
   const products = []
   const rows = await pool.query(selectAllProductsByOrgNumber, [orgNumber])
 
-  if (rows.length > 0) {
-    for await (const row of rows) {
-      const product = parseProduct(row)
+  // TODO
+  await Promise.all(
+    rows.map(async (product) => {
       product.categories = await productDAO.getCategories(product.id)
       product.images = await productDAO.getImages(product.id)
-      products.push(product)
-    }
-
-    return products
-  } else {
-    // TODO: Should we really throw when nothing went wrong?
-    throw createError(400, 'No products found!')
-  }
+      products.push(parseProduct(product))
+    })
+  )
+  return products
 }
 
 /**
