@@ -168,32 +168,21 @@ productDAO.getAll = async () => {
  * @return {Product[]}
  */
 productDAO.getAllByOrgNumber = async (orgNumber) => {
-  let conn
-  try {
-    conn = await pool.getConnection()
+  const selectAllProductsByOrgNumber = 'SELECT id, producer_org_no, name, description, price, sale_price, unit, in_stock FROM product WHERE producer_org_no=?'
+  const products = []
+  const rows = await pool.query(selectAllProductsByOrgNumber, [orgNumber])
 
-    const selectAllProductsByOrgNumber = 'SELECT id, producer_org_no, name, description, price, sale_price, unit, in_stock FROM product WHERE producer_org_no=?'
-    const products = []
-
-    const rows = await conn.query(selectAllProductsByOrgNumber, [orgNumber])
-
-    if (rows.length > 0) {
-      for await (const row of rows) {
-        const product = parseProduct(row)
-
-        product.categories = await productDAO.getCategoriesByProductId(product.id)
-
-        product.images = await conn.query('SELECT * FROM product_image WHERE product_id = ?', [product.id])
-
-        products.push(product)
-      }
-
-      return products
-    } else {
-      throw createError(400, 'No products found!')
+  if (rows.length > 0) {
+    for await (const row of rows) {
+      const product = parseProduct(row)
+      product.categories = await productDAO.getCategoriesByProductId(product.id)
+      product.images = await productDAO.getImages(product.id)
+      products.push(product)
     }
-  } finally {
-    if (conn) conn.release()
+
+    return products
+  } else {
+    throw createError(400, 'No products found!')
   }
 }
 
