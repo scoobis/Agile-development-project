@@ -1,4 +1,3 @@
-const Product = require('../models/product')
 const productDAO = require('../database/productDAO')
 const fs = require('fs')
 
@@ -7,21 +6,19 @@ const service = {}
 /**
  * Creates a new product
  *
- * @param {*} req
- * @param {*} res
- * @param {*} next
+ * @param {Product} product
+ * @param {Object[]} files
  */
-service.create = async (req, res, next) => {
-  const newProduct = await service.getProductFromRequest(req)
+service.create = async (product, files) => {
   try {
-    await productDAO.create(newProduct, req.files)
+    await productDAO.create(product, files)
   } catch (error) {
     // Try deleting the newly uploaded files.
     // Maybe not save them at all if not need be?
     // TODO: shouldn't have to check if req.files exist, needs to use models to pre-exist.
     // But keep it here for now.
-    if (req.files) {
-      req.files.forEach(file => fs.unlinkSync(file.path))
+    if (files) {
+      files.forEach(file => fs.unlinkSync(file.path))
     }
     throw error
   }
@@ -30,83 +27,68 @@ service.create = async (req, res, next) => {
 /**
  * Updates a product
  *
- * @param {*} req
- * @param {*} res
- * @param {*} next
+ * @param {Product} product
  */
-service.update = async (req, res, next) => {
-  const updatedProduct = await service.getProductFromRequest(req)
-  updatedProduct.id = await req.params.id
-
-  await productDAO.update(updatedProduct)
+service.update = async (product) => {
+  await productDAO.update(product)
 }
 
 /**
  * Deletes a product
  *
- * @param {*} req
- * @param {*} res
- * @param {*} next
+ * @param {Number} id - The id of the product
  */
-service.delete = async (req, res, next) => {
-  const productId = await req.params.id
-  const images = await productDAO.getImages(productId)
-  // Delete product from database
-  await productDAO.delete(productId)
-  // Delete pictures belonging to product
+service.delete = async (id) => {
+  const images = await productDAO.getImages(id)
+
+  await productDAO.delete(id)
+
   images.forEach(image => fs.unlinkSync('uploads/' + image.imageName))
 }
 
 /**
- * Gets one product
+ * Returns one product
  *
- * @param {*} req
- * @param {*} res
- * @param {*} next
+ * @param {Number} id - The id of the product
+ * @returns {Promise<Product>} product
  */
-service.get = async (req, res, next) => {
-  const productId = await req.params.id
-  const product = await productDAO.get(productId)
-  // Returning entire product object data.
-  return product
+service.get = async (id) => {
+  return productDAO.get(id)
 }
 
 /**
- * Gets all products
+ * Returns all products
  *
- * @param {*} req
- * @param {*} res
- * @param {*} next
+ * @returns {Promise<Product[]>}
  */
-service.getAll = async (req, res, next) => {
+service.getAll = async () => {
   return productDAO.getAll()
 }
 
 /**
- * Gets all products from one producer
+ * Returns all products from one producer
  *
- * @param {*} req
- * @param {*} res
- * @param {*} next
+ * @param {Number} orgNumber
+ * @returns {Promise<Product[]>}
  */
-service.getAllFromProducer = async (req, res, next) => {
-  const orgNumber = await req.params.orgNumber
+service.getAllFromProducer = async (orgNumber) => {
   return productDAO.getAllByOrgNumber(orgNumber)
 }
 
 /**
- * Gets all products from a category
+ * Returns all products from a category
  *
- * @param {*} req
- * @param {*} res
- * @param {*} next
+ * @param {Number} categoryId
+ * @returns {Promise<Product[]>}
  */
-service.getAllFromCategory = async (req, res, next) => {
-  const categoryId = await req.params.categoryId
+service.getAllFromCategory = async (categoryId) => {
   return productDAO.getAllByCategoryId(categoryId)
 }
 
-service.getAllCategories = async (req, res, next) => {
+/**
+ * Returns all categories
+ */
+service.getAllCategories = async () => {
   const categories = await productDAO.getAllCategories()
   const subcategories = await service.getAllSubCategories()
 
@@ -167,29 +149,12 @@ service.getAllCategories = async (req, res, next) => {
   return categories
 }
 
-service.getAllSubCategories = async (req, res, next) => {
+/**
+ * Returns all sub categories
+ */
+service.getAllSubCategories = async () => {
   const subcategories = await productDAO.getAllSubCategories()
   return subcategories
-}
-
-/**
- * Creates and returns a Product object out of the request data
- *
- * @param {*} req
- */
-service.getProductFromRequest = async (req) => {
-  return new Product(
-    null,
-    req.body.orgNumber,
-    req.body.name,
-    req.body.description,
-    req.body.price,
-    req.body.salePrice,
-    req.body.unit,
-    req.body.inStock,
-    req.body.categories,
-    []
-  )
 }
 
 module.exports = service

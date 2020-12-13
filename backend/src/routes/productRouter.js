@@ -6,7 +6,7 @@ const fileUpload = require('../middlewares/fileupload')
 
 router.post('/', authorize.verifyJWT, fileUpload.product, validate.product, controller.create, fileUpload.errorHandler)
 router.get('/:id', controller.get)
-router.put('/:id', authorize.verifyJWT, controller.update)
+router.put('/:id', authorize.verifyJWT, fileUpload.product, validate.product, controller.update, fileUpload.errorHandler)
 router.delete('/:id', authorize.verifyJWT, controller.delete)
 
 module.exports = router
