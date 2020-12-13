@@ -116,12 +116,10 @@ productDAO.delete = async (productId) => {
  */
 productDAO.get = async (productId) => {
   const selectProductById = 'SELECT * FROM product WHERE id=?'
-  const [row] = await pool.query(selectProductById, [productId])
-  const product = parseProduct(row)
+  const [product] = await pool.query(selectProductById, [productId])
   product.categories = await productDAO.getCategories(product.id)
   product.images = await productDAO.getImages(product.id)
-
-  return product
+  return parseProduct(product)
 }
 
 /**
