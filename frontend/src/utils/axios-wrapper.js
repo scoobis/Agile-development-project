@@ -6,7 +6,7 @@ const axiosInstance = axios.create({
   baseURL: API_URL,
   headers: {
     Accept: 'application/json',
-    Authorization: process.browser && getUserToken()
+    Authorization: process.browser && `Bearer ${getUserToken()}`
   }
 })
 
