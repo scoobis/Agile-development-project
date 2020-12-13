@@ -337,18 +337,15 @@ productDAO.getCategoriesByProductId = async (productId) => {
  * Get the images belonging to a product.
  * @param {number} productId - The associated productid.
  * @return {ProductImage[]}
+ * @throws {SqlError}
  */
 productDAO.getImages = async (productId) => {
-  let conn
-  try {
-    conn = await pool.getConnection()
-    const images = []
-    const result = await conn.query('SELECT * FROM product_image WHERE product_id = ?', [productId])
-    result.forEach(
-      result => images.push(new ProductImage(result.id, result.product_id, result.image_name, result.alt_text))
-    )
-    return images
-  } finally { if (conn) conn.release() }
+  const images = []
+  const result = await pool.query('SELECT * FROM product_image WHERE product_id = ?', [productId])
+  result.forEach(
+    result => images.push(new ProductImage(result.id, result.product_id, result.image_name, result.alt_text))
+  )
+  return images
 }
 
 /**
