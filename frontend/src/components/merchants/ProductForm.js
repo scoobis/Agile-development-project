@@ -178,10 +178,13 @@ function ProductForm ({ onSubmit, preFilled }) {
       const preFilledImages = state.preFilledImages
 
       const imagesToRemove = preFilledImages.filter((img) => !images.find((i) => i.data === img.data))
-      const nameOfImagesToRemove = imagesToRemove.map((img) => img.file.name)
+      const idsToRemove = preFilled.images
+        .filter((img) => imagesToRemove.find((i) => img.image_name === i.file.name))
+        .map((img) => img.id)
+
       const imagesToAdd = images.filter((img) => !preFilledImages.find((i) => i.data === img.data))
 
-      return { imagesToRemove: nameOfImagesToRemove, imagesToAdd }
+      return { imagesToRemove: idsToRemove, imagesToAdd }
     }
   }
 
