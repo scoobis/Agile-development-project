@@ -2,6 +2,7 @@ import React from 'react'
 import { Typography, Button, Grid, Box } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import Link from 'next/link'
+import { CURRENCY } from '../../utils/config'
 
 const useStyles = makeStyles({
   summaryContainer: {
@@ -32,7 +33,7 @@ const SummaryCard = (props) => {
       <Box pb={1} mb={1} borderBottom='1px solid #999' display='flex' justifyContent='space-between'>
         <Typography variant='body1'>Delsumma</Typography>
         <Typography className={classes.price} variant='body1'>
-          {total}.00 SEK
+          {total} {CURRENCY}
         </Typography>
       </Box>
       <Box pb={1} mb={1} borderBottom='1px solid #999' display='flex' justifyContent='space-between'>
@@ -44,7 +45,7 @@ const SummaryCard = (props) => {
       <Box pt={4} pb={4} display='flex' justifyContent='space-between'>
         <Typography variant='body1'>Totalsumma</Typography>
         <Typography className={classes.price} variant='h4'>
-          {total}.00 SEK
+          {total} {CURRENCY}
         </Typography>
       </Box>
       <Box>

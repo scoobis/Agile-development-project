@@ -7,6 +7,7 @@ import { useSnackbar } from 'notistack'
 import Link from 'next/link'
 import AccordionGroup from '../AccordionGroup'
 import { isNull } from '../../utils/helpers'
+import { CURRENCY } from '../../utils/config'
 
 const SpecificProductCard = (props) => {
   const useStyles = makeStyles((theme) => ({
@@ -68,11 +69,11 @@ const SpecificProductCard = (props) => {
           <Grid item xs={12}>
             {salePrice && (
               <Typography display='inline' className={` ${classes.bold} ${classes.salePrice} `} variant='h5'>
-                {salePrice} SEK/{unit}
+                {salePrice} {CURRENCY}/{unit}
               </Typography>
             )}
             <Typography display='inline' className={`${classes.bold} ${salePrice && classes.oldPrice}`} variant='h5'>
-              {price} SEK/{unit}
+              {price} {CURRENCY}/{unit}
             </Typography>
           </Grid>
           <Grid item xs={12}>
