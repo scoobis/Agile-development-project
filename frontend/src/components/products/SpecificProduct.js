@@ -1,22 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { makeStyles } from '@material-ui/core/styles'
-import { Container, Typography, Grid } from '@material-ui/core'
+import { Container, Grid } from '@material-ui/core'
 import SpecificProductCard from './SpecificProductCard'
 import { getOneProduct } from '../../utils/api'
 import { API_URL } from '../../utils/config'
-
-const useStyles = makeStyles({
-  img: {
-    maxWidth: '100%',
-    maxHeight: '60vh',
-    margin: '0 auto'
-  },
-  container: { boxShadow: '0 0 3px 2px rgb(0,0,0,.2)' },
-  gridContainer: { paddingTop: '40px' }
-})
+import SlickSlider from './SlickSlider'
 
 const SpecificProduct = (props) => {
-  const classes = useStyles()
   const [product, setProduct] = useState({})
   const { productId, onLoad } = props
 
@@ -28,26 +17,29 @@ const SpecificProduct = (props) => {
   }, [props])
 
   const { name, description, price, salePrice, unit, inStock, id, images } = product
-  const DEFAULT_IMG_SRC = '/apples.JPG'
+
+  const getImages = () =>
+    images && images.length
+      ? images.map((img) => ({
+        id: img.id,
+        alt: img.alt_text,
+        src: `${API_URL}/static/${img.image_name}`
+      }))
+      : [
+        {
+          id: 1,
+          alt: 'Apples',
+          src: '/apples.JPG'
+        }
+      ]
 
   return (
-    <Container className={classes.container}>
-      <Grid className={classes.gridContainer} container spacing={2}>
-        <Grid item xs={7}>
-          {images && images.length ? (
-            images.map((img) => (
-              <img
-                className={classes.img}
-                alt={img.alt_text}
-                key={img.id}
-                src={`${API_URL}/static/${img.image_name}`}
-              />
-            ))
-          ) : (
-            <img className={classes.img} alt='Produkt bild' src={DEFAULT_IMG_SRC} />
-          )}
+    <Container>
+      <Grid container spacing={3}>
+        <Grid item md={6}>
+          <SlickSlider images={getImages()} />
         </Grid>
-        <Grid item xs={5}>
+        <Grid item md={6}>
           <SpecificProductCard
             inStock={inStock}
             price={price}
@@ -57,11 +49,6 @@ const SpecificProduct = (props) => {
             id={id}
             description={description}
           />
-        </Grid>
-        <Grid item xs={12}>
-          <Typography className={classes.pos} variant='h6' color='textSecondary'>
-            Om producenten
-          </Typography>
         </Grid>
       </Grid>
     </Container>

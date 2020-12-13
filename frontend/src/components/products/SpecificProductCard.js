@@ -4,16 +4,22 @@ import { Card, CardContent, Typography, Button, Grid, Box } from '@material-ui/c
 import { CartContext } from '../../context/CartContext'
 import PickAmount from './PickAmount'
 import { useSnackbar } from 'notistack'
+import Link from 'next/link'
+import AccordionGroup from '../AccordionGroup'
 import { isNull } from '../../utils/helpers'
 
 const SpecificProductCard = (props) => {
-  const useStyles = makeStyles({
-    root: { backgroundColor: 'white' },
+  const useStyles = makeStyles((theme) => ({
+    root: { backgroundColor: theme.palette.common.white },
     center: { textAlign: 'center' },
     bold: { fontWeight: 'bold' },
     oldPrice: { textDecoration: 'line-through', fontSize: 16 },
-    salePrice: { color: 'red' }
-  })
+    salePrice: { color: 'red', marginRight: '15px' },
+    cardContent: { padding: '15px 30px' },
+    lowInStock: { color: '#ffa700' },
+    highInStock: { color: 'green' },
+    outOfStock: { color: 'red' }
+  }))
 
   const { name, price, salePrice, unit, inStock, id, description } = props
   const [amount, setAmount] = useState(1)
@@ -35,40 +41,71 @@ const SpecificProductCard = (props) => {
     })
   }
 
+  const getStockColor = () => {
+    if (inStock === 0) {
+      return classes.outOfStock
+    } else if (inStock <= 2) {
+      return classes.lowInStock
+    }
+
+    return classes.highInStock
+  }
+
   return (
     <Card className={classes.root}>
-      <CardContent className={classes.center}>
+      <CardContent className={classes.cardContent}>
         <Grid container spacing={1}>
-          <Grid item xs={12}>
+          <Grid item md={6}>
             <Typography variant='h3'>{name}</Typography>
           </Grid>
-          {!isNull(description) && (
-            <Grid xs={12} item>
-              <Typography variant='body1'>{description}</Typography>
-            </Grid>
-          )}
-          <Grid item xs={12}>
-            <Typography className={`${classes.bold} ${salePrice && classes.oldPrice}`} variant='h4'>
-              {price} SEK/{unit}
+          <Grid item md={6}>
+            <Typography align='right' variant='h6'>
+              <Link href='#'>
+                <a style={{ textDecoration: 'none', color: 'inherit' }}>Lenas Gårdsbutik</a>
+              </Link>
             </Typography>
+          </Grid>
+          <Grid item xs={12}>
             {salePrice && (
-              <Typography className={` ${classes.bold} ${classes.salePrice} `} variant='h4'>
+              <Typography display='inline' className={` ${classes.bold} ${classes.salePrice} `} variant='h5'>
                 {salePrice} SEK/{unit}
               </Typography>
             )}
-            <br />
-            <br />
+            <Typography display='inline' className={`${classes.bold} ${salePrice && classes.oldPrice}`} variant='h5'>
+              {price} SEK/{unit}
+            </Typography>
           </Grid>
           <Grid item xs={12}>
-            <PickAmount inStock={inStock} handleAmountChange={handleAmountChange} />
+            <Typography className={getStockColor()}>{inStock} i lager</Typography>
           </Grid>
           <Grid item xs={12}>
-            <Button size='large' fullWidth variant='contained' color='primary' onClick={handleAddToCart}>
-              Lägg i kundvagn
-            </Button>
+            <Box display='flex' pb={3} pt={3}>
+              <PickAmount inStock={inStock} handleAmountChange={handleAmountChange} />
+              <Button
+                disabled={inStock === 0}
+                size='large'
+                fullWidth
+                variant='contained'
+                color='primary'
+                onClick={handleAddToCart}
+              >
+                {inStock === 0 ? 'Slut i lager' : 'Lägg i kundvagn'}
+              </Button>
+            </Box>
           </Grid>
           <Grid item xs={12}>
-            <Typography variant='caption'>I lager: {inStock}</Typography>
+            <AccordionGroup
+              items={[
+                {
+                  heading: 'Beskrivning',
+                  content: !isNull(description) ? description : ''
+                },
+                {
+                  heading: 'Om producenten',
+                  content: 'Hello world!'
+                }
+              ]}
+            />
           </Grid>
         </Grid>
       </CardContent>

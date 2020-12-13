@@ -1,0 +1,17 @@
+.thumbnailSliderWrap {
+  margin: 15px 0;
+}
+
+.thumbnailSliderWrap .slickSlide {
+  padding: 5px;
+}
+
+.thumbnailSliderWrap .slickSlideImg {
+  width: 120px;
+  height: 120px;
+}
+
+.mainImage {
+  max-height: 600px;
+  margin: 0 auto;
+}
