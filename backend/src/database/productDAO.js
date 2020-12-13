@@ -120,25 +120,18 @@ productDAO.delete = async (productId) => {
  *
  * @param {number} productId
  *
- * @return {Product}
+ * @return {Promise<Product>}
+ * @throws {SqlError} - SqlError|Error Object
  */
 productDAO.get = async (productId) => {
-  let conn
-  try {
-    conn = await pool.getConnection()
+  const selectProductById = 'SELECT * FROM product WHERE id=?'
+  const [row] = await pool.query(selectProductById, [productId])
 
-    const selectProductById = 'SELECT * FROM product WHERE id=?'
+  const product = parseProduct(row)
+  product.categories = await productDAO.getCategoriesByProductId(product.id)
+  product.images = await productDAO.getImages(product.id)
 
-    const [row] = await conn.query(selectProductById, [productId])
-
-    const product = parseProduct(row)
-    product.categories = await productDAO.getCategoriesByProductId(product.id)
-    product.images = await productDAO.getImages(product.id)
-
-    return product
-  } finally {
-    if (conn) conn.release()
-  }
+  return product
 }
 
 /**
