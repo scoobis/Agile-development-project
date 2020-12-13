@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useState } from 'react'
 import InputBase from '@material-ui/core/InputBase'
 import SearchIcon from '@material-ui/icons/Search'
 import { fade, makeStyles } from '@material-ui/core/styles'
+import { useRouter } from 'next/router'
 
 const useStyles = makeStyles((theme) => ({
   search: {
@@ -44,22 +45,37 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
-function SearchBar () {
+const SearchBar = () => {
   const classes = useStyles()
+  const [toSearch, setToSearch] = useState('')
+  const router = useRouter()
+
+  const handleChange = (e) => {
+    setToSearch(e.target.value)
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    router.push(`/search/?q=${toSearch}`)
+  }
 
   return (
     <div className={classes.search}>
       <div className={classes.searchIcon}>
         <SearchIcon />
       </div>
-      <InputBase
-        placeholder='Sök bland 5000+ produkter'
-        classes={{
-          root: classes.inputRoot,
-          input: classes.inputInput
-        }}
-        inputProps={{ 'aria-label': 'search' }}
-      />
+      <form onSubmit={handleSubmit}>
+        <InputBase
+          placeholder='Sök bland 5000+ produkter'
+          classes={{
+            root: classes.inputRoot,
+            input: classes.inputInput
+          }}
+          inputProps={{ 'aria-label': 'search', minLength: 2 }}
+          required
+          onChange={handleChange}
+        />
+      </form>
     </div>
   )
 }
