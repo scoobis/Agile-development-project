@@ -9,7 +9,7 @@ const productDAO = {}
  * Registers a new product.
  *
  * @param {Product} product
- * @throws {Error}
+ * @throws {SqlError|Error} - SqlError|Error
  */
 productDAO.create = async (product, files) => {
   let conn
@@ -43,7 +43,6 @@ productDAO.create = async (product, files) => {
     await Promise.all(queryResults)
     await conn.commit()
   } catch (error) {
-    // Roll back the sql transaaction
     conn.rollback()
     throw error
   } finally {
@@ -129,7 +128,7 @@ productDAO.get = async (productId) => {
  * Gets all products
  *
  * @return {Promise<Product[]>}
- * @throws {( HttpError | SqlError )} - HttpError|SqlError|Error
+ * @throws {HttpError|SqlError} - HttpError|SqlError|Error
  */
 productDAO.getAll = async () => {
   const selectAllProducts = 'SELECT id, producer_org_no, name, description, price, sale_price, unit, in_stock FROM product' // LIMIT 100?
@@ -173,6 +172,7 @@ productDAO.getAllByOrgNumber = async (orgNumber) => {
 
     return products
   } else {
+    // TODO: Should we really throw when nothing went wrong?
     throw createError(400, 'No products found!')
   }
 }
@@ -181,39 +181,29 @@ productDAO.getAllByOrgNumber = async (orgNumber) => {
  * Gets all products from a specific category.
  *
  * @param {number} categoryId
- * @return {Product[]}
+ * @return {Promise<Product[]>}
  */
 productDAO.getAllByCategoryId = async (categoryId) => {
-  let conn
-  try {
-    conn = await pool.getConnection()
+  const selectAllProductsByCategoryId = 'SELECT product_id FROM product_category WHERE category_id=?'
+  const selectAllProductsById = 'SELECT id, producer_org_no, name, description, price, sale_price, unit, in_stock FROM product WHERE id=?'
+  const products = []
 
-    const selectAllProductsByCategoryId = 'SELECT product_id FROM product_category WHERE category_id=?'
-    const selectAllProductsById = 'SELECT id, producer_org_no, name, description, price, sale_price, unit, in_stock FROM product WHERE id=?'
-    const products = []
+  const productIds = await pool.query(selectAllProductsByCategoryId, [categoryId])
 
-    const productIds = await conn.query(selectAllProductsByCategoryId, [categoryId])
-
-    if (productIds.length > 0) {
-      for await (const productId of productIds) {
-        for (const key in productId) {
-          const [row] = await conn.query(selectAllProductsById, [productId[key]])
-
-          const product = parseProduct(row)
-
-          product.categories = await productDAO.getCategoriesByProductId(product.id)
-
-          product.images = await conn.query('SELECT * FROM product_image WHERE product_id = ?', [product.id])
-
-          products.push(product)
-        }
+  if (productIds.length > 0) {
+    for await (const productId of productIds) {
+      for (const key in productId) {
+        const [row] = await pool.query(selectAllProductsById, [productId[key]])
+        const product = parseProduct(row)
+        product.categories = await productDAO.getCategoriesByProductId(product.id)
+        product.images = await pool.query('SELECT * FROM product_image WHERE product_id = ?', [product.id])
+        products.push(product)
       }
-      return products
-    } else {
-      throw createError(400, 'No products found!')
     }
-  } finally {
-    if (conn) conn.release()
+    return products
+  } else {
+    // TODO: Should we really throw when nothing went wrong?
+    throw createError(400, 'No products found!')
   }
 }
 
@@ -300,9 +290,10 @@ productDAO.getCategoriesByProductId = async (productId) => {
 
 /**
  * Get the images belonging to a product.
+ * Returns an empty array if no images exist.
  * @param {number} productId - The associated productid.
  * @return {ProductImage[]}
- * @throws {SqlError}
+ * @throws {SqlError} - SqlError|Error
  */
 productDAO.getImages = async (productId) => {
   const images = []
