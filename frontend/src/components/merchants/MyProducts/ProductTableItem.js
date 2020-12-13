@@ -29,7 +29,7 @@ const ACTIONS = {
 
 const getFirstImageURL = (images) => {
   if (images.length) {
-    return `${API_URL}/static/${images[0].image_name}`
+    return `${API_URL}/static/${images[0].imageName}`
   }
 
   return '/apples.jpg'
