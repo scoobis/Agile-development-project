@@ -2,6 +2,7 @@ const pool = require('./databaseConnection')
 const createError = require('http-errors')
 const Product = require('../models/product')
 const ProductImage = require('../models/productimage')
+const Category = require('../models/category')
 
 const productDAO = {}
 
@@ -182,6 +183,7 @@ productDAO.getAllByOrgNumber = async (orgNumber) => {
  *
  * @param {number} categoryId
  * @return {Promise<Product[]>}
+ * @throws {SqlError|HttpError|Error}
  */
 productDAO.getAllByCategoryId = async (categoryId) => {
   const selectAllProductsByCategoryId = 'SELECT product_id FROM product_category WHERE category_id=?'
@@ -209,17 +211,16 @@ productDAO.getAllByCategoryId = async (categoryId) => {
 
 /**
  * Get all categories.
- * @return {*[]}
+ * @return {Promise<Category[]>}
+ * @throws {SqlError|Error}
  */
 productDAO.getAllCategories = async () => {
-  let conn
-  try {
-    conn = await pool.getConnection()
-    const categories = await conn.query('SELECT name, id FROM category WHERE parent_id IS NULL')
-    return categories
-  } finally {
-    if (conn) conn.release()
-  }
+  const categories = []
+  const rows = await pool.query('SELECT * FROM category WHERE parent_id IS NULL')
+  rows.forEach(category => {
+    categories.push(new Category(category.id, category.parent_id, category.name, category.description))
+  })
+  return categories
 }
 
 /**
