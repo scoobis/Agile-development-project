@@ -81,8 +81,8 @@ CREATE TABLE product_image (
   FOREIGN KEY (product_id) REFERENCES product(id) ON DELETE CASCADE
 );
 
--- TAG --
-CREATE TABLE tag (
+-- PRODUCT_TAG --
+CREATE TABLE product_tag (
   id INT NOT NULL AUTO_INCREMENT,
   name VARCHAR(40) NOT NULL,
   product_id INT NOT NULL,
