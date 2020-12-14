@@ -71,20 +71,31 @@ productDAO.update = async (product) => {
     conn = await pool.getConnection()
     await conn.beginTransaction()
 
-    const { id, orgNumber, name, description, price, salePrice, unit, inStock, categories } = product
+    const { id, orgNumber, name, description, price, salePrice, unit, inStock, categories, tags } = product
     const queryResults = []
 
     const updateProductQuery = 'UPDATE product SET producer_org_no=?, name=?, description=?, price=?, sale_price=?, unit=?, in_stock=? WHERE id=?'
-    const deleteAllOldCategoriesFromProductQuery = 'DELETE FROM product_category WHERE product_id=?'
-    const insertNewCategoryToProductQuery = 'INSERT INTO product_category value (?, ?)'
+    const deleteAllCategoriesFromProductQuery = 'DELETE FROM product_category WHERE product_id=?'
+    const deleteAllTagsFromProductQuery = 'DELETE FROM tag WHERE product_id=?'
+    const insertCategoryToProductQuery = 'INSERT INTO product_category value (?, ?)'
+    const insertProductTagQuery = 'INSERT INTO tag (name, product_id) VALUES (?, ?)'
 
     await conn.query(updateProductQuery, [orgNumber, name, description, price, salePrice, unit, inStock, id])
 
-    await conn.query(deleteAllOldCategoriesFromProductQuery, [id])
+    await conn.query(deleteAllCategoriesFromProductQuery, [id])
+
+    await conn.query(deleteAllTagsFromProductQuery, [id])
 
     categories.forEach(
       categoryId => queryResults.push(
-        conn.query(insertNewCategoryToProductQuery, [id, categoryId])
+        conn.query(insertCategoryToProductQuery, [id, categoryId])
+          .catch(error => { throw error })
+      )
+    )
+
+    tags.forEach(
+      tag => queryResults.push(
+        conn.query(insertProductTagQuery, [tag, id])
           .catch(error => { throw error })
       )
     )
