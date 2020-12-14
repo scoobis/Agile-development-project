@@ -235,31 +235,18 @@ productDAO.getCategoryById = async (id) => {
  * @return {*[]}
  */
 productDAO.getCategories = async (productId) => {
-  // Maybe take conn as parameter, as its only used as help method at the moment
-  let conn
-  try {
-    conn = await pool.getConnection()
-
-    const selectAllCategoriesFromProductQuery = 'SELECT category_id FROM product_category WHERE product_id=?'
-    const selectCategoryByIdQuery = 'SELECT id, parent_id, name, description FROM category WHERE id=?'
-    const categories = []
-
-    const categoryIds = await conn.query(selectAllCategoriesFromProductQuery, [productId])
-
-    if (categoryIds.length > 0) {
-      for await (const categoryId of categoryIds) {
-        for (const key in categoryId) {
-          const [category] = await conn.query(selectCategoryByIdQuery, [categoryId[key]])
-          // TODO Fix category object.
-          categories.push(category)
-        }
-      }
-    }
-
-    return categories
-  } finally {
-    if (conn) conn.release()
-  }
+  const selectQuery =
+   `SELECT id, parent_id, name, description
+   FROM category AS c
+   INNER JOIN product_category AS pc
+   ON c.id=pc.category_id
+   WHERE pc.product_id=?`
+  const categories = []
+  const rows = await pool.query(selectQuery, [productId])
+  rows.forEach(cat => {
+    categories.push(new Category(cat.id, cat.parent_id, cat.name, cat.description))
+  })
+  return categories
 }
 
 /**
