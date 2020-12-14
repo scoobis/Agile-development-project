@@ -28,7 +28,7 @@ const OrderItemTable = (props) => {
   const [activeDetials, setActiveDetails] = useState(false)
 
   const openOrderDetails = () => {
-    activeDetials ? setOrderDetialsComponent('') : setOrderDetialsComponent('active')
+    activeDetials ? setOrderDetialsComponent({ order: {}, isActive: false }) : setOrderDetialsComponent({ order, isActive: true })
     setActiveDetails(!activeDetials)
   }
 

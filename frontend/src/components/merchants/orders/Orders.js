@@ -36,11 +36,11 @@ const Orders = () => {
     { customerName: 'Peter', customerEmail: 'peter@email.com', status: 'aktiv', id: 'jjj555', fees: { total: 55 } }
   ])
 
-  const [orderDetialsComponent, setOrderDetialsComponent] = useState('')
+  const [orderDetialsComponent, setOrderDetialsComponent] = useState({ order: {}, isActive: false })
 
-  const renderOrderDetials = () => {
-    if (orderDetialsComponent === 'active') {
-      return <OrderDetials />
+  const renderOrderDetials = (order) => {
+    if (orderDetialsComponent.isActive) {
+      return <OrderDetials order={order} />
     }
   }
 
@@ -68,7 +68,7 @@ const Orders = () => {
           </TableBody>
         </Table>
       </TableContainer>
-      {orderDetialsComponent && renderOrderDetials()}
+      {orderDetialsComponent && renderOrderDetials(orderDetialsComponent.order)}
     </div>
   ) : (
     <Typography>Inga produkter hittades</Typography>
