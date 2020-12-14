@@ -279,7 +279,7 @@ productDAO.getImages = async (productId) => {
  */
 const parseProduct = (row) => {
   return new Product(row.id, row.producer_org_no, row.name, row.description, row.price,
-    row.sale_price, row.unit, row.in_stock, row.categories, row.images)
+    row.sale_price, row.unit, row.in_stock, row.categories, row.images, [])
 }
 
 module.exports = productDAO

@@ -112,6 +112,7 @@ const parseProduct = (object) => {
     object.unit,
     object.inStock,
     object.categories,
+    [],
     []
   )
 }
