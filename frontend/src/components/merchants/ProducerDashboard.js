@@ -4,8 +4,9 @@ import ProductForm from './ProductForm'
 import useAuth from '../../utils/useAuth'
 import MyProducts from './MyProducts/MyProducts'
 import { addProduct } from '../../utils/api'
+import Orders from './orders/Orders'
 
-function ProducerDashboard () {
+function ProducerDashboard() {
   const { user } = useAuth()
   const [activeComponent, setActiveComponent] = useState('')
 
@@ -13,7 +14,8 @@ function ProducerDashboard () {
 
   const OPTIONS = {
     ADD_PRODUCT: 'ADD_PRODUCT',
-    VIEW_PRODUCTS: 'VIEW_PRODUCTS'
+    VIEW_PRODUCTS: 'VIEW_PRODUCTS',
+    VIEW_ORDERS: 'VIEW_ORDERS'
   }
 
   const renderActiveComponent = () => {
@@ -30,6 +32,13 @@ function ProducerDashboard () {
           <>
             {getActiveComponentHeading('Mina produkter')}
             <MyProducts />
+          </>
+        )
+      case OPTIONS.VIEW_ORDERS:
+        return (
+          <>
+            {getActiveComponentHeading('Mina beställningar')}
+            <Orders />
           </>
         )
       default:
@@ -55,17 +64,14 @@ function ProducerDashboard () {
         <Grid item xs={12} lg={3}>
           <Paper>
             <MenuList>
-              <MenuItem
-                selected={activeComponent === OPTIONS.ADD_PRODUCT}
-                onClick={() => setActiveComponent(OPTIONS.ADD_PRODUCT)}
-              >
+              <MenuItem selected={activeComponent === OPTIONS.ADD_PRODUCT} onClick={() => setActiveComponent(OPTIONS.ADD_PRODUCT)}>
                 Lägg till produkt
               </MenuItem>
-              <MenuItem
-                selected={activeComponent === OPTIONS.VIEW_PRODUCTS}
-                onClick={() => setActiveComponent(OPTIONS.VIEW_PRODUCTS)}
-              >
+              <MenuItem selected={activeComponent === OPTIONS.VIEW_PRODUCTS} onClick={() => setActiveComponent(OPTIONS.VIEW_PRODUCTS)}>
                 Mina produkter
+              </MenuItem>
+              <MenuItem selected={activeComponent === OPTIONS.VIEW_ORDERS} onClick={() => setActiveComponent(OPTIONS.VIEW_ORDERS)}>
+                Mina beställningar
               </MenuItem>
             </MenuList>
           </Paper>
