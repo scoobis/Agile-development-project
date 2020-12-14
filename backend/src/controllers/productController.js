@@ -1,11 +1,15 @@
 const service = require('../services/productService')
 const createError = require('http-errors')
+const Product = require('../models/product/product')
 
 const controller = {}
 
 controller.create = async (req, res, next) => {
   try {
-    await service.create(req)
+    const product = parseProduct(req.body)
+    const files = req.files
+
+    await service.create(product, files)
     res.status(200).json({ success: true, message: 'Product added!' })
   } catch (error) {
     return next(error)
@@ -14,7 +18,10 @@ controller.create = async (req, res, next) => {
 
 controller.update = async (req, res, next) => {
   try {
-    await service.update(req)
+    const product = parseProduct(req.body)
+    product.id = req.params.id
+
+    await service.update(product)
     res.status(200).json({ success: true, message: 'Product updated!' })
   } catch (error) {
     return next(error)
@@ -23,7 +30,9 @@ controller.update = async (req, res, next) => {
 
 controller.delete = async (req, res, next) => {
   try {
-    await service.delete(req)
+    const id = req.params.id
+
+    await service.delete(id)
     res.status(200).json({ success: true, message: 'Product deleted!' })
   } catch (error) {
     return next(error)
@@ -32,7 +41,10 @@ controller.delete = async (req, res, next) => {
 
 controller.get = async (req, res, next) => {
   try {
-    const result = await service.get(req)
+    const id = req.params.id
+
+    const result = await service.get(id)
+
     if (result) {
       res.status(200).json(result)
     } else {
@@ -54,7 +66,9 @@ controller.getAll = async (req, res, next) => {
 
 controller.getAllFromProducer = async (req, res, next) => {
   try {
-    const result = await service.getAllFromProducer(req)
+    const orgNumber = req.params.orgNumber
+
+    const result = await service.getAllFromProducer(orgNumber)
     res.status(200).json(result)
   } catch (error) {
     return next(error)
@@ -63,7 +77,9 @@ controller.getAllFromProducer = async (req, res, next) => {
 
 controller.getAllFromCategory = async (req, res, next) => {
   try {
-    const result = await service.getAllFromCategory(req)
+    const categoryId = req.params.categoryId
+
+    const result = await service.getAllFromCategory(categoryId)
     res.status(200).json(result)
   } catch (error) {
     return next(error)
@@ -77,6 +93,27 @@ controller.getAllCategories = async (req, res, next) => {
   } catch (error) {
     return next(error)
   }
+}
+
+/**
+ * Parses and returns a Product
+ *
+ * @param {Object} object
+ * @returns {Product} product
+ */
+const parseProduct = (object) => {
+  return new Product(
+    null,
+    object.orgNumber,
+    object.name,
+    object.description,
+    object.price,
+    object.salePrice,
+    object.unit,
+    object.inStock,
+    object.categories,
+    []
+  )
 }
 
 module.exports = controller

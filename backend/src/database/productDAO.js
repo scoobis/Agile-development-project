@@ -1,7 +1,8 @@
 const pool = require('./databaseConnection')
 const createError = require('http-errors')
-const Product = require('../models/product')
-const ProductImage = require('../models/productimage')
+const Product = require('../models/product/product')
+const ProductImage = require('../models/product/productimage')
+const Category = require('../models/category')
 
 const productDAO = {}
 
@@ -9,7 +10,7 @@ const productDAO = {}
  * Registers a new product.
  *
  * @param {Product} product
- * @throws {Error}
+ * @throws {SqlError|Error} - SqlError|Error
  */
 productDAO.create = async (product, files) => {
   let conn
@@ -43,7 +44,6 @@ productDAO.create = async (product, files) => {
     await Promise.all(queryResults)
     await conn.commit()
   } catch (error) {
-    // Roll back the sql transaaction
     conn.rollback()
     throw error
   } finally {
@@ -96,22 +96,13 @@ productDAO.update = async (product) => {
  * Deletes a product.
  *
  * @param {number} productId
+ * @throws {SqlError|HttpError} - SqlError|HttpError|Error
  */
 productDAO.delete = async (productId) => {
-  let conn
-  try {
-    conn = await pool.getConnection()
-    // TODO: Transaction; remove category relation and images.
-
-    const deleteProductByIdQuery = 'DELETE FROM product WHERE id=?'
-
-    const result = await conn.query(deleteProductByIdQuery, [productId])
-
-    if (!result.affectedRows) {
-      throw createError(400, 'Product not found!')
-    }
-  } finally {
-    if (conn) conn.release()
+  const deleteProductByIdQuery = 'DELETE FROM product WHERE id=?'
+  const result = await pool.query(deleteProductByIdQuery, [productId])
+  if (!result.affectedRows) {
+    throw createError(400, 'Product not found!')
   }
 }
 
@@ -120,61 +111,35 @@ productDAO.delete = async (productId) => {
  *
  * @param {number} productId
  *
- * @return {Product}
+ * @return {Promise<Product>}
+ * @throws {SqlError} - SqlError|Error Object
  */
 productDAO.get = async (productId) => {
-  let conn
-  try {
-    conn = await pool.getConnection()
-
-    const selectProductById = 'SELECT * FROM product WHERE id=?'
-    const selectImageByProductId = 'SELECT * FROM product_image WHERE product_id = ?'
-
-    const [row] = await conn.query(selectProductById, [productId])
-
-    const product = parseProduct(row)
-    product.categories = await productDAO.getCategoriesByProductId(product.id)
-    product.images = await conn.query(selectImageByProductId, [product.id])
-
-    return product
-  } finally {
-    if (conn) conn.release()
-  }
+  const selectProductById = 'SELECT * FROM product WHERE id=?'
+  const [product] = await pool.query(selectProductById, [productId])
+  product.categories = await productDAO.getCategories(product.id)
+  product.images = await productDAO.getImages(product.id)
+  return parseProduct(product)
 }
 
 /**
  * Gets all products
  *
- * @return {Product[]}
+ * @return {Promise<Product[]>}
+ * @throws {HttpError|SqlError} - HttpError|SqlError|Error
  */
 productDAO.getAll = async () => {
-  let conn
-  try {
-    conn = await pool.getConnection()
-
-    const selectAllProducts = 'SELECT id, producer_org_no, name, description, price, sale_price, unit, in_stock FROM product' // LIMIT 100?
-    const products = []
-
-    const rows = await conn.query(selectAllProducts)
-
-    if (rows.length > 0) {
-      for (const row of rows) {
-        const product = parseProduct(row)
-
-        product.categories = await productDAO.getCategoriesByProductId(product.id)
-
-        product.images = await conn.query('SELECT * FROM product_image WHERE product_id = ?', [product.id])
-
-        products.push(product)
-      }
-
-      return products
-    } else {
-      throw createError(400, 'No products found!')
-    }
-  } finally {
-    if (conn) conn.release()
-  }
+  const selectAllProducts = 'SELECT id, producer_org_no, name, description, price, sale_price, unit, in_stock FROM product' // LIMIT 100?
+  const products = []
+  const rows = await pool.query(selectAllProducts)
+  await Promise.all(
+    rows.map(async (product) => {
+      product.categories = await productDAO.getCategories(product.id)
+      product.images = await productDAO.getImages(product.id)
+      products.push(parseProduct(product))
+    })
+  )
+  return products
 }
 
 /**
@@ -184,88 +149,59 @@ productDAO.getAll = async () => {
  * @return {Product[]}
  */
 productDAO.getAllByOrgNumber = async (orgNumber) => {
-  let conn
-  try {
-    conn = await pool.getConnection()
-
-    const selectAllProductsByOrgNumber = 'SELECT id, producer_org_no, name, description, price, sale_price, unit, in_stock FROM product WHERE producer_org_no=?'
-    const products = []
-
-    const rows = await conn.query(selectAllProductsByOrgNumber, [orgNumber])
-
-    if (rows.length > 0) {
-      for await (const row of rows) {
-        const product = parseProduct(row)
-
-        product.categories = await productDAO.getCategoriesByProductId(product.id)
-
-        product.images = await conn.query('SELECT * FROM product_image WHERE product_id = ?', [product.id])
-
-        products.push(product)
-      }
-
-      return products
-    } else {
-      throw createError(400, 'No products found!')
-    }
-  } finally {
-    if (conn) conn.release()
-  }
+  const selectAllProductsByOrgNumber = 'SELECT id, producer_org_no, name, description, price, sale_price, unit, in_stock FROM product WHERE producer_org_no=?'
+  const products = []
+  const rows = await pool.query(selectAllProductsByOrgNumber, [orgNumber])
+  await Promise.all(
+    rows.map(async (product) => {
+      product.categories = await productDAO.getCategories(product.id)
+      product.images = await productDAO.getImages(product.id)
+      products.push(parseProduct(product))
+    })
+  )
+  return products
 }
 
 /**
  * Gets all products from a specific category.
  *
  * @param {number} categoryId
- * @return {Product[]}
+ * @return {Promise<Product[]>}
+ * @throws {SqlError|HttpError|Error}
  */
 productDAO.getAllByCategoryId = async (categoryId) => {
-  let conn
-  try {
-    conn = await pool.getConnection()
+  const selectQuery =
+    `SELECT p.id, p.producer_org_no, p.name, p.description, p.price, p.sale_price, p.unit, p.in_stock 
+    FROM product AS p 
+    INNER JOIN product_category AS pc 
+    ON p.id=pc.product_id 
+    WHERE pc.category_id=?`
 
-    const selectAllProductsByCategoryId = 'SELECT product_id FROM product_category WHERE category_id=?'
-    const selectAllProductsById = 'SELECT id, producer_org_no, name, description, price, sale_price, unit, in_stock FROM product WHERE id=?'
-    const products = []
+  const products = []
+  const rows = await pool.query(selectQuery, [categoryId])
 
-    const productIds = await conn.query(selectAllProductsByCategoryId, [categoryId])
-
-    if (productIds.length > 0) {
-      for await (const productId of productIds) {
-        for (const key in productId) {
-          const [row] = await conn.query(selectAllProductsById, [productId[key]])
-
-          const product = parseProduct(row)
-
-          product.categories = await productDAO.getCategoriesByProductId(product.id)
-
-          product.images = await conn.query('SELECT * FROM product_image WHERE product_id = ?', [product.id])
-
-          products.push(product)
-        }
-      }
-      return products
-    } else {
-      throw createError(400, 'No products found!')
-    }
-  } finally {
-    if (conn) conn.release()
-  }
+  await Promise.all(
+    rows.map(async (product) => {
+      product.categories = await productDAO.getCategories(product.id)
+      product.images = await productDAO.getImages(product.id)
+      products.push(parseProduct(product))
+    })
+  )
+  return products
 }
 
 /**
  * Get all categories.
- * @return {*[]}
+ * @return {Promise<Category[]>}
+ * @throws {SqlError|Error}
  */
 productDAO.getAllCategories = async () => {
-  let conn
-  try {
-    conn = await pool.getConnection()
-    const categories = await conn.query('SELECT name, id FROM category WHERE parent_id IS NULL')
-    return categories
-  } finally {
-    if (conn) conn.release()
-  }
+  const categories = []
+  const rows = await pool.query('SELECT * FROM category WHERE parent_id IS NULL')
+  rows.forEach(category => {
+    categories.push(new Category(category.id, category.parent_id, category.name, category.description))
+  })
+  return categories
 }
 
 /**
@@ -273,14 +209,11 @@ productDAO.getAllCategories = async () => {
  * @return {*[]}
  */
 productDAO.getAllSubCategories = async () => {
-  let conn
-  try {
-    conn = await pool.getConnection()
-    const subcategories = await conn.query('SELECT name, id, parent_id FROM category WHERE parent_id IS NOT NULL')
-    return subcategories
-  } finally {
-    if (conn) conn.release()
-  }
+  const subcategories = await pool.query('SELECT name, id, parent_id, description FROM category WHERE parent_id IS NOT NULL')
+  // FIXME:TODO:
+  // SHOULD BE:
+  // return subcategories.map(cat => new Category(cat.id, cat.parent_id, cat.name, cat.description))
+  return subcategories
 }
 
 /**
@@ -290,15 +223,9 @@ productDAO.getAllSubCategories = async () => {
  * @return {*}
  */
 productDAO.getCategoryById = async (id) => {
-  let conn
-  try {
-    conn = await pool.getConnection()
-    const selectCategoryByIdQuery = 'SELECT id, name FROM category WHERE id=?'
-    const [category] = await conn.query(selectCategoryByIdQuery, [id])
-    return category
-  } finally {
-    if (conn) conn.release()
-  }
+  const selectCategoryByIdQuery = 'SELECT name, id, parent_id, description FROM category WHERE id=?'
+  const [category] = await pool.query(selectCategoryByIdQuery, [id])
+  return new Category(category.id, category.parent_id, category.name, category.description)
 }
 
 /**
@@ -307,49 +234,35 @@ productDAO.getCategoryById = async (id) => {
  * @param {number} productId
  * @return {*[]}
  */
-productDAO.getCategoriesByProductId = async (productId) => {
-  // Maybe take conn as parameter, as its only used as help method at the moment
-  let conn
-  try {
-    conn = await pool.getConnection()
-
-    const selectAllCategoriesFromProductQuery = 'SELECT category_id FROM product_category WHERE product_id=?'
-    const selectCategoryByIdQuery = 'SELECT id, parent_id, name, description FROM category WHERE id=?'
-    const categories = []
-
-    const categoryIds = await conn.query(selectAllCategoriesFromProductQuery, [productId])
-
-    if (categoryIds.length > 0) {
-      for await (const categoryId of categoryIds) {
-        for (const key in categoryId) {
-          const [category] = await conn.query(selectCategoryByIdQuery, [categoryId[key]])
-          categories.push(category)
-        }
-      }
-    }
-
-    return categories
-  } finally {
-    if (conn) conn.release()
-  }
+productDAO.getCategories = async (productId) => {
+  const selectQuery =
+   `SELECT id, parent_id, name, description
+   FROM category AS c
+   INNER JOIN product_category AS pc
+   ON c.id=pc.category_id
+   WHERE pc.product_id=?`
+  const categories = []
+  const rows = await pool.query(selectQuery, [productId])
+  rows.forEach(cat => {
+    categories.push(new Category(cat.id, cat.parent_id, cat.name, cat.description))
+  })
+  return categories
 }
 
 /**
  * Get the images belonging to a product.
+ * Returns an empty array if no images exist.
  * @param {number} productId - The associated productid.
  * @return {ProductImage[]}
+ * @throws {SqlError} - SqlError|Error
  */
 productDAO.getImages = async (productId) => {
-  let conn
-  try {
-    conn = await pool.getConnection()
-    const images = []
-    const result = await conn.query('SELECT * FROM product_image WHERE product_id = ?', [productId])
-    result.forEach(
-      result => images.push(new ProductImage(result.id, result.product_id, result.image_name, result.alt_text))
-    )
-    return images
-  } finally { if (conn) conn.release() }
+  const images = []
+  const result = await pool.query('SELECT * FROM product_image WHERE product_id = ?', [productId])
+  result.forEach(
+    result => images.push(new ProductImage(result.id, result.product_id, result.image_name, result.alt_text))
+  )
+  return images
 }
 
 /**
@@ -365,7 +278,8 @@ productDAO.getImages = async (productId) => {
  * @return {Product}
  */
 const parseProduct = (row) => {
-  return new Product(row.id, row.producer_org_no, row.name, row.description, row.price, row.sale_price, row.unit, row.in_stock, [], [])
+  return new Product(row.id, row.producer_org_no, row.name, row.description, row.price,
+    row.sale_price, row.unit, row.in_stock, row.categories, row.images)
 }
 
 module.exports = productDAO

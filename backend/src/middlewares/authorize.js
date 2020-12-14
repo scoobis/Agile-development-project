@@ -23,4 +23,18 @@ authorize.ownerOfProduct = async (req, res, next) => {
   }
 }
 
+authorize.verifyJWT = async (req, res, next) => {
+  const header = req.headers.authorization
+  if (header) {
+    const token = header.split(' ')[1]
+    jwt.verify(token, 'shhhhh', (err, user) => {
+      if (err) { next(err) }
+      req.user = user
+      next()
+    })
+  } else {
+    next(createError(401, 'Unauthorized'))
+  }
+}
+
 module.exports = authorize
