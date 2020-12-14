@@ -223,15 +223,9 @@ productDAO.getAllSubCategories = async () => {
  * @return {*}
  */
 productDAO.getCategoryById = async (id) => {
-  let conn
-  try {
-    conn = await pool.getConnection()
-    const selectCategoryByIdQuery = 'SELECT id, name FROM category WHERE id=?'
-    const [category] = await conn.query(selectCategoryByIdQuery, [id])
-    return category
-  } finally {
-    if (conn) conn.release()
-  }
+  const selectCategoryByIdQuery = 'SELECT name, id, parent_id, description FROM category WHERE id=?'
+  const [category] = await pool.query(selectCategoryByIdQuery, [id])
+  return new Category(category.id, category.parent_id, category.name, category.description)
 }
 
 /**
