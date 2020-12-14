@@ -68,7 +68,7 @@ validate.producer = async (req, res, next) => {
  * @param {*} next
  */
 validate.product = async (req, res, next) => {
-  const { orgNumber, name, description, price, salePrice, unit, inStock, categories, images } = req.body
+  const { orgNumber, name, description, price, salePrice, unit, inStock, categories, images, tags } = req.body
   /**
    * OrgNumber
    */
@@ -163,6 +163,13 @@ validate.product = async (req, res, next) => {
    */
   if (!images) {
     // return next(createError(400, 'The image array is "undefined"'))
+  }
+
+  /**
+   * Tags
+   */
+  if (!productService.isUndefined(tags) && !productService.isArray(tags)) {
+    return next(createError(400, 'Tags is "undefined"'))
   }
 
   next()

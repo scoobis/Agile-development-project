@@ -3,7 +3,7 @@
  * @class Product
  */
 class Product {
-  constructor (id = null, orgNumber, name, description, price, salePrice = null, unit, inStock, categories = [], images = []) {
+  constructor (id = null, orgNumber, name, description, price, salePrice = null, unit, inStock, categories = [], images = [], tags = []) {
     this.id = id
     this.orgNumber = orgNumber
     this.name = name
@@ -14,6 +14,7 @@ class Product {
     this.inStock = inStock
     this.categories = categories
     this.images = images
+    this.tags = tags
   }
 }
 
