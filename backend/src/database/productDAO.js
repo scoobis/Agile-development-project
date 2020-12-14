@@ -3,6 +3,7 @@ const createError = require('http-errors')
 const Product = require('../models/product/product')
 const ProductImage = require('../models/product/productimage')
 const Category = require('../models/category')
+const ProductTag = require('../models/product/productTag')
 
 const productDAO = {}
 
@@ -131,13 +132,18 @@ productDAO.delete = async (productId) => {
  * @param {number} productId
  *
  * @return {Promise<Product>}
- * @throws {SqlError} - SqlError|Error Object
+ * @throws {SqlError|HttpError} - SqlError|Error Object
  */
 productDAO.get = async (productId) => {
   const selectProductById = 'SELECT * FROM product WHERE id=?'
   const [product] = await pool.query(selectProductById, [productId])
-  product.categories = await productDAO.getCategories(product.id)
-  product.images = await productDAO.getImages(product.id)
+  if (product) {
+    product.categories = await productDAO.getCategories(product.id)
+    product.images = await productDAO.getImages(product.id)
+    product.tags = await productDAO.getTags(product.id)
+  } else {
+    throw createError(400, 'Product not found!')
+  }
   return parseProduct(product)
 }
 
@@ -285,6 +291,23 @@ productDAO.getImages = async (productId) => {
 }
 
 /**
+ * Gets the tags belonging to a product.
+ * Returns an empty array if no tags exist.
+ *
+ * @param {Number} productId - The associated product id.
+ * @return {Tags[]}
+ * @throws {SqlError} - SqlError|Error
+ */
+productDAO.getTags = async (productId) => {
+  const tags = []
+  const result = await pool.query('SELECT id, name, product_id FROM tag WHERE product_id = ?', [productId])
+  result.forEach(
+    result => tags.push(new ProductTag(result.id, result.name, result.product_id))
+  )
+  return tags
+}
+
+/**
  *
  * Private functions.
  *
@@ -298,7 +321,7 @@ productDAO.getImages = async (productId) => {
  */
 const parseProduct = (row) => {
   return new Product(row.id, row.producer_org_no, row.name, row.description, row.price,
-    row.sale_price, row.unit, row.in_stock, row.categories, row.images, [])
+    row.sale_price, row.unit, row.in_stock, row.categories, row.images, row.tags)
 }
 
 module.exports = productDAO
