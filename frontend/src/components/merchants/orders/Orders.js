@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import { getProductsByProducer, removeProduct } from '../../../utils/api'
-import useAuth from '../../../utils/useAuth'
 
 import { withStyles, makeStyles } from '@material-ui/core/styles'
 import Table from '@material-ui/core/Table'
@@ -11,7 +9,7 @@ import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import Paper from '@material-ui/core/Paper'
 import { Typography } from '@material-ui/core'
-import { replaceNullsWithEmptyStr } from '../../../utils/helpers'
+import OrderItemTable from './OrderItemTable'
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -31,49 +29,31 @@ const useStyles = makeStyles({
 
 const Orders = () => {
   const classes = useStyles()
-  const [products, setProducts] = useState([])
-  const { user } = useAuth()
 
-  useEffect(() => {
-    getProducts()
-  }, [])
+  // TODO: remove mock data
+  const [orders, setOrders] = useState([
+    { customerName: 'Peter', customerEmail: 'peter@email.com', status: 'aktiv', id: 'jjj555', fees: { total: 55 } }
+  ])
 
-  const getProducts = () =>
-    getProductsByProducer(user.user.orgNumber).then((response) => {
-      if (response.status === 200) {
-        setProducts(response.data.map(replaceNullsWithEmptyStr))
-      } else {
-        // setProducts([])
-      }
-    })
+  useEffect(() => {}, [])
 
-  const handleRemoveProduct = (id) => {
-    removeProduct({ id, orgNumber: user.user.orgNumber })
-      .then((response) => response.success && setProducts(products.filter((product) => product.id !== id)))
-      .catch(console.log)
-  }
-
-  return products.length ? (
+  return orders.length ? (
     <TableContainer component={Paper}>
       <Table className={classes.table} aria-label='customized table'>
         <TableHead>
           <TableRow className={classes.tableRow}>
-            <StyledTableCell>Namn</StyledTableCell>
-            <StyledTableCell align='right'>Pris</StyledTableCell>
-            <StyledTableCell align='right'>Rabatterat pris</StyledTableCell>
-            <StyledTableCell align='right'>Enhet</StyledTableCell>
-            <StyledTableCell align='right'>Antal i lager</StyledTableCell>
-            <StyledTableCell align='right'>Kategorier</StyledTableCell>
-            <StyledTableCell align='right'>Tumnagel</StyledTableCell>
+            <StyledTableCell>Kund namn</StyledTableCell>
+            <StyledTableCell align='right'>Email</StyledTableCell>
+            <StyledTableCell align='right'>Frakt</StyledTableCell>
+            <StyledTableCell align='right'>Total belopp</StyledTableCell>
+            <StyledTableCell align='right'>Status</StyledTableCell>
             <StyledTableCell align='right' />
           </TableRow>
         </TableHead>
         <TableBody>
-          {/*
-          {products.map((product) => (
-            <ProductTableItem key={product.id} product={product} onEdit={getProducts} onRemove={handleRemoveProduct} />
+          {orders.map((order) => (
+            <OrderItemTable key={order.id} order={order} />
           ))}
-          */}
         </TableBody>
       </Table>
     </TableContainer>
