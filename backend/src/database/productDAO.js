@@ -63,8 +63,8 @@ productDAO.create = async (product, files) => {
 /**
  * Updates a product
  *
- * @param {*} product
- * @param {*} categoryId
+ * @param {Product} product
+ * @throws {SqlError|Error} - SqlError|Error
  */
 productDAO.update = async (product) => {
   let conn
@@ -115,7 +115,7 @@ productDAO.update = async (product) => {
 /**
  * Deletes a product.
  *
- * @param {number} productId
+ * @param {Number} productId
  * @throws {SqlError|HttpError} - SqlError|HttpError|Error
  */
 productDAO.delete = async (productId) => {
@@ -129,8 +129,7 @@ productDAO.delete = async (productId) => {
 /**
  * Get product data.
  *
- * @param {number} productId
- *
+ * @param {Number} productId
  * @return {Promise<Product>}
  * @throws {SqlError|HttpError} - SqlError|Error Object
  */
@@ -161,6 +160,7 @@ productDAO.getAll = async () => {
     rows.map(async (product) => {
       product.categories = await productDAO.getCategories(product.id)
       product.images = await productDAO.getImages(product.id)
+      product.tags = await productDAO.getTags(product.id)
       products.push(parseProduct(product))
     })
   )
@@ -170,8 +170,8 @@ productDAO.getAll = async () => {
 /**
  * Get all products from a specific producer.
  *
- * @param {number} orgNumber
- * @return {Product[]}
+ * @param {Number} orgNumber
+ * @return {Promise<Product[]>}
  */
 productDAO.getAllByOrgNumber = async (orgNumber) => {
   const selectAllProductsByOrgNumber = 'SELECT id, producer_org_no, name, description, price, sale_price, unit, in_stock FROM product WHERE producer_org_no=?'
@@ -181,6 +181,7 @@ productDAO.getAllByOrgNumber = async (orgNumber) => {
     rows.map(async (product) => {
       product.categories = await productDAO.getCategories(product.id)
       product.images = await productDAO.getImages(product.id)
+      product.tags = await productDAO.getTags(product.id)
       products.push(parseProduct(product))
     })
   )
@@ -190,7 +191,7 @@ productDAO.getAllByOrgNumber = async (orgNumber) => {
 /**
  * Gets all products from a specific category.
  *
- * @param {number} categoryId
+ * @param {Number} categoryId
  * @return {Promise<Product[]>}
  * @throws {SqlError|HttpError|Error}
  */
@@ -209,6 +210,7 @@ productDAO.getAllByCategoryId = async (categoryId) => {
     rows.map(async (product) => {
       product.categories = await productDAO.getCategories(product.id)
       product.images = await productDAO.getImages(product.id)
+      product.tags = await productDAO.getTags(product.id)
       products.push(parseProduct(product))
     })
   )
@@ -217,6 +219,7 @@ productDAO.getAllByCategoryId = async (categoryId) => {
 
 /**
  * Get all categories.
+ *
  * @return {Promise<Category[]>}
  * @throws {SqlError|Error}
  */
@@ -231,6 +234,7 @@ productDAO.getAllCategories = async () => {
 
 /**
  * Get all sub-categories.
+ *
  * @return {*[]}
  */
 productDAO.getAllSubCategories = async () => {
@@ -244,8 +248,8 @@ productDAO.getAllSubCategories = async () => {
 /**
  * Gets a category by its id
  *
- * @param {number} id
- * @return {*}
+ * @param {Number} id
+ * @return {Promise<Category>}
  */
 productDAO.getCategoryById = async (id) => {
   const selectCategoryByIdQuery = 'SELECT name, id, parent_id, description FROM category WHERE id=?'
@@ -256,7 +260,7 @@ productDAO.getCategoryById = async (id) => {
 /**
  * Get all categories for a specific product.
  *
- * @param {number} productId
+ * @param {Number} productId
  * @return {*[]}
  */
 productDAO.getCategories = async (productId) => {
@@ -277,7 +281,8 @@ productDAO.getCategories = async (productId) => {
 /**
  * Get the images belonging to a product.
  * Returns an empty array if no images exist.
- * @param {number} productId - The associated productid.
+ *
+ * @param {Number} productId - The associated productid.
  * @return {ProductImage[]}
  * @throws {SqlError} - SqlError|Error
  */
