@@ -22,7 +22,7 @@ productDAO.create = async (product, files) => {
     const insertProductQuery = 'INSERT INTO product (producer_org_no, name, description, price, sale_price, unit, in_stock) VALUES (?, ?, ?, ?, ?, ?, ?)'
     const insertProductImgQuery = 'INSERT INTO product_image (product_id, image_name, alt_text) VALUES (?, ?, ?)'
     const insertProductCategoryQuery = 'INSERT INTO product_category value (?, ?)'
-    const insertProductTagQuery = 'INSERT INTO tag (name, product_id) VALUES (?, ?)'
+    const insertProductTagQuery = 'INSERT INTO product_tag (name, product_id) VALUES (?, ?)'
     const { orgNumber, name, description, price, unit, salePrice, inStock, categories, tags } = product
     const queryResults = []
 
@@ -77,9 +77,9 @@ productDAO.update = async (product) => {
 
     const updateProductQuery = 'UPDATE product SET producer_org_no=?, name=?, description=?, price=?, sale_price=?, unit=?, in_stock=? WHERE id=?'
     const deleteAllCategoriesFromProductQuery = 'DELETE FROM product_category WHERE product_id=?'
-    const deleteAllTagsFromProductQuery = 'DELETE FROM tag WHERE product_id=?'
+    const deleteAllTagsFromProductQuery = 'DELETE FROM product_tag WHERE product_id=?'
     const insertCategoryToProductQuery = 'INSERT INTO product_category value (?, ?)'
-    const insertProductTagQuery = 'INSERT INTO tag (name, product_id) VALUES (?, ?)'
+    const insertProductTagQuery = 'INSERT INTO product_tag (name, product_id) VALUES (?, ?)'
 
     await conn.query(updateProductQuery, [orgNumber, name, description, price, salePrice, unit, inStock, id])
 
@@ -305,7 +305,7 @@ productDAO.getImages = async (productId) => {
  */
 productDAO.getTags = async (productId) => {
   const tags = []
-  const result = await pool.query('SELECT id, name, product_id FROM tag WHERE product_id = ?', [productId])
+  const result = await pool.query('SELECT id, name, product_id FROM product_tag WHERE product_id = ?', [productId])
   result.forEach(
     result => tags.push(new ProductTag(result.id, result.name, result.product_id))
   )
