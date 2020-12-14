@@ -31,9 +31,38 @@ const useStyles = makeStyles({
 const Orders = () => {
   const classes = useStyles()
 
-  // TODO: remove mock data
+  // TODO: remove mock data, and get
   const [orders, setOrders] = useState([
-    { customerName: 'Peter', customerEmail: 'peter@email.com', status: 'aktiv', id: 'jjj555', fees: { total: 55 } }
+    {
+      customerName: 'Peter',
+      customerEmail: 'peter@email.com',
+      customerPhone: '123456789',
+      cutomerStreetAddress: 'Storgatan 1',
+      customerZip: '39230',
+      customerCity: 'Kalmar',
+      status: 'aktiv',
+      id: 'jjj555',
+      fees: { total: 55 },
+      products: [
+        { id: 2, quantity: 5, name: 'name', price: 4 },
+        { id: 1, quantity: 6, name: 'Tomat', price: 29 }
+      ]
+    },
+    {
+      customerName: 'Peter',
+      customerEmail: 'peter@email.com',
+      customerPhone: '123456789',
+      cutomerStreetAddress: 'Storgatan 1',
+      customerZip: '39230',
+      customerCity: 'Kalmar',
+      status: 'aktiv',
+      id: 'jjj554',
+      products: [
+        { id: 2, quantity: 3, name: 'name', price: 4 },
+        { id: 1, quantity: 2, name: 'Tomat', price: 29 }
+      ],
+      fees: { total: 55 }
+    }
   ])
 
   const [orderDetialsComponent, setOrderDetialsComponent] = useState({ order: {}, isActive: false })
