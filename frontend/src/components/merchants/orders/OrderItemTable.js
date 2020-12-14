@@ -20,10 +20,14 @@ const useStyles = makeStyles({
   notActive: { color: 'red', fontWeight: 'bold' }
 })
 
-const OrderItemTable = (order) => {
+const OrderItemTable = (order, setOrderDetialsComponent) => {
   const classes = useStyles()
 
   order = order.order // why does it become order.order?...
+  const test = () => {
+    console.log(setOrderDetialsComponent)
+    setOrderDetialsComponent('active')
+  }
 
   return (
     <StyledTableRow>
@@ -36,7 +40,7 @@ const OrderItemTable = (order) => {
       <TableCell align='right' className={order.status === 'aktiv' ? classes.active : classes.notActive}>
         {order.status}
       </TableCell>
-      <TableCell align='right' style={{ cursor: 'pointer', fontWeight: 'bold' }}>
+      <TableCell align='right' style={{ cursor: 'pointer', fontWeight: 'bold' }} onClick={test()}>
         Mer info
       </TableCell>
       <TableCell align='right'>
