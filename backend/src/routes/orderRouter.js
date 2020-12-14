@@ -3,5 +3,6 @@ const controller = require('../controllers/orderController')
 
 // Order
 router.get('/:id', controller.get)
+router.post('/sendorder', controller.sendorder)
 
 module.exports = router

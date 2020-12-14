@@ -3,14 +3,20 @@
  * @class Order
  */
 module.exports = class Order {
-  constructor (orgNumber, customerName = null, customerPhone = null, customerStreetAddress = null, customerZip = null, customerCity = null, price = 0, created = 2020, id = null) {
+  constructor (orgNumber, customerName, customerPhone, customerStreetAddress, customerZip, customerCity, products, shippingMethod, paymentMethod, subtotal, shipping, discount, total, created, id = null) {
     this.orgNumber = orgNumber
     this.customerName = customerName
     this.customerPhone = customerPhone
     this.customerStreetAddress = customerStreetAddress
     this.customerZip = customerZip
     this.customerCity = customerCity
-    this.price = price
+    this.products = products
+    this.shippingMethod = shippingMethod
+    this.paymentMethod = paymentMethod
+    this.subtotal = subtotal
+    this.shipping = shipping
+    this.discount = discount
+    this.total = total
     this.created = created
     this.id = id
   }

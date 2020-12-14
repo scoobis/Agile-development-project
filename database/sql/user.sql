@@ -92,15 +92,20 @@ CREATE TABLE product_tag (
 
 -- ORDER --
 CREATE TABLE orders (
-  id INT NOT NULL AUTO_INCREMENT,
   producer_org_no INT,
   customer_name VARCHAR(100),
   customer_phone_no VARCHAR(10),
   customer_street_address VARCHAR(100),
   customer_zip INT(5),
   customer_city VARCHAR(40),
-  price INT,
+  shipping_method VARCHAR(40),
+  payment_method VARCHAR(40),
+  subtotal INT,
+  shipping INT,
+  discount INT,
+  total INT,
   created DATE,
+  id INT NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (id)
 );
 
