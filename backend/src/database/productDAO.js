@@ -1,7 +1,7 @@
 const pool = require('./databaseConnection')
 const createError = require('http-errors')
 const Product = require('../models/product/product')
-const ProductImage = require('../models/productimage')
+const ProductImage = require('../models/product/productimage')
 const Category = require('../models/category')
 
 const productDAO = {}
