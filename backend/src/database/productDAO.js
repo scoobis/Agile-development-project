@@ -1,6 +1,6 @@
 const pool = require('./databaseConnection')
 const createError = require('http-errors')
-const Product = require('../models/product')
+const Product = require('../models/product/product')
 const ProductImage = require('../models/productimage')
 const Category = require('../models/category')
 
@@ -152,8 +152,6 @@ productDAO.getAllByOrgNumber = async (orgNumber) => {
   const selectAllProductsByOrgNumber = 'SELECT id, producer_org_no, name, description, price, sale_price, unit, in_stock FROM product WHERE producer_org_no=?'
   const products = []
   const rows = await pool.query(selectAllProductsByOrgNumber, [orgNumber])
-
-  // TODO
   await Promise.all(
     rows.map(async (product) => {
       product.categories = await productDAO.getCategories(product.id)
@@ -172,27 +170,24 @@ productDAO.getAllByOrgNumber = async (orgNumber) => {
  * @throws {SqlError|HttpError|Error}
  */
 productDAO.getAllByCategoryId = async (categoryId) => {
-  const selectAllProductsByCategoryId = 'SELECT product_id FROM product_category WHERE category_id=?'
-  const selectAllProductsById = 'SELECT id, producer_org_no, name, description, price, sale_price, unit, in_stock FROM product WHERE id=?'
+  const selectQuery =
+    `SELECT p.id, p.producer_org_no, p.name, p.description, p.price, p.sale_price, p.unit, p.in_stock 
+    FROM product AS p 
+    INNER JOIN product_category AS pc 
+    ON p.id=pc.product_id 
+    WHERE pc.category_id=?`
+
   const products = []
+  const rows = await pool.query(selectQuery, [categoryId])
 
-  const productIds = await pool.query(selectAllProductsByCategoryId, [categoryId])
-
-  if (productIds.length > 0) {
-    for await (const productId of productIds) {
-      for (const key in productId) {
-        const [row] = await pool.query(selectAllProductsById, [productId[key]])
-        const product = parseProduct(row)
-        product.categories = await productDAO.getCategories(product.id)
-        product.images = await productDAO.getImages(product.id)
-        products.push(product)
-      }
-    }
-    return products
-  } else {
-    // TODO: Should we really throw when nothing went wrong?
-    throw createError(400, 'No products found!')
-  }
+  await Promise.all(
+    rows.map(async (product) => {
+      product.categories = await productDAO.getCategories(product.id)
+      product.images = await productDAO.getImages(product.id)
+      products.push(parseProduct(product))
+    })
+  )
+  return products
 }
 
 /**

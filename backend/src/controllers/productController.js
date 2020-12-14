@@ -1,6 +1,6 @@
 const service = require('../services/productService')
 const createError = require('http-errors')
-const Product = require('../models/product')
+const Product = require('../models/product/product')
 
 const controller = {}
 
