@@ -34,8 +34,8 @@ const Orders = () => {
   // TODO: remove mock data, and get
   const [orders, setOrders] = useState([
     {
-      customerName: 'Peter',
-      customerEmail: 'peter@email.com',
+      customerName: 'John Doe',
+      customerEmail: 'email@email.com',
       customerPhone: '123456789',
       cutomerStreetAddress: 'Storgatan 1',
       customerZip: '39230',
@@ -56,8 +56,8 @@ const Orders = () => {
       total: '2014'
     },
     {
-      customerName: 'Peter',
-      customerEmail: 'peter@email.com',
+      customerName: 'John Doe',
+      customerEmail: 'email@email.com',
       customerPhone: '123456789',
       cutomerStreetAddress: 'Storgatan 1',
       customerZip: '39230',
