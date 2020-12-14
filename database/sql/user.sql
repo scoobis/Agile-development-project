@@ -77,7 +77,16 @@ CREATE TABLE product_image (
   product_id INT NOT NULL,
   image_name VARCHAR(255) NOT NULL,
   alt_text VARCHAR(100) NOT NULL,
-  PRIMARY KEY(id),
+  PRIMARY KEY (id),
+  FOREIGN KEY (product_id) REFERENCES product(id) ON DELETE CASCADE
+);
+
+-- TAG --
+CREATE TABLE tag (
+  id INT NOT NULL AUTO_INCREMENT,
+  name VARCHAR(40) NOT NULL,
+  product_id INT NOT NULL,
+  PRIMARY KEY (id),
   FOREIGN KEY (product_id) REFERENCES product(id) ON DELETE CASCADE
 );
 
