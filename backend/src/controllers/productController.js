@@ -113,7 +113,7 @@ const parseProduct = (object) => {
     object.inStock,
     object.categories,
     [],
-    []
+    object.tags
   )
 }
 

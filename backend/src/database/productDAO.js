@@ -21,7 +21,8 @@ productDAO.create = async (product, files) => {
     const insertProductQuery = 'INSERT INTO product (producer_org_no, name, description, price, sale_price, unit, in_stock) VALUES (?, ?, ?, ?, ?, ?, ?)'
     const insertProductImgQuery = 'INSERT INTO product_image (product_id, image_name, alt_text) VALUES (?, ?, ?)'
     const insertProductCategoryQuery = 'INSERT INTO product_category value (?, ?)'
-    const { orgNumber, name, description, price, unit, salePrice, inStock, categories } = product
+    const insertProductTagQuery = 'INSERT INTO tag (name, product_id) VALUES (?, ?)'
+    const { orgNumber, name, description, price, unit, salePrice, inStock, categories, tags } = product
     const queryResults = []
 
     const productResponse = await conn.query(insertProductQuery, [orgNumber, name, description, price, salePrice, unit, inStock])
@@ -37,6 +38,13 @@ productDAO.create = async (product, files) => {
     categories.forEach(
       categoryId => queryResults.push(
         conn.query(insertProductCategoryQuery, [productId, categoryId])
+          .catch(error => { throw error })
+      )
+    )
+
+    tags.forEach(
+      tag => queryResults.push(
+        conn.query(insertProductTagQuery, [tag, productId])
           .catch(error => { throw error })
       )
     )
