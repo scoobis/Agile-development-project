@@ -90,7 +90,12 @@ CREATE TABLE orders (
   customer_street_address VARCHAR(100),
   customer_zip INT(5),
   customer_city VARCHAR(40),
-  price INT,
+  total INT,
+  subtotal INT,
+  shipping_method VARCHAR(40),
+  payment_method VARCHAR(40),
+  shipping INT,
+  discount INT,
   created DATE,
   PRIMARY KEY (id)
 );
