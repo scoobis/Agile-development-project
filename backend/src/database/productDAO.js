@@ -209,14 +209,11 @@ productDAO.getAllCategories = async () => {
  * @return {*[]}
  */
 productDAO.getAllSubCategories = async () => {
-  let conn
-  try {
-    conn = await pool.getConnection()
-    const subcategories = await conn.query('SELECT name, id, parent_id FROM category WHERE parent_id IS NOT NULL')
-    return subcategories
-  } finally {
-    if (conn) conn.release()
-  }
+  const subcategories = await pool.query('SELECT name, id, parent_id, description FROM category WHERE parent_id IS NOT NULL')
+  // FIXME:TODO:
+  // SHOULD BE:
+  // return subcategories.map(cat => new Category(cat.id, cat.parent_id, cat.name, cat.description))
+  return subcategories
 }
 
 /**
