@@ -34,7 +34,7 @@ const parseOrder = (object) => {
   object.products.forEach(element => {
     arrayWithOrderProducts.push(
       new OrderProduct(
-        element.orderID,
+        element.orderId,
         element.productId,
         element.name,
         element.unit,
