@@ -47,6 +47,7 @@ const Orders = () => {
             <StyledTableCell align='right'>Frakt</StyledTableCell>
             <StyledTableCell align='right'>Total belopp</StyledTableCell>
             <StyledTableCell align='right'>Status</StyledTableCell>
+            <StyledTableCell align='right'>Öppna</StyledTableCell>
             <StyledTableCell align='right' />
           </TableRow>
         </TableHead>

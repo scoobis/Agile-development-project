@@ -1,9 +1,8 @@
 import React, { useState } from 'react'
-import Link from 'next/link'
 import { withStyles } from '@material-ui/core/styles'
 import { IconButton, makeStyles, TableCell, TableRow } from '@material-ui/core'
-import EditIcon from '@material-ui/icons/Edit'
-import DeleteForeverIcon from '@material-ui/icons/DeleteForever'
+import ClearIcon from '@material-ui/icons/Clear'
+import CheckIcon from '@material-ui/icons/Check'
 
 const StyledTableRow = withStyles((theme) => ({
   root: {
@@ -37,12 +36,15 @@ const OrderItemTable = (order) => {
       <TableCell align='right' className={order.status === 'aktiv' ? classes.active : classes.notActive}>
         {order.status}
       </TableCell>
+      <TableCell align='right' style={{ cursor: 'pointer', fontWeight: 'bold' }}>
+        Mer info
+      </TableCell>
       <TableCell align='right'>
         <IconButton onClick={() => setAction(ACTIONS.EDIT_PRODUCT)}>
-          <EditIcon />
+          <CheckIcon />
         </IconButton>
         <IconButton onClick={() => setAction(ACTIONS.REMOVE_PRODUCT)}>
-          <DeleteForeverIcon />
+          <ClearIcon />
         </IconButton>
       </TableCell>
     </StyledTableRow>
