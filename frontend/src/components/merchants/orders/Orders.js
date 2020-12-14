@@ -42,11 +42,18 @@ const Orders = () => {
       customerCity: 'Kalmar',
       status: 'aktiv',
       id: 'jjj555',
-      fees: { total: 55 },
       products: [
         { id: 2, quantity: 5, name: 'name', price: 4 },
+        { id: 1, quantity: 6, name: 'Tomat', price: 29 },
+        { id: 2, quantity: 5, name: 'name', price: 4 },
         { id: 1, quantity: 6, name: 'Tomat', price: 29 }
-      ]
+      ],
+      shippingMethod: 'collect',
+      paymentMethod: 'upon_collect',
+      subtotal: '2014',
+      shipping: '0',
+      discount: '0',
+      total: '2014'
     },
     {
       customerName: 'Peter',
@@ -59,9 +66,16 @@ const Orders = () => {
       id: 'jjj554',
       products: [
         { id: 2, quantity: 3, name: 'name', price: 4 },
-        { id: 1, quantity: 2, name: 'Tomat', price: 29 }
+        { id: 1, quantity: 2, name: 'Tomat', price: 29 },
+        { id: 2, quantity: 5, name: 'name', price: 4 },
+        { id: 1, quantity: 6, name: 'Tomat', price: 29 }
       ],
-      fees: { total: 55 }
+      shippingMethod: 'collect',
+      paymentMethod: 'upon_collect',
+      subtotal: '2014',
+      shipping: '0',
+      discount: '0',
+      total: '2014'
     }
   ])
 

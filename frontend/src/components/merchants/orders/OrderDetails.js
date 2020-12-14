@@ -6,6 +6,8 @@ import { CURRENCY } from '../../../utils/config'
 const useStyles = makeStyles({
   bold: { fontWeight: 'bold' },
   title: { marginBottom: '15px' },
+  rightGrid: { paddingLeft: '20px' },
+  leftGrid: { paddingRight: '20px', borderRight: '1px solid #a3a3a3' },
   container: { background: '#ededed', boxShadow: 'black 1px 1px 4px', padding: '20px', borderRadius: '5px', marginTop: '20px' }
 })
 
@@ -15,7 +17,7 @@ const OrderDetials = (props) => {
 
   return (
     <Grid container className={classes.container}>
-      <Grid item xs={6} style={{ paddingRight: '20px', borderRight: '1px solid grey' }}>
+      <Grid item xs={6} className={classes.leftGrid}>
         <Typography variant='h6' className={classes.title}>
           Produkter
         </Typography>
@@ -33,7 +35,8 @@ const OrderDetials = (props) => {
           )
         })}
       </Grid>
-      <Grid item xs={6} style={{ paddingLeft: '20px' }}>
+
+      <Grid item xs={6} className={classes.rightGrid}>
         <Typography variant='h6' className={classes.title}>
           Kunden
         </Typography>
@@ -43,14 +46,46 @@ const OrderDetials = (props) => {
         <Typography variant='body1'>
           Email: <b>{order.customerEmail}</b>
         </Typography>
-        <Typography variant='body1'>
+        <Typography variant='body1' style={{ borderBottom: '1px solid #a3a3a3', paddingBottom: '15px' }}>
           Telefonnummer: <b>{order.customerPhone}</b>
         </Typography>
+
+        <Typography variant='h6' className={classes.title} style={{ marginTop: '15px' }}>
+          Frakt
+        </Typography>
         <Typography variant='body1'>
+          Frakt: <b>{order.shippingMethod}</b>
+        </Typography>
+        <Typography variant='body1'>
+          Fraktkostnad:{' '}
+          <b>
+            {order.shipping} {CURRENCY}
+          </b>
+        </Typography>
+        <Typography variant='body1' style={{ borderBottom: '1px solid #a3a3a3', paddingBottom: '15px' }}>
           Adress:{' '}
           <b>
             {order.cutomerStreetAddress}, {order.customerZip} {order.customerCity}
           </b>
+        </Typography>
+
+        <Typography variant='h6' className={classes.title} style={{ marginTop: '15px' }}>
+          Kostnad
+        </Typography>
+        <Typography variant='body1'>
+          Delsumma:{' '}
+          <b>
+            {order.subtotal} {CURRENCY}
+          </b>
+        </Typography>
+        <Typography variant='body1'>
+          Totalsumma:{' '}
+          <b>
+            {order.total} {CURRENCY}
+          </b>
+        </Typography>
+        <Typography variant='body1'>
+          Betalmetod: <b>{order.paymentMethod}</b>
         </Typography>
       </Grid>
     </Grid>

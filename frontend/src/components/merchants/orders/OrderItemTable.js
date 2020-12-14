@@ -39,7 +39,7 @@ const OrderItemTable = (props) => {
       </TableCell>
       <TableCell align='right'>{order.customerEmail}</TableCell>
       <TableCell align='right'>Hämtas på plats</TableCell>
-      <TableCell align='right'>{order.fees.total} SEK</TableCell>
+      <TableCell align='right'>{order.total} SEK</TableCell>
       <TableCell align='right' className={order.status === 'aktiv' ? classes.active : classes.notActive}>
         {order.status}
       </TableCell>
