@@ -20,13 +20,16 @@ const useStyles = makeStyles({
   notActive: { color: 'red', fontWeight: 'bold' }
 })
 
-const OrderItemTable = (order, setOrderDetialsComponent) => {
+const OrderItemTable = (props) => {
   const classes = useStyles()
 
-  order = order.order // why does it become order.order?...
-  const test = () => {
-    console.log(setOrderDetialsComponent)
-    setOrderDetialsComponent('active')
+  const { order, setOrderDetialsComponent } = props
+
+  const [activeDetials, setActiveDetails] = useState(false)
+
+  const openOrderDetails = () => {
+    activeDetials ? setOrderDetialsComponent('') : setOrderDetialsComponent('active')
+    setActiveDetails(!activeDetials)
   }
 
   return (
@@ -40,8 +43,8 @@ const OrderItemTable = (order, setOrderDetialsComponent) => {
       <TableCell align='right' className={order.status === 'aktiv' ? classes.active : classes.notActive}>
         {order.status}
       </TableCell>
-      <TableCell align='right' style={{ cursor: 'pointer', fontWeight: 'bold' }} onClick={test()}>
-        Mer info
+      <TableCell align='right' style={{ cursor: 'pointer', fontWeight: 'bold' }} onClick={() => openOrderDetails()}>
+        {!activeDetials ? 'Öppna' : 'Stäng'}
       </TableCell>
       <TableCell align='right'>
         <IconButton onClick={() => setAction(ACTIONS.EDIT_PRODUCT)}>
