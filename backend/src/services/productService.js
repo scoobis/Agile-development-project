@@ -30,7 +30,14 @@ service.create = async (product, files) => {
  * @param {Product} product
  */
 service.update = async (product) => {
-  await productDAO.update(product)
+  try {
+    await productDAO.update(product)
+  } catch (error) {
+    if (product.images) {
+      product.images.forEach(file => fs.unlinkSync(file.path))
+    }
+    throw error
+  }
 }
 
 /**

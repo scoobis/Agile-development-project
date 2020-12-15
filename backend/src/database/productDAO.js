@@ -76,6 +76,7 @@ productDAO.update = async (product) => {
     const queryResults = []
 
     const updateProductQuery = 'UPDATE product SET producer_org_no=?, name=?, description=?, price=?, sale_price=?, unit=?, in_stock=? WHERE id=?'
+    const insertProductImgQuery = 'INSERT INTO product_image (product_id, image_name, alt_text) VALUES (?, ?, ?)'
     const deleteAllCategoriesFromProductQuery = 'DELETE FROM product_category WHERE product_id=?'
     const deleteAllTagsFromProductQuery = 'DELETE FROM product_tag WHERE product_id=?'
     const insertCategoryToProductQuery = 'INSERT INTO product_category value (?, ?)'
@@ -86,6 +87,13 @@ productDAO.update = async (product) => {
     await conn.query(deleteAllCategoriesFromProductQuery, [id])
 
     await conn.query(deleteAllTagsFromProductQuery, [id])
+
+    product.images.forEach(
+      image => queryResults.push(
+        conn.query(insertProductImgQuery, [id, image.imageName, image.altText])
+          .catch(error => { throw error })
+      )
+    )
 
     categories.forEach(
       categoryId => queryResults.push(
