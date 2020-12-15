@@ -88,6 +88,7 @@ const CheckoutForm = (props) => {
       discount: '0', // TODO: what is the intention
       total: cartContext.total
     })
+    // TODO: fail msg or go to a success page or something?
   }
 
   const classes = useStyles()
