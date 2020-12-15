@@ -21,17 +21,17 @@ const SpecificProduct = (props) => {
   const getImages = () =>
     images && images.length
       ? images.map((img) => ({
-        id: img.id,
-        alt: img.alt_text,
-        src: `${API_URL}/static/${img.image_name}`
-      }))
+          id: img.id,
+          alt: img.altText,
+          src: `${API_URL}/static/${img.imageName}`
+        }))
       : [
-        {
-          id: 1,
-          alt: 'Apples',
-          src: '/apples.JPG'
-        }
-      ]
+          {
+            id: 1,
+            alt: 'Apples',
+            src: '/apples.JPG'
+          }
+        ]
 
   return (
     <Container>

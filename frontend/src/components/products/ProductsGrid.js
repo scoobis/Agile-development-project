@@ -6,7 +6,7 @@ import ProductCard from './ProductCard'
 const ProductsGrid = ({ products }) => {
   const getFirstImage = (images) => {
     if (images.length) {
-      return `${API_URL}/static/${images[0].image_name}`
+      return `${API_URL}/static/${images[0].imageName}`
     }
     return '/apples.jpg'
   }

@@ -66,17 +66,17 @@ const ProductForm = ({ onSubmit, preFilled }) => {
     })
   }, [])
 
-  async function convertInitialImagesToFiles () {
+  async function convertInitialImagesToFiles() {
     if (preFilled && preFilled.images) {
       const files = await Promise.all(
         preFilled.images.map(async (image) => {
-          const url = `${API_URL}/static/${image.image_name}`
+          const url = `${API_URL}/static/${image.imageName}`
           const response = await window.fetch(url)
           const blob = await response.blob()
           const finalResult = await blobToBase64(blob)
           const file = {}
           file.data = finalResult
-          file.file = new window.File([blob], image.image_name, { type: blob.type })
+          file.file = new window.File([blob], image.imageName, { type: blob.type })
           return file
         })
       )
@@ -357,7 +357,7 @@ const ProductForm = ({ onSubmit, preFilled }) => {
               <Typography variant='h5'>Taggar</Typography>
             </Box>
             <Box pb={2}>
-              <SelectTags onChange={handleTagsChange} defaultValues={state.tags} max={15} />
+              <SelectTags onChange={handleTagsChange} defaultValues={state.product.tags} max={15} />
             </Box>
           </Grid>
           <Grid item xs={12}>
