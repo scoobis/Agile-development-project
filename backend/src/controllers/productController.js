@@ -1,6 +1,7 @@
 const service = require('../services/productService')
 const createError = require('http-errors')
 const Product = require('../models/product/product')
+const ProductImage = require('../models/product/productimage')
 
 const controller = {}
 
@@ -18,9 +19,12 @@ controller.create = async (req, res, next) => {
 
 controller.update = async (req, res, next) => {
   try {
-    const product = parseProduct(req.body)
-    product.id = req.params.id
-
+    const productId = req.params.id
+    const images = req.files.map(file => new ProductImage(null, null, file.filename, file.originalname))
+    const product = new Product(productId, req.body.orgNumber, req.body.name,
+      req.body.description, req.body.price, req.body.salePrice, req.body.unit,
+      req.body.inStock, req.body.categories, images, req.body.tags)
+    // TODO: Where to get images to delete?
     await service.update(product)
     res.status(200).json({ success: true, message: 'Product updated!' })
   } catch (error) {
