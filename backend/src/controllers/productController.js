@@ -21,6 +21,9 @@ controller.create = async (req, res, next) => {
 }
 
 controller.update = async (req, res, next) => {
+  if (req.user.role !== 'producer') {
+    return next(createError(403, 'Bara producenter får uppdatera produkter.'))
+  }
   try {
     const productId = req.params.id
     const images = req.files.map(file => new ProductImage(null, null, file.filename, file.originalname))
@@ -36,6 +39,9 @@ controller.update = async (req, res, next) => {
 }
 
 controller.delete = async (req, res, next) => {
+  if (req.user.role !== 'producer') {
+    return next(createError(403, 'Bara producenter får radera produkter.'))
+  }
   try {
     const id = req.params.id
 
