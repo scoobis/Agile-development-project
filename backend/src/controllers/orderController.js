@@ -31,17 +31,8 @@ controller.sendorder = async (req, res, next) => {
 
 const parseOrder = (object) => {
   const arrayWithOrderProducts = []
-  object.products.forEach(element => {
-    arrayWithOrderProducts.push(
-      new OrderProduct(
-        element.orderId,
-        element.productId,
-        element.name,
-        element.unit,
-        element.price,
-        element.quantity
-      )
-    )
+  object.products.forEach((element) => {
+    arrayWithOrderProducts.push(new OrderProduct(element.orderId, element.productId, element.name, element.unit, element.price, element.quantity))
   })
 
   return new Order(

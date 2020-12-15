@@ -66,7 +66,14 @@ const CheckoutForm = (props) => {
       zip: { ...zip, hasError: !isValidZipCode(zip.value) }
     })
 
-    const test = {
+    // Backend wants productId instead of id on products
+    cartContext.cartProducts = cartContext.cartProducts.map((product) => {
+      const { id: productId } = product
+      delete product.id
+      return { productId, ...product }
+    })
+    newOrder({
+      orgNumber: cartContext.cartProducts[0].orgNumber, // take orgNumber from first product, since all should be from the same producer
       customerName: state.name.value,
       customerEmail: state.email.value,
       customerPhone: state.phone.value,
@@ -80,24 +87,7 @@ const CheckoutForm = (props) => {
       shipping: '0', // no shipping required atm
       discount: '0', // TODO: what is the intention
       total: cartContext.total
-    }
-    console.log(test)
-    /*
-    newOrder({
-      customerName: state.name,
-      customerEmail: state.email,
-      customerPhone: state.phone,
-      customerStreetAddress: state.streetAddress,
-      customerZip: state.zip,
-      customerCity: state.city,
-      products: products,
-      shippingMethod: 'collect', // Only option atm
-      paymentMethod: 'upon_collect', // only option atm
-      subtotal: cartContext.total, // TODO: calc subTotal (not required atm?)
-      shipping: '0', // no shipping required atm
-      discount: '0', // TODO: what is the intention
-      total: cartContext.total
-    })*/
+    })
   }
 
   const classes = useStyles()

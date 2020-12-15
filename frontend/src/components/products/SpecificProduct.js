@@ -16,7 +16,7 @@ const SpecificProduct = (props) => {
     })
   }, [props])
 
-  const { name, description, price, salePrice, unit, inStock, id, images } = product
+  const { name, description, price, salePrice, unit, inStock, id, images, orgNumber } = product
 
   const getImages = () =>
     images && images.length
@@ -48,6 +48,7 @@ const SpecificProduct = (props) => {
             unit={unit}
             id={id}
             description={description}
+            orgNumber={orgNumber}
           />
         </Grid>
       </Grid>

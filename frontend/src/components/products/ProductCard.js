@@ -37,10 +37,12 @@ const useStyles = makeStyles({
 })
 
 const ProductCard = (props) => {
-  const { id, name, price, unit, inStock, imgSrc } = props
+  const { id, name, price, unit, inStock, imgSrc, orgNumber } = props
   const { addProduct } = useContext(CartContext)
   const [amount, setAmount] = useState(1)
   const classes = useStyles()
+
+  console.log(orgNumber)
 
   const handleAmountChange = (value) => setAmount(value)
 
@@ -64,7 +66,7 @@ const ProductCard = (props) => {
         </a>
       </Link>
       <CardActions>
-        <Button variant='contained' color='primary' onClick={() => addProduct({ id, amount, name, price })}>
+        <Button variant='contained' color='primary' onClick={() => addProduct({ id, amount, name, price, unit, orgNumber })}>
           Köp
         </Button>
         <PickAmount inStock={inStock} handleAmountChange={handleAmountChange} />

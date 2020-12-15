@@ -25,6 +25,7 @@ const ProductsGrid = ({ products }) => {
                 imgSrc={getFirstImage(product.images)}
                 id={product.id}
                 unit={product.unit}
+                orgNumber={product.orgNumber}
               />
             </Grid>
           ))
