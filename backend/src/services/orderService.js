@@ -8,7 +8,7 @@ service.get = async (req) => {
 }
 
 service.order = async (order) => {
-  orderDAO.order(order)
+  await orderDAO.order(order)
 }
 
 module.exports = service
