@@ -182,11 +182,34 @@ VALUES
 
 INSERT INTO product (producer_org_no, name, description, price, sale_price, unit, in_stock) 
 VALUES
-  ('1111111111', 'Tomat', 'Röd', 29, 19, 'kg', 10);
+  ('1111111111', 'Tomat', 'Röd tomat', 29, 19, 'kg', 10),
+  ('1111111111', 'Gurka', 'Grön gurka', 12, null, 'st', 10),
+  ('1111111111', 'Äpple', 'Royal Gala', 34, null, 'kg', 10),
+  ('1111111111', 'Päron', 'Conference', 44, 39, 'kg', 10),
+  ('1111111111', 'Ruccola', 'Färsk ruccola sallad', 129, 119, 'kg', 10);
 
 INSERT INTO product_category (product_id, category_id) 
 VALUES
-  ('1', '1');
+  (1, 1),
+  (1, 2),
+  (2, 1),
+  (2, 3),
+  (3, 10),
+  (3, 11),
+  (4, 10),
+  (4, 12),
+  (5, 1),
+  (5, 4);
+
+INSERT INTO product_tag (name, product_id) 
+VALUES
+  ('Nyhet', 1),
+  ('Söta', 1),
+  ('Nyhet', 2),
+  ('Raka', 2),
+  ('Spanska', 3),
+  ('Svenska', 4),
+  ('Färsk', 5);
 
 --INSERT INTO product_image (product_id, image_name, alt_text)
 --VALUES

@@ -86,6 +86,17 @@ controller.getAllFromCategory = async (req, res, next) => {
   }
 }
 
+controller.getAllByName = async (req, res, next) => {
+  try {
+    const name = req.params.name
+
+    const result = await service.getAllByName(name)
+    res.status(200).json(result)
+  } catch (error) {
+    return next(error)
+  }
+}
+
 controller.getAllCategories = async (req, res, next) => {
   try {
     const result = await service.getAllCategories()

@@ -218,6 +218,43 @@ productDAO.getAllByCategoryId = async (categoryId) => {
 }
 
 /**
+ * Gets all products that has a name, category name or tag name that match the name provided
+ *
+ * @param {String} name
+ * @return {Promise<Product[]>} products
+ */
+productDAO.getAllByName = async (name) => {
+  const wildcard = `%${name}%`
+  const products = []
+
+  const selectProductsByCategoryName =
+  `SELECT product.* FROM product
+   INNER JOIN product_category ON product.id = product_category.product_id 
+   INNER JOIN category ON product_category.category_id = category.id AND category.name LIKE ?`
+
+  const selectProductsByTagName =
+  `SELECT product.* FROM product
+   INNER JOIN product_tag ON product.id = product_tag.product_id AND product_tag.name LIKE ?`
+
+  const selectProductsByProductName = 'SELECT * FROM product WHERE name LIKE ?'
+
+  const union = `${selectProductsByCategoryName} UNION ${selectProductsByTagName} UNION ${selectProductsByProductName}`
+
+  const rows = await pool.query(union, [wildcard, wildcard, wildcard])
+
+  await Promise.all(
+    rows.map(async (product) => {
+      product.categories = await productDAO.getCategories(product.id)
+      product.images = await productDAO.getImages(product.id)
+      product.tags = await productDAO.getTags(product.id)
+      products.push(parseProduct(product))
+    })
+  )
+
+  return products
+}
+
+/**
  * Get all categories.
  *
  * @return {Promise<Category[]>}
@@ -288,7 +325,10 @@ productDAO.getCategories = async (productId) => {
  */
 productDAO.getImages = async (productId) => {
   const images = []
-  const result = await pool.query('SELECT * FROM product_image WHERE product_id = ?', [productId])
+  const selectImagesByProductId = 'SELECT * FROM product_image WHERE product_id = ?'
+
+  const result = await pool.query(selectImagesByProductId, [productId])
+
   result.forEach(
     result => images.push(new ProductImage(result.id, result.product_id, result.image_name, result.alt_text))
   )
@@ -305,42 +345,14 @@ productDAO.getImages = async (productId) => {
  */
 productDAO.getTags = async (productId) => {
   const tags = []
-  const result = await pool.query('SELECT id, name, product_id FROM product_tag WHERE product_id = ?', [productId])
+  const selectTagsByProductId = 'SELECT id, name, product_id FROM product_tag WHERE product_id = ?'
+
+  const result = await pool.query(selectTagsByProductId, [productId])
+
   result.forEach(
     result => tags.push(new ProductTag(result.id, result.name, result.product_id))
   )
   return tags
-}
-
-productDAO.search = async (search) => {
-  const wildcard = `%${search}%`
-  const products = []
-
-  const selectProductsByCategoryName =
-  `SELECT product.* FROM product
-   INNER JOIN product_category ON product.id = product_category.product_id 
-   INNER JOIN category ON product_category.category_id = category.id AND category.name LIKE ?`
-
-  const selectProductsByTagName =
-  `SELECT product.* FROM product
-   INNER JOIN product_tag ON product.id = product_tag.product_id AND product_tag.name LIKE ?`
-
-  const selectProductsByProductName = 'SELECT * FROM product WHERE name LIKE ?'
-
-  const union = `${selectProductsByCategoryName} UNION ${selectProductsByTagName} UNION ${selectProductsByProductName}`
-
-  const rows = await pool.query(union, [wildcard, wildcard, wildcard])
-
-  await Promise.all(
-    rows.map(async (product) => {
-      product.categories = await productDAO.getCategories(product.id)
-      product.images = await productDAO.getImages(product.id)
-      product.tags = await productDAO.getTags(product.id)
-      products.push(parseProduct(product))
-    })
-  )
-
-  return products
 }
 
 /**
