@@ -23,9 +23,8 @@ controller.update = async (req, res, next) => {
     const images = req.files.map(file => new ProductImage(null, null, file.filename, file.originalname))
     const product = new Product(productId, req.body.orgNumber, req.body.name,
       req.body.description, req.body.price, req.body.salePrice, req.body.unit,
-      req.body.inStock, req.body.categories, images, req.body.tags
-    )
-    // Where to get images to delete?
+      req.body.inStock, req.body.categories, images, req.body.tags)
+    // TODO: Where to get images to delete?
     await service.update(product)
     res.status(200).json({ success: true, message: 'Product updated!' })
   } catch (error) {
