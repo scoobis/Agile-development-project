@@ -6,6 +6,9 @@ const ProductImage = require('../models/product/productimage')
 const controller = {}
 
 controller.create = async (req, res, next) => {
+  if (req.user.role !== 'producer') {
+    return next(createError(403, 'Bara producenter får skapa produkter.'))
+  }
   try {
     const product = parseProduct(req.body)
     const files = req.files
