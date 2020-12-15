@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
+import { newOrder } from '../../utils/api'
 import {
   isValidName,
   isValidEmail,
@@ -32,7 +33,9 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
-const CheckoutForm = () => {
+const CheckoutForm = (props) => {
+  const { cartContext } = props
+
   const [state, setState] = useState({
     name: { value: '', hasError: false, helperText: '' },
     email: { value: '', hasError: false, helperText: '' },
@@ -63,7 +66,38 @@ const CheckoutForm = () => {
       zip: { ...zip, hasError: !isValidZipCode(zip.value) }
     })
 
-    // TODO: Submit form
+    const test = {
+      customerName: state.name.value,
+      customerEmail: state.email.value,
+      customerPhone: state.phone.value,
+      customerStreetAddress: state.streetAddress.value,
+      customerZip: state.zip.value,
+      customerCity: state.city.value,
+      products: cartContext.cartProducts,
+      shippingMethod: 'collect', // Only option atm
+      paymentMethod: 'upon_collect', // only option atm
+      subtotal: cartContext.total, // TODO: calc subTotal (not required atm?)
+      shipping: '0', // no shipping required atm
+      discount: '0', // TODO: what is the intention
+      total: cartContext.total
+    }
+    console.log(test)
+    /*
+    newOrder({
+      customerName: state.name,
+      customerEmail: state.email,
+      customerPhone: state.phone,
+      customerStreetAddress: state.streetAddress,
+      customerZip: state.zip,
+      customerCity: state.city,
+      products: products,
+      shippingMethod: 'collect', // Only option atm
+      paymentMethod: 'upon_collect', // only option atm
+      subtotal: cartContext.total, // TODO: calc subTotal (not required atm?)
+      shipping: '0', // no shipping required atm
+      discount: '0', // TODO: what is the intention
+      total: cartContext.total
+    })*/
   }
 
   const classes = useStyles()

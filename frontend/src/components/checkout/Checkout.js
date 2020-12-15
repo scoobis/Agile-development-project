@@ -12,7 +12,7 @@ const Checkout = () => {
     <Container>
       <Grid container spacing={2}>
         <Grid item xs={8}>
-          <CheckoutForm />
+          <CheckoutForm cartContext={state} />
         </Grid>
         <Grid item xs={4}>
           <OrderCard state={state} />

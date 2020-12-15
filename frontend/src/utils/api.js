@@ -114,3 +114,9 @@ export const editProduct = (product) => {
     .then((response) => response.data)
     .catch((err) => err.response)
 }
+
+export const newOrder = (order) =>
+  axios
+    .post('/order', order)
+    .then((response) => response)
+    .catch((err) => err.response)
