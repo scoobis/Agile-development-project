@@ -27,6 +27,11 @@ export const addProduct = (product) => {
 
   fd.append('inStock', product.inStock)
   product.categories.forEach((category) => fd.append('categories[]', category))
+
+  if (product.tags) {
+    product.tags.forEach((tag) => fd.append('tags[]', tag))
+  }
+
   fd.append('orgNumber', product.orgNumber)
 
   return axios
@@ -95,6 +100,13 @@ export const editProduct = (product) => {
 
   fd.append('inStock', product.inStock)
   product.categories.forEach((category) => fd.append('categories[]', category))
+
+  if (product.tags) {
+    product.tags.forEach((tag) => fd.append('tags[]', tag))
+  } else {
+    fd.append('tags[]', [])
+  }
+
   fd.append('orgNumber', product.orgNumber)
 
   return axios
