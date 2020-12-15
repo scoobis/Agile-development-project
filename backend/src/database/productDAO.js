@@ -312,6 +312,32 @@ productDAO.getTags = async (productId) => {
   return tags
 }
 
+productDAO.search = async (search) => {
+  const wildcard = `%${search}%`
+  const products = []
+
+  const selectProductsByCategoryName =
+  `SELECT product.* FROM product
+   INNER JOIN product_category ON product.id = product_category.product_id 
+   INNER JOIN category ON product_category.category_id = category.id AND category.name LIKE ?`
+
+  const selectProductsByTagName =
+  `SELECT product.* FROM product
+   INNER JOIN product_tag ON product.id = product_tag.product_id AND product_tag.name LIKE ?`
+
+  const selectProductByProductName = 'SELECT * FROM product WHERE name LIKE ?'
+
+  const fromCategories = await pool.query(selectProductsByCategoryName, [wildcard])
+  const fromTags = await pool.query(selectProductsByTagName, [wildcard])
+  const fromProduct = await pool.query(selectProductByProductName, [wildcard])
+
+  fromCategories.forEach(product => products.push(parseProduct(product)))
+  fromTags.forEach(product => products.push(parseProduct(product)))
+  fromProduct.forEach(product => products.push(parseProduct(product)))
+
+  return products
+}
+
 /**
  *
  * Private functions.
