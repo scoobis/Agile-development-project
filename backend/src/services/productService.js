@@ -31,6 +31,7 @@ service.create = async (product, files) => {
  */
 service.update = async (product) => {
   try {
+    await productDAO.get(product.id)
     await productDAO.update(product)
   } catch (error) {
     if (product.images) {
