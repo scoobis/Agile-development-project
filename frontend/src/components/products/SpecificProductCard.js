@@ -22,7 +22,7 @@ const SpecificProductCard = (props) => {
     outOfStock: { color: 'red' }
   }))
 
-  const { name, price, salePrice, unit, inStock, id, description } = props
+  const { name, price, salePrice, unit, inStock, id, description, orgNumber } = props
   const [amount, setAmount] = useState(1)
   const { addProduct } = useContext(CartContext)
   const classes = useStyles()
@@ -31,7 +31,7 @@ const SpecificProductCard = (props) => {
   const handleAmountChange = (value) => setAmount(value)
 
   const handleAddToCart = () => {
-    addProduct({ id, amount, name, price })
+    addProduct({ id, amount, name, price, unit, orgNumber })
 
     enqueueSnackbar(`${name} har lagts till i varukorgen`, {
       variant: 'success',
@@ -82,14 +82,7 @@ const SpecificProductCard = (props) => {
           <Grid item xs={12}>
             <Box display='flex' pb={3} pt={3}>
               <PickAmount inStock={inStock} handleAmountChange={handleAmountChange} />
-              <Button
-                disabled={inStock === 0}
-                size='large'
-                fullWidth
-                variant='contained'
-                color='primary'
-                onClick={handleAddToCart}
-              >
+              <Button disabled={inStock === 0} size='large' fullWidth variant='contained' color='primary' onClick={handleAddToCart}>
                 {inStock === 0 ? 'Slut i lager' : 'Lägg i kundvagn'}
               </Button>
             </Box>
