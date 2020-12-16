@@ -68,7 +68,8 @@ validate.producer = async (req, res, next) => {
  * @param {*} next
  */
 validate.product = async (req, res, next) => {
-  const { orgNumber, name, description, price, salePrice, unit, inStock, categories, images, tags } = req.body
+  const { name, description, price, salePrice, unit, inStock, categories, images, tags } = req.body
+  const { orgNumber } = req.user
   /**
    * OrgNumber
    */

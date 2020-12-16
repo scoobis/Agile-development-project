@@ -28,7 +28,9 @@ authorize.verifyJWT = async (req, res, next) => {
   if (header) {
     const token = header.split(' ')[1]
     jwt.verify(token, 'shhhhh', (err, user) => {
-      if (err) { next(err) }
+      if (err) {
+        next(err)
+      }
       req.user = user
       next()
     })
