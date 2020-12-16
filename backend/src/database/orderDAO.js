@@ -1,4 +1,7 @@
 const pool = require('./databaseConnection')
+const createError = require('http-errors')
+const Order = require('../models/order')
+const OrderProduct = require('../models/orderProduct')
 
 const orderDAO = {}
 
@@ -34,4 +37,51 @@ orderDAO.order = async (order) => {
     if (conn) conn.release()
   }
 }
+
+orderDAO.getAllOrdersFromProducer = async (orgNumber) => {
+  const getAllOrders = 'SELECT * FROM orders WHERE producer_org_no=?'
+  const getAllProductsFromOrder = 'SELECT * FROM order_product WHERE order_id=?'
+  const [orders] = await pool.query(getAllOrders, orgNumber)
+
+  if (orders) {
+    for (const order of [orders]) {
+      const products = await pool.query(getAllProductsFromOrder, order.id)
+      order.products = products
+    }
+
+    return parseOrder([orders])
+  } else {
+    throw createError(400, 'You do not have any orders!')
+  }
+}
+
+const parseOrder = (object) => {
+  const orders = []
+  object.forEach(order => {
+    const arrayWithOrderProducts = []
+    order.products.forEach((element) => {
+      arrayWithOrderProducts.push(new OrderProduct(element.orderId, element.productId, element.name, element.unit, element.price, element.quantity, element.id))
+    })
+
+    orders.push(new Order(
+      order.producer_org_no,
+      order.customer_name,
+      order.customer_phone_no,
+      order.customer_street_address,
+      order.customer_zip,
+      order.customer_city,
+      arrayWithOrderProducts,
+      order.shipping_method,
+      order.payment_method,
+      order.subtotal,
+      order.shipping,
+      order.discount,
+      order.total,
+      order.created,
+      order.id
+    ))
+  })
+  return orders
+}
+
 module.exports = orderDAO

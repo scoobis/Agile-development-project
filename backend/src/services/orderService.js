@@ -11,4 +11,8 @@ service.order = async (order) => {
   await orderDAO.order(order)
 }
 
+service.getAllOrdersFromProducer = async (orgNumber) => {
+  return orderDAO.getAllOrdersFromProducer(orgNumber)
+}
+
 module.exports = service
