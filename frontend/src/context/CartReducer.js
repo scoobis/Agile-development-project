@@ -11,14 +11,14 @@ export const CartReducer = (state, action) => {
     case 'REMOVE_PRODUCT':
       return removeProduct(state, action.payload)
     case 'CLEAR_CART':
-      return clearCart
+      return clearCart()
     default:
       return { ...state }
   }
 }
 
 const clearCart = () => {
-  saveInStorage('cart', { cartProducts: [] })
+  saveInStorage('cart', [{}])
   return { cartProducts: [] }
 }
 
