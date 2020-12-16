@@ -10,7 +10,10 @@ controller.create = async (req, res, next) => {
     return next(createError(403, 'Bara producenter får skapa produkter.'))
   }
   try {
-    const product = parseProduct(req.body)
+    const product = parseProduct({
+      ...req.body,
+      orgNumber: req.user.orgNumber
+    })
     const files = req.files
 
     await service.create(product, files)
@@ -26,10 +29,20 @@ controller.update = async (req, res, next) => {
   }
   try {
     const productId = req.params.id
-    const images = req.files.map(file => new ProductImage(null, null, file.filename, file.originalname))
-    const product = new Product(productId, req.body.orgNumber, req.body.name,
-      req.body.description, req.body.price, req.body.salePrice, req.body.unit,
-      req.body.inStock, req.body.categories, images, req.body.tags)
+    const images = req.files.map((file) => new ProductImage(null, null, file.filename, file.originalname))
+    const product = new Product(
+      productId,
+      req.user.orgNumber,
+      req.body.name,
+      req.body.description,
+      req.body.price,
+      req.body.salePrice,
+      req.body.unit,
+      req.body.inStock,
+      req.body.categories,
+      images,
+      req.body.tags
+    )
     // TODO: Where to get images to delete?
     await service.update(product)
     res.status(200).json({ success: true, message: 'Product updated!' })
@@ -126,6 +139,7 @@ controller.getAllCategories = async (req, res, next) => {
  * @returns {Product} product
  */
 const parseProduct = (object) => {
+  console.log(object)
   return new Product(
     null,
     object.orgNumber,

@@ -32,8 +32,6 @@ export const addProduct = (product) => {
     product.tags.forEach((tag) => fd.append('tags[]', tag))
   }
 
-  fd.append('orgNumber', product.orgNumber)
-
   return axios
     .post('/product', fd)
     .then((response) => response.data)
@@ -64,9 +62,9 @@ export const getOneProduct = (id) =>
     .then((response) => response.data)
     .catch((err) => err.response)
 
-export const removeProduct = ({ id, orgNumber }) => {
+export const removeProduct = (id) => {
   return axios
-    .delete(`/product/${id}`, { data: { orgNumber } })
+    .delete(`/product/${id}`)
     .then((response) => response.data)
     .catch((err) => err.response)
 }
@@ -106,8 +104,6 @@ export const editProduct = (product) => {
   } else {
     fd.append('tags[]', [])
   }
-
-  fd.append('orgNumber', product.orgNumber)
 
   return axios
     .put(`/product/${product.id}`, fd)

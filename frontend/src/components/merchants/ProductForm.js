@@ -151,7 +151,6 @@ const ProductForm = ({ onSubmit, preFilled }) => {
     } else {
       const toSave = {
         ...state.product,
-        orgNumber: user.user.orgNumber,
         categories: getParentCategoriesForChildren() || [],
         description: state.product.description || null,
         salePrice: state.product.salePrice || null

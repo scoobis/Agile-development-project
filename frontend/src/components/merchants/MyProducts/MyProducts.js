@@ -30,7 +30,7 @@ const useStyles = makeStyles({
   }
 })
 
-export default function MyProducts () {
+const MyProducts = () => {
   const classes = useStyles()
   const [products, setProducts] = useState([])
   const { user } = useAuth()
@@ -49,7 +49,7 @@ export default function MyProducts () {
     })
 
   const handleRemoveProduct = (id) => {
-    removeProduct({ id, orgNumber: user.user.orgNumber })
+    removeProduct(id)
       .then((response) => response.success && setProducts(products.filter((product) => product.id !== id)))
       .catch(console.log)
   }
@@ -80,3 +80,5 @@ export default function MyProducts () {
     <Typography>Inga produkter hittades</Typography>
   )
 }
+
+export default MyProducts
