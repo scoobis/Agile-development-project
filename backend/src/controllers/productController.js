@@ -105,9 +105,8 @@ controller.getAllFromCategory = async (req, res, next) => {
   try {
     const categoryId = req.params.categoryId
 
-    const category = await service.getCategory(categoryId)
-    const products = await service.getAllFromCategory(categoryId)
-    res.status(200).json({ name: category.name, products: products })
+    const result = await service.getAllFromCategory(categoryId)
+    res.status(200).json(result)
   } catch (error) {
     return next(error)
   }

@@ -87,10 +87,13 @@ service.getAllFromProducer = async (orgNumber) => {
  * Returns all products from a category
  *
  * @param {Number} categoryId
- * @returns {Promise<Product[]>}
+ * @returns {Object{String, Product[]}} { name: categoryName, products: [] }
  */
 service.getAllFromCategory = async (categoryId) => {
-  return productDAO.getAllByCategoryId(categoryId)
+  const category = await productDAO.getCategoryById(categoryId)
+  const products = await productDAO.getAllByCategoryId(category.id)
+
+  return { name: category.name, products: products }
 }
 
 /**
