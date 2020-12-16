@@ -295,11 +295,16 @@ productDAO.getAllSubCategories = async () => {
  *
  * @param {Number} id
  * @return {Promise<Category>}
+ * @throws {SqlError|HttpError} - SqlError|Error Object
  */
 productDAO.getCategoryById = async (id) => {
   const selectCategoryByIdQuery = 'SELECT name, id, parent_id, description FROM category WHERE id=?'
   const [category] = await pool.query(selectCategoryByIdQuery, [id])
-  return new Category(category.id, category.parent_id, category.name, category.description)
+  if (category) {
+    return new Category(category.id, category.parent_id, category.name, category.description)
+  } else {
+    throw createError(400, 'Category not found!')
+  }
 }
 
 /**
