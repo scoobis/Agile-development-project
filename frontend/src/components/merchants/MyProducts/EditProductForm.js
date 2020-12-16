@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
-export default function EditProductForm ({ product, onClose }) {
+const EditProductForm = ({ product, onClose }) => {
   const [open, setOpen] = React.useState(true)
   const { user } = useAuth()
   const classes = useStyles()
@@ -52,10 +52,16 @@ export default function EditProductForm ({ product, onClose }) {
       </DialogTitle>
       <DialogContent dividers className={classes.dialogContent}>
         <ProductForm
-          preFilled={{ ...product, categories: product.categories.map((c) => c.id) }}
+          preFilled={{
+            ...product,
+            categories: product.categories.map((c) => c.id),
+            tags: product.tags.map((t) => t.name)
+          }}
           onSubmit={handleEditProduct}
         />
       </DialogContent>
     </Dialog>
   )
 }
+
+export default EditProductForm
