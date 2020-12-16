@@ -4,7 +4,7 @@ const authorize = require('../middlewares/authorize')
 
 // Order
 router.get('/:id', controller.get)
-router.get('/producer/orders', controller.getAllOrdersFromProducer)
+router.get('/producer/orders', authorize.verifyJWT, controller.getAllOrdersFromProducer)
 router.post('/', controller.sendorder)
 
 module.exports = router
