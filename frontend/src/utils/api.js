@@ -53,8 +53,8 @@ export const getProductsByProducer = (orgNumber) =>
 export const getAllProductsFromCategory = (id) =>
   axios
     .get(`/products/fromCategory/${id}`)
-    .then((response) => response.data)
-    .catch((err) => err.response)
+    .then((response) => ({ data: response.data }))
+    .catch((error) => ({ error: error }))
 
 export const getOneProduct = (id) =>
   axios

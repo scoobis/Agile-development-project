@@ -11,23 +11,29 @@ const ProductCategory = () => {
   const { id } = router.query
   const [isLoading, setLoading] = useState(false)
   const [products, setProducts] = useState([])
+  const [name, setName] = useState('')
 
   useEffect(() => {
     setLoading(true)
     setProducts([])
+    setName('')
 
-    getAllProductsFromCategory(id).then((res) => {
-      if (res && res.length) {
-        setProducts(res)
-      }
-      setLoading(false)
-    })
+    if (id) {
+      getAllProductsFromCategory(id).then(({ data }) => {
+        setLoading(false)
+
+        if (data) {
+          setName(data.name)
+          setProducts(data.products)
+        }
+      })
+    }
   }, [id])
 
   return (
     <>
       <Head>
-        <title>{id}</title>
+        <title>{name}</title>
       </Head>
       <Layout>
         <Container maxWidth='lg'>
@@ -35,7 +41,7 @@ const ProductCategory = () => {
             <Grid item xs={12}>
               <Box pb={3}>
                 <Typography variant='h1' component='h1' align='center'>
-                  Produkt kategori {id}
+                  {name}
                 </Typography>
               </Box>
             </Grid>
