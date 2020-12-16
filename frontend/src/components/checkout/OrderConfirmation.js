@@ -13,6 +13,8 @@ const useStyles = makeStyles({
 const OrderConfirmation = () => {
   const { state } = useContext(CartContext)
 
+  console.log(state)
+
   const classes = useStyles()
   // TODO: Shipping and payment is hardcoded (Only option atm)
   return (
@@ -24,36 +26,29 @@ const OrderConfirmation = () => {
         <AccordionGroup
           items={[
             {
-              heading: 'Om producenten',
+              heading: 'Produkter',
               content: (
                 <Grid container align='left'>
-                  <Grid container style={{ borderBottom: '1px solid #d4d4d4', marginBottom: '15px', paddingBottom: '10px' }}>
-                    <Grid item xs={4}>
-                      <img src='/apples.jpg' style={{ width: '90px' }} />
-                    </Grid>
-                    <Grid item xs={8}>
-                      <Typography variant='subtitle1'>
-                        Title <b>x 5</b>
-                      </Typography>
-                      <Typography>
-                        Pris: <b>45 SEK</b>
-                      </Typography>
-                    </Grid>
-                  </Grid>
-
-                  <Grid container style={{ borderBottom: '1px solid #d4d4d4', marginBottom: '15px', paddingBottom: '10px' }}>
-                    <Grid item xs={4}>
-                      <img src='/apples.jpg' style={{ width: '90px' }} />
-                    </Grid>
-                    <Grid item xs={8}>
-                      <Typography variant='subtitle1'>
-                        Title <b>x 5</b>
-                      </Typography>
-                      <Typography>
-                        Pris: <b>45 SEK</b>
-                      </Typography>
-                    </Grid>
-                  </Grid>
+                  {state.cartProducts.map((product) => {
+                    return (
+                      <Grid container style={{ borderBottom: '1px solid #d4d4d4', marginBottom: '15px', paddingBottom: '10px' }}>
+                        <Grid item xs={4}>
+                          <img src='/apples.jpg' style={{ width: '90px' }} />
+                        </Grid>
+                        <Grid item xs={8}>
+                          <Typography variant='subtitle1'>
+                            {product.name}{' '}
+                            <i>
+                              {product.quantity} {product.unit}
+                            </i>
+                          </Typography>
+                          <Typography>
+                            Pris: <b>{product.price * product.quantity} SEK</b>
+                          </Typography>
+                        </Grid>
+                      </Grid>
+                    )
+                  })}
                 </Grid>
               )
             }
