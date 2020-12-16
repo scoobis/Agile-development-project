@@ -6,17 +6,25 @@ import ProductsGrid from './ProductsGrid'
 
 const Products = () => {
   const [products, setProducts] = useState([])
+  const [allProducts, setAllProducts] = useState([])
 
   useEffect(() => {
     getAllProducts().then((response) => {
-      response.length && setProducts([...response])
+      if (response.length) {
+        setAllProducts(response)
+        setProducts(response)
+      }
     })
   }, [])
 
   const filterProducts = (id) => {
-    getAllProductsFromCategory(id).then(({ data }) => {
-      data && setProducts([...data.products])
-    })
+    if (id === -1 || id === '-1') {
+      setProducts(allProducts)
+    } else {
+      getAllProductsFromCategory(id).then(({ data }) => {
+        setProducts(data.products)
+      })
+    }
   }
 
   return (
