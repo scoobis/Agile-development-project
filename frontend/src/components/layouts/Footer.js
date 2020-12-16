@@ -3,6 +3,7 @@ import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 import Link from 'next/link'
+import { PRODUCERS_PATH, REGISTER_PRODUCER_PATH } from '../../utils/config'
 
 const useStyles = makeStyles((theme) => ({
   footer: {
@@ -30,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
-function Footer() {
+function Footer () {
   const classes = useStyles()
   const currentYear = new Date().getFullYear()
 
@@ -49,12 +50,12 @@ function Footer() {
               </Link>
             </li>
             <li>
-              <Link href='/producenter'>
+              <Link href={PRODUCERS_PATH}>
                 <a>Producenter</a>
               </Link>
             </li>
             <li>
-              <Link href='/bli-producent'>
+              <Link href={REGISTER_PRODUCER_PATH}>
                 <a>Bli producent</a>
               </Link>
             </li>

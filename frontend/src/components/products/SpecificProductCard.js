@@ -7,7 +7,7 @@ import { useSnackbar } from 'notistack'
 import Link from 'next/link'
 import AccordionGroup from '../AccordionGroup'
 import { isNull } from '../../utils/helpers'
-import { CURRENCY } from '../../utils/config'
+import { CURRENCY, PRODUCT_CATEGORIES_PATH } from '../../utils/config'
 
 const SpecificProductCard = (props) => {
   const useStyles = makeStyles((theme) => ({
@@ -63,7 +63,11 @@ const SpecificProductCard = (props) => {
       <>
         <Link
           key={item.id}
-          href={route === 'search' ? `/search?q=${item.name}` : route === 'category' && `/produkt-kategori/${item.id}`}
+          href={
+            route === 'search'
+              ? `/search?q=${item.name}`
+              : route === 'category' && `${PRODUCT_CATEGORIES_PATH}/${item.id}`
+          }
         >
           <a>{item.name}</a>
         </Link>

@@ -21,6 +21,7 @@ import {
 } from '../../utils/user'
 import { signup } from '../../utils/api'
 import { Customer } from '../../utils/roles'
+import { LOGIN_PATH } from '../../utils/config'
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -184,7 +185,7 @@ const CustomerSignupForm = () => {
             <Grid item>
               <Typography variant='body2'>
                 Är du redan kund?{' '}
-                <Link href='/logga-in'>
+                <Link href={LOGIN_PATH}>
                   <a>Logga in</a>
                 </Link>
               </Typography>

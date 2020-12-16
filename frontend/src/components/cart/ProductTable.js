@@ -4,7 +4,7 @@ import DeleteForeverIcon from '@material-ui/icons/DeleteForever'
 import { makeStyles, withStyles } from '@material-ui/core/styles'
 import { IconButton, TableCell, TableRow } from '@material-ui/core'
 import Link from 'next/link'
-import { CURRENCY } from '../../utils/config'
+import { CURRENCY, PRODUCTS_PATH, PRODUCT_PLACEHOLDER_IMG_PATH } from '../../utils/config'
 
 const StyledTableRow = withStyles((theme) => ({
   root: {
@@ -30,10 +30,10 @@ const ProductTable = (props) => {
   return (
     <StyledTableRow>
       <TableCell align='center'>
-        <img src='/apples.jpg' className={classes.img} />
+        <img src={PRODUCT_PLACEHOLDER_IMG_PATH} className={classes.img} />
       </TableCell>
       <TableCell align='left' className={classes.name}>
-        <Link href={`/produkter/${id}`}>
+        <Link href={`${PRODUCTS_PATH}/${id}`}>
           <a>{name}</a>
         </Link>
       </TableCell>

@@ -6,7 +6,7 @@ import { withStyles } from '@material-ui/core/styles'
 import { IconButton, makeStyles, TableCell, TableRow } from '@material-ui/core'
 import EditIcon from '@material-ui/icons/Edit'
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever'
-import { API_URL } from '../../../utils/config'
+import { API_URL, PRODUCTS_PATH, PRODUCT_PLACEHOLDER_IMG_PATH } from '../../../utils/config'
 
 const StyledTableRow = withStyles((theme) => ({
   root: {
@@ -32,7 +32,7 @@ const getFirstImageURL = (images) => {
     return `${API_URL}/static/${images[0].imageName}`
   }
 
-  return '/apples.jpg'
+  return PRODUCT_PLACEHOLDER_IMG_PATH
 }
 
 function ProductTableItem ({ product, onEdit, onRemove }) {
@@ -42,7 +42,7 @@ function ProductTableItem ({ product, onEdit, onRemove }) {
   return (
     <StyledTableRow>
       <TableCell component='th' scope='row'>
-        <Link href={`/produkter/${product.id}`}>
+        <Link href={`${PRODUCTS_PATH}/${product.id}`}>
           <a>{product.name}</a>
         </Link>
       </TableCell>

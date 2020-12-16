@@ -4,6 +4,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import Link from 'next/link'
 import { isValidEmail, isValidPassword, MIN_EMAIL_LENGTH, MIN_PWD_LENGTH } from '../utils/user'
 import { AuthContext } from '../context/AuthContext'
+import { REGISTER_CUSTOMER_PATH } from '../utils/config'
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -100,7 +101,7 @@ const LoginForm = () => {
             <Grid item>
               <Typography variant='body2'>
                 Inte kund?{' '}
-                <Link href='/registrera'>
+                <Link href={REGISTER_CUSTOMER_PATH}>
                   <a>Registrera konto</a>
                 </Link>
               </Typography>
