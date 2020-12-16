@@ -120,9 +120,9 @@ const Navbar = () => {
               <ExpandMoreIcon />
             </Button>
             <ProductSubMenu />
-            <MenuLinkItem href='#' title='Fyndhörna' />
-            <MenuLinkItem href='#' title='Producenter' />
-            <MenuLinkItem href='#' title='Så funkar det' />
+            <MenuLinkItem href='/fyndhorna' title='Fyndhörna' />
+            <MenuLinkItem href='/producenter' title='Producenter' />
+            <MenuLinkItem href='/sa-funkar-det' title='Så funkar det' />
           </ul>
         </nav>
       </Grid>
