@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Container, Typography, Box, Grid, Button } from '@material-ui/core'
 import CheckCircleIcon from '@material-ui/icons/CheckCircle'
 import { CURRENCY } from '../../utils/config'
@@ -14,7 +14,13 @@ const useStyles = makeStyles({
 const OrderConfirmation = () => {
   const { state } = useContext(CartContext)
 
-  console.log(state)
+  const [stateCopy, setStateCopy] = useState([])
+
+  useEffect(() => {
+    setStateCopy(state)
+  }, [])
+
+  console.log(stateCopy)
 
   const classes = useStyles()
   // TODO: Shipping and payment is hardcoded (Only option atm)
