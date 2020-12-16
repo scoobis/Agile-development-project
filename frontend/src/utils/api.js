@@ -40,19 +40,19 @@ export const addProduct = (product) => {
 
 export const getAllProducts = () =>
   axios
-    .get('/products')
+    .get('/product/all')
     .then((response) => response.data)
     .catch((err) => err.response)
 
 export const getProductsByProducer = (orgNumber) =>
   axios
-    .get(`/products/fromProducer/${orgNumber}`)
+    .get(`/product/producer/${orgNumber}`)
     .then((response) => response)
     .catch((err) => err.response)
 
 export const getAllProductsFromCategory = (id) =>
   axios
-    .get(`/products/fromCategory/${id}`)
+    .get(`/product/category/${id}`)
     .then((response) => ({ data: response.data }))
     .catch((error) => ({ error: error }))
 
@@ -71,7 +71,7 @@ export const removeProduct = (id) => {
 
 export const getCategories = () =>
   axios
-    .get('/products/categories')
+    .get('/product/categories')
     .then((response) => response.data)
     .catch((err) => err.response)
 
@@ -117,4 +117,4 @@ export const newOrder = (order) =>
     .then((response) => response)
     .catch((err) => err.response)
 
-export const searchProducts = (query) => axios.get(`/products/search/${query}`)
+export const searchProducts = (query) => axios.get(`/product/all/search?q=${query}`)

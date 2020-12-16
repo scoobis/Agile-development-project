@@ -100,7 +100,9 @@ controller.getAllFromCategory = async (req, res, next) => {
 
 controller.getAllByName = async (req, res, next) => {
   try {
-    const name = req.params.name
+    const name = req.query.q
+
+    console.log(req.query)
 
     const result = await service.getAllByName(name)
     res.status(200).json(result)
