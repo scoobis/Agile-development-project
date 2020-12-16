@@ -24,7 +24,6 @@ app.use('/static', express.static('uploads'))
 // app.use('/', require('./routes/WHICHROUTER?'))
 app.use('/user', require('./routes/userRouter'))
 app.use('/product', require('./routes/productRouter'))
-app.use('/products', require('./routes/productsRouter'))
 app.use('/order', require('./routes/orderRouter'))
 
 // Fall back to 404
