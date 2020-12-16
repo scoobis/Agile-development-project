@@ -15,7 +15,6 @@ import MultipleSelect from './MultipleSelect'
 import { getCategories } from '../../utils/api'
 import UploadImages from './UploadImages'
 import SelectTags from './SelectTags'
-import useAuth from '../../utils/useAuth'
 import { findParents } from '../../utils/helpers'
 import { API_URL } from '../../utils/config'
 
@@ -36,7 +35,6 @@ const EMPTY_INITIAL_STATE = {
 }
 
 const ProductForm = ({ onSubmit, preFilled }) => {
-  const { user } = useAuth()
   const [state, setState] = useState(
     preFilled ? { ...EMPTY_INITIAL_STATE, product: { ...preFilled, images: [] } } : EMPTY_INITIAL_STATE
   )
@@ -66,7 +64,7 @@ const ProductForm = ({ onSubmit, preFilled }) => {
     })
   }, [])
 
-  async function convertInitialImagesToFiles() {
+  async function convertInitialImagesToFiles () {
     if (preFilled && preFilled.images) {
       const files = await Promise.all(
         preFilled.images.map(async (image) => {

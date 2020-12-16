@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react'
 import styles from './Navbar.module.css'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import { getCategories } from '../../../utils/api'
+import { PRODUCTS_PATH, PRODUCT_CATEGORIES_PATH } from '../../../utils/config'
 
 const Navbar = () => {
   const [anchorElMenu, setAnchorElMenu] = useState(null)
@@ -48,11 +49,11 @@ const Navbar = () => {
         <Grid key={category.id} item md={3}>
           <List component='div'>
             <Typography component='div' className={styles.parentCategory}>
-              <ListItemLink href={`/produkt-kategori/${category.id}`} title={category.name} />
+              <ListItemLink href={`${PRODUCT_CATEGORIES_PATH}/${category.id}`} title={category.name} />
             </Typography>
             {category.children &&
               category.children.map((child) => (
-                <ListItemLink key={child.id} href={`/produkt-kategori/${child.id}`} title={child.name} />
+                <ListItemLink key={child.id} href={`${PRODUCT_CATEGORIES_PATH}/${child.id}`} title={child.name} />
               ))}
           </List>
         </Grid>
@@ -70,7 +71,7 @@ const Navbar = () => {
               <ListItem className={styles.listItem}>Annat</ListItem>
             </Typography>
             {cats.map((c) => (
-              <ListItemLink key={c.id} href={`/produkt-kategori/${c.id}`} title={c.name} />
+              <ListItemLink key={c.id} href={`${PRODUCT_CATEGORIES_PATH}/${c.id}`} title={c.name} />
             ))}
           </List>
         </Grid>
@@ -99,7 +100,7 @@ const Navbar = () => {
           <Grid item xs={12}>
             <List component='div'>
               <Typography component='div' className={styles.parentCategory}>
-                <ListItemLink href='/produkter' title='Alla produkter' />
+                <ListItemLink href={PRODUCTS_PATH} title='Alla produkter' />
               </Typography>
             </List>
           </Grid>

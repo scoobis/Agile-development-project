@@ -13,6 +13,15 @@ import LocalMallOutlinedIcon from '@material-ui/icons/LocalMallOutlined'
 import SearchBar from '../../SearchBar'
 import { Badge, Menu, MenuItem } from '@material-ui/core'
 import Navbar from './Navbar'
+import {
+  CART_PATH,
+  LOGIN_PATH,
+  LOGO_PATH,
+  MY_ACCOUNT_PATH,
+  PRODUCER_DASHBOARD_PATH,
+  REGISTER_CUSTOMER_PATH,
+  REGISTER_PRODUCER_PATH
+} from '../../../utils/config'
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -36,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
-export default function Header () {
+export default function Header() {
   const classes = useStyles()
   const { signout, user, isCustomer, isProducer } = useContext(AuthContext)
   const { state } = useContext(CartContext)
@@ -78,20 +87,20 @@ export default function Header () {
     >
       {!user.isAuthenticated ? (
         <div>
-          <LinkMenuItem href='/logga-in' title='Logga in' />
-          <LinkMenuItem href='/registrera' title='Registrera' />
-          <LinkMenuItem href='/bli-producent' title='Bli producent' />
+          <LinkMenuItem href={LOGIN_PATH} title='Logga in' />
+          <LinkMenuItem href={REGISTER_CUSTOMER_PATH} title='Registrera' />
+          <LinkMenuItem href={REGISTER_PRODUCER_PATH} title='Bli producent' />
         </div>
       ) : isCustomer ? (
         <div>
-          <LinkMenuItem href='/mitt-konto' title='Mitt konto' />
+          <LinkMenuItem href={MY_ACCOUNT_PATH} title='Mitt konto' />
           <MenuItem onClick={handleSignout}>Logga ut</MenuItem>
         </div>
       ) : (
         isProducer && (
           <div>
-            <LinkMenuItem href='/merchants' title='Mina produkter' />
-            <LinkMenuItem href='/merchants' title='Mitt konto' />
+            <LinkMenuItem href={PRODUCER_DASHBOARD_PATH} title='Mina produkter' />
+            <LinkMenuItem href={PRODUCER_DASHBOARD_PATH} title='Mitt konto' />
             <MenuItem onClick={handleSignout}>Logga ut</MenuItem>
           </div>
         )
@@ -106,7 +115,7 @@ export default function Header () {
           <div className={classes.logo}>
             <Link href='/'>
               <a>
-                <img src='/logga-reko-cirkel.svg' height='60' />
+                <img src={LOGO_PATH} height='60' />
               </a>
             </Link>
           </div>
@@ -117,7 +126,7 @@ export default function Header () {
             <IconButton edge='end' onClick={handleAccountMenuOpen} color='inherit'>
               <AccountCircle />
             </IconButton>
-            <Link href='/varukorg'>
+            <Link href={CART_PATH}>
               <a>
                 <IconButton edge='end' color='inherit'>
                   <LocalMallOutlinedIcon />

@@ -19,6 +19,7 @@ import { CartContext } from '../../context/CartContext'
 import Link from 'next/link'
 
 import ProductTable from './ProductTable'
+import { PRODUCTS_PATH } from '../../utils/config'
 
 const useStyles = makeStyles({ test: { boxShadow: 'none' } })
 
@@ -69,7 +70,7 @@ const Cart = () => {
                 <Typography>Din varukorg är tom</Typography>
               </Box>
               <Button variant='contained' color='primary'>
-                <Link href='/produkter'>
+                <Link href={PRODUCTS_PATH}>
                   <a style={{ color: '#fff' }}>Börja handla</a>
                 </Link>
               </Button>

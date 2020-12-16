@@ -3,6 +3,7 @@ import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 import Link from 'next/link'
+import { PRODUCERS_PATH, REGISTER_PRODUCER_PATH } from '../../utils/config'
 
 const useStyles = makeStyles((theme) => ({
   footer: {
@@ -49,12 +50,12 @@ function Footer () {
               </Link>
             </li>
             <li>
-              <Link href='#'>
+              <Link href={PRODUCERS_PATH}>
                 <a>Producenter</a>
               </Link>
             </li>
             <li>
-              <Link href='/bli-producent'>
+              <Link href={REGISTER_PRODUCER_PATH}>
                 <a>Bli producent</a>
               </Link>
             </li>
@@ -87,7 +88,6 @@ function Footer () {
               </Link>
             </li>
           </ul>
-
         </Grid>
         <Grid item sm={12} md={4}>
           <Typography variant='subtitle1' paragraph className={classes.subHeading}>
@@ -95,17 +95,14 @@ function Footer () {
           </Typography>
 
           <Typography variant='body2'>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-          sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-          Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
-           nisi ut aliquip ex ea commodo consequat.
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+            dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex
+            ea commodo consequat.
           </Typography>
         </Grid>
       </Grid>
       <Grid item xs={12}>
-        <Typography variant='subtitle1'>
-          © {currentYear} Team 2
-        </Typography>
+        <Typography variant='subtitle1'>© {currentYear} Team 2</Typography>
       </Grid>
     </div>
   )

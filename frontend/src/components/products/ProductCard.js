@@ -4,6 +4,7 @@ import { Card, CardActions, CardContent, CardMedia, Typography, Button } from '@
 import { CartContext } from '../../context/CartContext'
 import Link from 'next/link'
 import PickAmount from './PickAmount'
+import { PRODUCTS_PATH } from '../../utils/config'
 
 const useStyles = makeStyles({
   root: {
@@ -46,7 +47,7 @@ const ProductCard = (props) => {
 
   return (
     <Card className={classes.root}>
-      <Link href={`/produkter/${id}`}>
+      <Link href={`${PRODUCTS_PATH}/${id}`}>
         <a className={classes.a}>
           <CardMedia className={classes.media} image={imgSrc} title='Produkt bild' />
           <CardContent>

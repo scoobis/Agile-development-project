@@ -30,6 +30,7 @@ import {
 } from '../../utils/user'
 import { signup } from '../../utils/api'
 import { Producer } from '../../utils/roles'
+import { LOGIN_PATH } from '../../utils/config'
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -291,7 +292,7 @@ const ProducerSignupForm = () => {
             <Grid item>
               <Typography variant='body2'>
                 Är du redan producent?{' '}
-                <Link href='/logga-in'>
+                <Link href={LOGIN_PATH}>
                   <a>Logga in</a>
                 </Link>
               </Typography>
