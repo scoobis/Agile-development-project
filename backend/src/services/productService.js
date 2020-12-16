@@ -94,6 +94,16 @@ service.getAllFromCategory = async (categoryId) => {
 }
 
 /**
+ * Returns a category from its id
+ *
+ * @param {Number} categoryId
+ * @returns {Promise<Category>}
+ */
+service.getCategory = async (categoryId) => {
+  return productDAO.getCategoryById(categoryId)
+}
+
+/**
  * Returns all products that has a name, category name or tag name that match the name provided
  *
  * @param {String} name
