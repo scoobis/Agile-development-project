@@ -94,6 +94,7 @@ CREATE TABLE product_tag (
 CREATE TABLE orders (
   producer_org_no INT,
   customer_name VARCHAR(100),
+  customer_email VARCHAR(100),
   customer_phone_no VARCHAR(10),
   customer_street_address VARCHAR(100),
   customer_zip INT(5),
