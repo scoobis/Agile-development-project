@@ -12,12 +12,12 @@ const useStyles = makeStyles({
 })
 
 const OrderConfirmation = () => {
-  const { state } = useContext(CartContext)
+  const { state, clearCart } = useContext(CartContext)
 
-  const [stateCopy, setStateCopy] = useState([])
+  const [stateCopy, setStateCopy] = useState(state)
 
   useEffect(() => {
-    setStateCopy(state)
+    clearCart()
   }, [])
 
   console.log(stateCopy)
@@ -36,7 +36,7 @@ const OrderConfirmation = () => {
               heading: 'Produkter',
               content: (
                 <Grid container align='left'>
-                  {state.cartProducts.map((product) => {
+                  {stateCopy.cartProducts.map((product) => {
                     return (
                       <Grid container style={{ borderBottom: '1px solid #d4d4d4', marginBottom: '15px', paddingBottom: '10px' }}>
                         <Grid item xs={4}>
@@ -66,7 +66,7 @@ const OrderConfirmation = () => {
       <Box mt={3} justifyContent='space-between' borderBottom='1px solid #d4d4d4' display='flex' width='300px'>
         <Typography variant='body1'>Delsumma</Typography>
         <Typography variant='body1' className={classes.price}>
-          {state.total} {CURRENCY}
+          {stateCopy.total} {CURRENCY}
         </Typography>
       </Box>
 
@@ -87,7 +87,7 @@ const OrderConfirmation = () => {
       <Box mt={3} justifyContent='space-between' borderBottom='1px solid #d4d4d4' display='flex' width='300px'>
         <Typography variant='subtitle1'>Totalsumma</Typography>
         <Typography variant='subtitle1' className={classes.price}>
-          {state.total} {CURRENCY}
+          {stateCopy.total} {CURRENCY}
         </Typography>
       </Box>
       <Link href='/produkter'>

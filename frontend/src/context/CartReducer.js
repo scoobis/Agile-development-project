@@ -10,9 +10,16 @@ export const CartReducer = (state, action) => {
       return decrease(state, action.payload)
     case 'REMOVE_PRODUCT':
       return removeProduct(state, action.payload)
+    case 'CLEAR_CART':
+      return clearCart
     default:
       return { ...state }
   }
+}
+
+const clearCart = () => {
+  saveInStorage('cart', { cartProducts: [] })
+  return { cartProducts: [] }
 }
 
 const addProduct = (state, payload) => {
