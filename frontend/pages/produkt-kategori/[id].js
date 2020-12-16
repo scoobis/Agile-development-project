@@ -14,6 +14,8 @@ const ProductCategory = () => {
 
   useEffect(() => {
     setLoading(true)
+    setProducts([])
+
     getAllProductsFromCategory(id).then((res) => {
       if (res && res.length) {
         setProducts(res)
