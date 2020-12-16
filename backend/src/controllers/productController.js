@@ -125,7 +125,6 @@ controller.getAllCategories = async (req, res, next) => {
  * @returns {Product} product
  */
 const parseProduct = (object) => {
-  console.log(object)
   return new Product(
     object.id,
     object.orgNumber,

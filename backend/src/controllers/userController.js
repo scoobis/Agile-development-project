@@ -30,7 +30,6 @@ controller.create = async (req, res, next) => {
 controller.login = async (req, res, next) => {
   try {
     const user = await service.login(req.body)
-    console.log(user.orgNumber)
     if (user) {
       const token = jwt.sign({ email: user.email, orgNumber: user.orgNumber, role: user.role }, 'shhhhh', { expiresIn: '1h' })
       res.status(200).json({
@@ -43,7 +42,7 @@ controller.login = async (req, res, next) => {
       }
       )
     } else {
-      throw new createError(400, 'User does not exist!')
+      throw createError(400, 'User does not exist!')
     }
   } catch (error) {
     return next(error)
