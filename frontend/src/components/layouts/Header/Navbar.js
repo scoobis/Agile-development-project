@@ -1,11 +1,21 @@
 import { Button, Grid, List, ListItem, Popover, Typography } from '@material-ui/core'
 import Link from 'next/link'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from './Navbar.module.css'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
+import { getCategories } from '../../../utils/api'
 
 const Navbar = () => {
   const [anchorElMenu, setAnchorElMenu] = useState(null)
+  const [categories, setCategories] = useState([])
+
+  useEffect(() => {
+    if (!categories.length) {
+      getCategories().then((categories) => {
+        setCategories(categories)
+      })
+    }
+  }, [])
 
   const handleClickMenu = (e) => {
     setAnchorElMenu(e.currentTarget)
@@ -26,10 +36,47 @@ const Navbar = () => {
   const ListItemLink = (props) => (
     <ListItem className={styles.listItem}>
       <Link href={props.href}>
-        <a>{props.title}</a>
+        <a onClick={handleCloseMenu}>{props.title}</a>
       </Link>
     </ListItem>
   )
+
+  const renderCategories = () => {
+    return categories
+      .filter((c) => c.children)
+      .map((category) => (
+        <Grid key={category.id} item md={3}>
+          <List component='div'>
+            <Typography component='div' className={styles.parentCategory}>
+              <ListItemLink href={`/produkt-kategori/${category.id}`} title={category.name} />
+            </Typography>
+            {category.children &&
+              category.children.map((child) => (
+                <ListItemLink key={child.id} href={`/produkt-kategori/${child.id}`} title={child.name} />
+              ))}
+          </List>
+        </Grid>
+      ))
+  }
+
+  const renderCategoriesWithoutChildren = () => {
+    const cats = categories.filter((c) => !c.children)
+    return (
+      cats &&
+      cats.length && (
+        <Grid key='other' item md={3}>
+          <List component='div'>
+            <Typography component='div' className={styles.parentCategory}>
+              <ListItem className={styles.listItem}>Annat</ListItem>
+            </Typography>
+            {cats.map((c) => (
+              <ListItemLink key={c.id} href={`/produkt-kategori/${c.id}`} title={c.name} />
+            ))}
+          </List>
+        </Grid>
+      )
+    )
+  }
 
   const ProductSubMenu = () => (
     <Popover
@@ -56,49 +103,8 @@ const Navbar = () => {
               </Typography>
             </List>
           </Grid>
-          <Grid item xs={3}>
-            <List component='div'>
-              <Typography component='div' className={styles.parentCategory}>
-                <ListItemLink href='#' title='Grönsaker' />
-              </Typography>
-              <ListItemLink href='#' title='Gurka' />
-              <ListItemLink href='#' title='Tomat' />
-              <ListItemLink href='#' title='Lök' />
-              <ListItemLink href='#' title='Sallad' />
-              <ListItemLink href='#' title='Ärter & bönor' />
-            </List>
-          </Grid>
-          <Grid item xs={3}>
-            <List component='div'>
-              <Typography component='div' className={styles.parentCategory}>
-                <ListItemLink href='#' title='Frukt' />
-              </Typography>
-              <ListItemLink href='#' title='Äpple' />
-              <ListItemLink href='#' title='Päron' />
-              <ListItemLink href='#' title='Persika' />
-            </List>
-          </Grid>
-          <Grid item xs={3}>
-            <List component='div'>
-              <Typography component='div' className={styles.parentCategory}>
-                <ListItemLink href='#' title='Mejeri' />
-              </Typography>
-              <ListItemLink href='#' title='Mjölk' />
-              <ListItemLink href='#' title='Ägg' />
-              <ListItemLink href='#' title='Ost' />
-            </List>
-          </Grid>
-          <Grid item xs={3}>
-            <List component='div'>
-              <Typography component='div' className={styles.parentCategory}>
-                <ListItemLink href='#' title='Kött' />
-              </Typography>
-              <ListItemLink href='#' title='Nötkött' />
-              <ListItemLink href='#' title='Fläskkött' />
-              <ListItemLink href='#' title='Lamm, kalv & vilt' />
-              <ListItemLink href='#' title='Kyckling & fågel' />
-            </List>
-          </Grid>
+          {renderCategories()}
+          {renderCategoriesWithoutChildren()}
         </Grid>
       </div>
     </Popover>
