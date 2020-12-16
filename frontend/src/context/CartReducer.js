@@ -1,4 +1,4 @@
-import { saveInStorage } from '../utils/localStorage'
+import { saveInStorage, removeInStorage } from '../utils/localStorage'
 
 export const CartReducer = (state, action) => {
   switch (action.type) {
@@ -18,7 +18,7 @@ export const CartReducer = (state, action) => {
 }
 
 const clearCart = () => {
-  saveInStorage('cart', [{}])
+  removeInStorage('cart')
   return { cartProducts: [] }
 }
 

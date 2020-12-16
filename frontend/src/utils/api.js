@@ -117,4 +117,10 @@ export const newOrder = (order) =>
     .then((response) => response)
     .catch((err) => err.response)
 
+export const getOrdersProducer = () =>
+  axios
+    .get('order/producer/orders')
+    .then((response) => response.data)
+    .catch((err) => err.response)
+
 export const searchProducts = (query) => axios.get(`/product/all/search?q=${query}`)

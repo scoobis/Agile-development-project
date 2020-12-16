@@ -32,6 +32,7 @@ const OrderItemTable = (props) => {
     setActiveDetails(!activeDetials)
   }
 
+  // TODO: order status fix
   return (
     <StyledTableRow>
       <TableCell component='th' scope='row'>
@@ -40,8 +41,8 @@ const OrderItemTable = (props) => {
       <TableCell align='right'>{order.customerEmail}</TableCell>
       <TableCell align='right'>Hämtas på plats</TableCell>
       <TableCell align='right'>{order.total} SEK</TableCell>
-      <TableCell align='right' className={order.status === 'aktiv' ? classes.active : classes.notActive}>
-        {order.status}
+      <TableCell align='right' className={classes.active}>
+        Aktiv
       </TableCell>
       <TableCell align='right' style={{ cursor: 'pointer', fontWeight: 'bold' }} onClick={() => openOrderDetails()}>
         {!activeDetials ? 'Öppna' : 'Stäng'}

@@ -35,6 +35,8 @@ controller.getAllOrdersFromProducer = async (req, res, next) => {
       const orgNumber = req.user.orgNumber
       const orders = await service.getAllOrdersFromProducer(orgNumber)
 
+      console.log(orders)
+
       res.status(200).json(orders)
     } else {
       throw createError(400, 'You have to be a producer to get your orders!')
@@ -53,6 +55,7 @@ const parseOrder = (object) => {
   return new Order(
     object.orgNumber,
     object.customerName,
+    object.customerEmail,
     object.customerPhone,
     object.customerStreetAddress,
     object.customerZip,
