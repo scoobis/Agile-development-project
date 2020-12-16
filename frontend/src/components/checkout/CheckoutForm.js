@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import { newOrder } from '../../utils/api'
+import { useRouter } from 'next/router'
 import {
   isValidName,
   isValidEmail,
@@ -35,6 +36,7 @@ const useStyles = makeStyles((theme) => ({
 
 const CheckoutForm = (props) => {
   const { cartContext } = props
+  const router = useRouter()
 
   const [state, setState] = useState({
     name: { value: '', hasError: false, helperText: '' },
@@ -87,8 +89,9 @@ const CheckoutForm = (props) => {
       shipping: '0', // no shipping required atm
       discount: '0', // TODO: what is the intention
       total: cartContext.total
+    }).then((res) => {
+      res.status === 200 && router.push('/tack-for-din-order')
     })
-    // TODO: fail msg or go to a success page or something?
   }
 
   const classes = useStyles()
