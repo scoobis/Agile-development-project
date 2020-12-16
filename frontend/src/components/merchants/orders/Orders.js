@@ -11,6 +11,7 @@ import Paper from '@material-ui/core/Paper'
 import { Typography } from '@material-ui/core'
 import OrderItemTable from './OrderItemTable'
 import OrderDetials from './OrderDetails'
+import { getOrdersProducer } from '../../../utils/api'
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -31,53 +32,7 @@ const useStyles = makeStyles({
 const Orders = () => {
   const classes = useStyles()
 
-  // TODO: remove mock data, and get
-  const [orders, setOrders] = useState([
-    {
-      customerName: 'John Doe',
-      customerEmail: 'email@email.com',
-      customerPhone: '123456789',
-      cutomerStreetAddress: 'Storgatan 1',
-      customerZip: '39230',
-      customerCity: 'Kalmar',
-      status: 'aktiv',
-      id: 'jjj555',
-      products: [
-        { id: 2, quantity: 5, name: 'name', price: 4 },
-        { id: 1, quantity: 6, name: 'Tomat', price: 29 },
-        { id: 2, quantity: 5, name: 'name', price: 4 },
-        { id: 1, quantity: 6, name: 'Tomat', price: 29 }
-      ],
-      shippingMethod: 'collect',
-      paymentMethod: 'upon_collect',
-      subtotal: '2014',
-      shipping: '0',
-      discount: '0',
-      total: '2014'
-    },
-    {
-      customerName: 'John Doe',
-      customerEmail: 'email@email.com',
-      customerPhone: '123456789',
-      cutomerStreetAddress: 'Storgatan 1',
-      customerZip: '39230',
-      customerCity: 'Kalmar',
-      status: 'aktiv',
-      id: 'jjj554',
-      products: [
-        { id: 2, quantity: 3, name: 'name', price: 4 },
-        { id: 1, quantity: 2, name: 'Tomat', price: 29 },
-        { id: 2, quantity: 5, name: 'name', price: 4 },
-        { id: 1, quantity: 6, name: 'Tomat', price: 29 }
-      ],
-      shippingMethod: 'collect',
-      paymentMethod: 'upon_collect',
-      subtotal: '2014',
-      shipping: '0',
-      discount: '0',
-      total: '2014'
-    }
-  ])
+  const [orders, setOrders] = useState([])
 
   const [orderDetialsComponent, setOrderDetialsComponent] = useState({ order: {}, isActive: false })
 
@@ -87,7 +42,11 @@ const Orders = () => {
     }
   }
 
-  useEffect(() => {}, [])
+  useEffect(() => {
+    getOrdersProducer().then((response) => {
+      setOrders(response)
+    })
+  }, [])
 
   return orders.length ? (
     <div>
@@ -114,7 +73,7 @@ const Orders = () => {
       {orderDetialsComponent && renderOrderDetials(orderDetialsComponent.order)}
     </div>
   ) : (
-    <Typography>Inga produkter hittades</Typography>
+    <Typography>Inga beställningar hittades</Typography>
   )
 }
 
