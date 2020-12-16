@@ -27,7 +27,6 @@ userDAO.createCustomer = async (user) => {
 userDAO.createProducer = async (user, address) => {
   let conn
   try {
-    console.log(user.orgNumber)
     conn = await pool.getConnection()
     const password = await bcrypt.hash(user.password, 8)
     const userResponse = await conn.query('INSERT INTO user (email, password, full_name, phone_no) VALUES (?, ?, ?, ?)', [user.email, password, user.name, user.phone])
@@ -83,7 +82,7 @@ userDAO.login = async (userToLogIn) => {
   try {
     conn = await pool.getConnection()
     const user = await userDAO.findByEmail(userToLogIn.email)
-    // console.log(userDAO)
+
     if (typeof user !== 'undefined') {
       const userFound = await bcrypt.compare(userToLogIn.password, user.password)
       if (userFound) {
