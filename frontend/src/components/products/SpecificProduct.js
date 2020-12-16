@@ -16,22 +16,20 @@ const SpecificProduct = (props) => {
     })
   }, [props])
 
-  const { name, description, price, salePrice, unit, inStock, id, images, orgNumber } = product
-
   const getImages = () =>
-    images && images.length
-      ? images.map((img) => ({
-          id: img.id,
-          alt: img.altText,
-          src: `${API_URL}/static/${img.imageName}`
-        }))
+    product.images && product.images.length
+      ? product.images.map((img) => ({
+        id: img.id,
+        alt: img.altText,
+        src: `${API_URL}/static/${img.imageName}`
+      }))
       : [
-          {
-            id: 1,
-            alt: 'Apples',
-            src: '/apples.JPG'
-          }
-        ]
+        {
+          id: 1,
+          alt: 'Apples',
+          src: '/apples.JPG'
+        }
+      ]
 
   return (
     <Container>
@@ -40,16 +38,7 @@ const SpecificProduct = (props) => {
           <SlickSlider images={getImages()} />
         </Grid>
         <Grid item md={6}>
-          <SpecificProductCard
-            inStock={inStock}
-            price={price}
-            salePrice={salePrice}
-            name={name}
-            unit={unit}
-            id={id}
-            description={description}
-            orgNumber={orgNumber}
-          />
+          <SpecificProductCard {...product} />
         </Grid>
       </Grid>
     </Container>

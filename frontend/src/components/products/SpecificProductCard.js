@@ -19,10 +19,15 @@ const SpecificProductCard = (props) => {
     cardContent: { padding: '15px 30px' },
     lowInStock: { color: '#ffa700' },
     highInStock: { color: 'green' },
-    outOfStock: { color: 'red' }
+    outOfStock: { color: 'red' },
+    metaData: {
+      '& > *': {
+        fontSize: '13px'
+      }
+    }
   }))
 
-  const { name, price, salePrice, unit, inStock, id, description, orgNumber } = props
+  const { name, price, salePrice, unit, inStock, id, description, orgNumber, categories, tags } = props
   const [amount, setAmount] = useState(1)
   const { addProduct } = useContext(CartContext)
   const classes = useStyles()
@@ -51,6 +56,20 @@ const SpecificProductCard = (props) => {
 
     return classes.highInStock
   }
+
+  const mapLinks = (arr, route) =>
+    arr &&
+    arr.map((item, i) => (
+      <>
+        <Link
+          key={item.id}
+          href={route === 'search' ? `/search?q=${item.name}` : route === 'category' && `/produkt-kategori/${item.id}`}
+        >
+          <a>{item.name}</a>
+        </Link>
+        {i + 1 < arr.length && ', '}
+      </>
+    ))
 
   return (
     <Card className={classes.root}>
@@ -82,9 +101,23 @@ const SpecificProductCard = (props) => {
           <Grid item xs={12}>
             <Box display='flex' pb={3} pt={3}>
               <PickAmount inStock={inStock} handleAmountChange={handleAmountChange} />
-              <Button disabled={inStock === 0} size='large' fullWidth variant='contained' color='primary' onClick={handleAddToCart}>
+              <Button
+                disabled={inStock === 0}
+                size='large'
+                fullWidth
+                variant='contained'
+                color='primary'
+                onClick={handleAddToCart}
+              >
                 {inStock === 0 ? 'Slut i lager' : 'Lägg i kundvagn'}
               </Button>
+            </Box>
+          </Grid>
+          <Grid item xs={12}>
+            <Box className={classes.metaData}>
+              <Typography>Kategorier: {mapLinks(categories, 'category')}</Typography>
+              <Typography>Taggar: {mapLinks(tags, 'search')}</Typography>
+              <Typography>Artikelnummer: {id}</Typography>
             </Box>
           </Grid>
           <Grid item xs={12}>
