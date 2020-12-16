@@ -10,8 +10,9 @@ const axiosInstance = axios.create({
 })
 
 axiosInstance.interceptors.request.use((config) => {
-  const token = getUserToken()
-  config.headers.Authorization = token ? `Bearer ${token}` : ''
+  if (process.browser) {
+    config.headers.Authorization = `Bearer ${getUserToken()}`
+  }
   return config
 })
 

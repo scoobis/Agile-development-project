@@ -14,8 +14,8 @@ const Products = () => {
   }, [])
 
   const filterProducts = (id) => {
-    getAllProductsFromCategory(id).then((response) => {
-      response.length && setProducts([...response])
+    getAllProductsFromCategory(id).then(({ data }) => {
+      data && setProducts([...data.products])
     })
   }
 
