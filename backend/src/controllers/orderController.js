@@ -29,6 +29,21 @@ controller.sendorder = async (req, res, next) => {
   }
 }
 
+controller.getAllOrdersFromProducer = async (req, res, next) => {
+  try {
+    if (req.user.orgNumber) {
+      const orgNumber = req.user.orgNumber
+      const orders = await service.getAllOrdersFromProducer(orgNumber)
+
+      res.status(200).json(orders)
+    } else {
+      throw createError(400, 'You have to be a producer to get your orders!')
+    }
+  } catch (error) {
+    return next(error)
+  }
+}
+
 const parseOrder = (object) => {
   const arrayWithOrderProducts = []
   object.products.forEach((element) => {
