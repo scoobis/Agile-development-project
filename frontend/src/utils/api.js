@@ -120,3 +120,5 @@ export const newOrder = (order) =>
     .post('/order', order)
     .then((response) => response)
     .catch((err) => err.response)
+
+export const searchProducts = (query) => axios.get(`/products/search/${query}`)
