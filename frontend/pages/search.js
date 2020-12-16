@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react'
 import { Box, CircularProgress, Container, Grid, Typography } from '@material-ui/core'
 import ProductsGrid from '../src/components/products/ProductsGrid'
 import SearchBar from '../src/components/SearchBar'
+import { searchProducts } from '../src/utils/api'
 
 const Search = () => {
   const router = useRouter()
@@ -14,21 +15,15 @@ const Search = () => {
 
   useEffect(() => {
     setLoading(true)
+    setResult([])
 
-    getSearchResults().then((res) => {
+    searchProducts(q).then((res) => {
+      if (res.status === 200) {
+        setResult(res.data)
+      }
       setLoading(false)
-      setResult(res)
     })
   }, [q])
-
-  const getSearchResults = () => {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        const data = []
-        resolve(data)
-      }, [1500])
-    })
-  }
 
   return (
     <>
