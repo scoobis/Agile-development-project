@@ -75,7 +75,7 @@ const Orders = () => {
       {orderDetialsComponent && renderOrderDetials(orderDetialsComponent.order)}
     </div>
   ) : (
-    <Typography>Inga beställningar hittades</Typography>
+    <Typography>Inga aktuella ordrar hittades</Typography>
   )
 }
 
