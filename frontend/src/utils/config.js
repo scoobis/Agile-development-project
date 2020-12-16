@@ -1,2 +1,11 @@
 export const API_URL = 'http://localhost:5001'
 export const CURRENCY = 'SEK'
+
+export const REGISTER_PRODUCER_PATH = '/bli-producent'
+export const REGISTER_CUSTOMER_PATH = '/registrera'
+export const PRODUCTS_PATH = '/produkter'
+export const PRODUCT_CATEGORIES_PATH = '/produkt-kategori'
+export const LOGIN_PATH = '/logga-in'
+export const PRODUCERS_PATH = '/producenter'
+export const CART_PATH = '/varukorg'
+export const PRODUCER_DASHBOARD_PATH = '/merchants'
