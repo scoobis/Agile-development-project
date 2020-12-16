@@ -37,12 +37,10 @@ const useStyles = makeStyles({
 })
 
 const ProductCard = (props) => {
-  const { id, name, price, unit, inStock, imgSrc, orgNumber } = props
+  const { id, name, price, unit, inStock, imgSrc, orgNumber, category } = props
   const { addProduct } = useContext(CartContext)
   const [amount, setAmount] = useState(1)
   const classes = useStyles()
-
-  console.log(orgNumber)
 
   const handleAmountChange = (value) => setAmount(value)
 
@@ -55,7 +53,7 @@ const ProductCard = (props) => {
             <Typography variant='h4' component='h2'>
               {name}
             </Typography>
-            <Typography color='textSecondary'>Kategori?: Test</Typography>
+            <Typography color='textSecondary'>{category}</Typography>
             <Typography className={(classes.pos, inStock <= 10 ? classes.yellow : classes.green)} color='textSecondary'>
               {inStock} i lager
             </Typography>
@@ -66,7 +64,11 @@ const ProductCard = (props) => {
         </a>
       </Link>
       <CardActions>
-        <Button variant='contained' color='primary' onClick={() => addProduct({ id, amount, name, price, unit, orgNumber })}>
+        <Button
+          variant='contained'
+          color='primary'
+          onClick={() => addProduct({ id, amount, name, price, unit, orgNumber })}
+        >
           Köp
         </Button>
         <PickAmount inStock={inStock} handleAmountChange={handleAmountChange} />

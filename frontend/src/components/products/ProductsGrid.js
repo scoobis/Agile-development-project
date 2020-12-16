@@ -11,6 +11,11 @@ const ProductsGrid = ({ products }) => {
     return '/apples.jpg'
   }
 
+  const getFirstCategory = (categories) => {
+    const category = categories.find((c) => c.parentId)
+    return category ? category.name : categories[0].name
+  }
+
   return (
     <div>
       <Grid container spacing={3}>
@@ -26,6 +31,7 @@ const ProductsGrid = ({ products }) => {
                 id={product.id}
                 unit={product.unit}
                 orgNumber={product.orgNumber}
+                category={getFirstCategory(product.categories)}
               />
             </Grid>
           ))
