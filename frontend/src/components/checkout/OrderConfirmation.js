@@ -1,10 +1,11 @@
 import React, { useContext } from 'react'
-import { Container, Typography, Box, Grid } from '@material-ui/core'
+import { Container, Typography, Box, Grid, Button } from '@material-ui/core'
 import CheckCircleIcon from '@material-ui/icons/CheckCircle'
 import { CURRENCY } from '../../utils/config'
 import { makeStyles } from '@material-ui/core/styles'
 import { CartContext } from '../../context/CartContext'
 import AccordionGroup from '../AccordionGroup'
+import Link from 'next/link'
 
 const useStyles = makeStyles({
   price: { fontWeight: 'bold' }
@@ -83,6 +84,13 @@ const OrderConfirmation = () => {
           {state.total} {CURRENCY}
         </Typography>
       </Box>
+      <Link href='/produkter'>
+        <a style={{ color: '#fff', textDecoration: 'none' }}>
+          <Button style={{ marginTop: '30px' }} variant='contained' color='primary'>
+            Fortsätt handla
+          </Button>
+        </a>
+      </Link>
     </Container>
   )
 }

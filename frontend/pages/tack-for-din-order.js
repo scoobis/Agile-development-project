@@ -10,7 +10,7 @@ const CheckoutPage = () => {
   return (
     <>
       <Head>
-        <title>Tack för din order</title>
+        <title>Tack För Din Order</title>
       </Head>
       <Layout>
         <OrderConfirmation />
