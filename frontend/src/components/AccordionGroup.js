@@ -55,9 +55,7 @@ const AccordionGroup = ({ items }) => {
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
             <Typography>{item.heading}</Typography>
           </AccordionSummary>
-          <AccordionDetails>
-            <Typography>{item.content}</Typography>
-          </AccordionDetails>
+          <AccordionDetails>{item.content}</AccordionDetails>
         </Accordion>
       ))}
     </div>
