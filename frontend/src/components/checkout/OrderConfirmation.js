@@ -38,7 +38,7 @@ const OrderConfirmation = () => {
                 <Grid container align='left'>
                   {stateCopy.cartProducts.map((product) => {
                     return (
-                      <Grid container style={{ borderBottom: '1px solid #d4d4d4', marginBottom: '15px', paddingBottom: '10px' }}>
+                      <Grid container style={{ borderBottom: '1px solid #d4d4d4', marginBottom: '15px', paddingBottom: '10px' }} key={product.id}>
                         <Grid item xs={4}>
                           <img src='/apples.jpg' style={{ width: '90px' }} />
                         </Grid>
