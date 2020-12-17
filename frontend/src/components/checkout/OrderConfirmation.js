@@ -6,19 +6,20 @@ import { makeStyles } from '@material-ui/core/styles'
 import { CartContext } from '../../context/CartContext'
 import AccordionGroup from '../AccordionGroup'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 
 const useStyles = makeStyles({
   price: { fontWeight: 'bold' }
 })
 
 const OrderConfirmation = () => {
+  const router = useRouter()
   const { state, clearCart } = useContext(CartContext)
 
   const [stateCopy, setStateCopy] = useState(state)
 
   useEffect(() => {
-    clearCart()
-    console.log(state.isPaid)
+    state.isPaid ? clearCart() : router.push('/')
   }, [])
 
   const classes = useStyles()
