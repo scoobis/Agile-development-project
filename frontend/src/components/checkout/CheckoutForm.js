@@ -90,7 +90,11 @@ const CheckoutForm = (props) => {
       discount: '0', // TODO: what is the intention
       total: cartContext.total
     }).then((res) => {
-      res.status === 200 && router.push('/tack-for-din-order')
+      res.status === 200 &&
+        router.push({
+          pathname: '/tack-for-din-order',
+          query: 'test'
+        })
     })
   }
 
