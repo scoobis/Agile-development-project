@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const CheckoutForm = (props) => {
-  const { cartContext } = props
+  const { cartContext, setPaid } = props
   const router = useRouter()
 
   const [state, setState] = useState({
@@ -90,7 +90,10 @@ const CheckoutForm = (props) => {
       discount: '0', // TODO: what is the intention
       total: cartContext.total
     }).then((res) => {
-      res.status === 200 && router.push('/tack-for-din-order')
+      if (res.status === 200) {
+        setPaid()
+        router.push('/tack-for-din-order')
+      }
     })
   }
 

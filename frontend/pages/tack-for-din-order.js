@@ -1,12 +1,13 @@
 import Head from 'next/head'
 import Layout from '../src/components/layouts/Layout'
+import { withRouter } from 'next/router'
 
 import dynamic from 'next/dynamic'
 const OrderConfirmation = dynamic(() => import('../src/components/checkout/OrderConfirmation'), {
   ssr: false
 })
 
-const CheckoutPage = () => {
+const CheckoutPage = ({ router }) => {
   return (
     <>
       <Head>
@@ -19,4 +20,4 @@ const CheckoutPage = () => {
   )
 }
 
-export default CheckoutPage
+export default withRouter(CheckoutPage)

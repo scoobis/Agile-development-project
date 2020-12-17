@@ -5,14 +5,14 @@ import { CartContext } from '../../context/CartContext'
 import CheckoutForm from './CheckoutForm'
 
 const Checkout = () => {
-  const { state } = useContext(CartContext)
+  const { state, setPaid } = useContext(CartContext)
 
   const handleChange = () => {}
   return (
     <Container>
       <Grid container spacing={2}>
         <Grid item xs={8}>
-          <CheckoutForm cartContext={state} />
+          <CheckoutForm cartContext={state} setPaid={setPaid} />
         </Grid>
         <Grid item xs={4}>
           <OrderCard state={state} />
