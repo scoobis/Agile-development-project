@@ -16,6 +16,7 @@ const OrderConfirmation = () => {
   const { state, clearCart } = useContext(CartContext)
 
   const [stateCopy, setStateCopy] = useState(state)
+  const [isPaid] = useState(state.isPaid)
 
   useEffect(() => {
     if (state.isPaid) clearCart()
@@ -25,7 +26,7 @@ const OrderConfirmation = () => {
   // TODO: Shipping and payment is hardcoded (Only option atm)
   return (
     <Container align='center'>
-      {state.isPaid ? (
+      {isPaid ? (
         <>
           <Typography variant='h2'>Tack För Din Order</Typography>
           <CheckCircleIcon style={{ fontSize: 55, marginTop: '20px', color: 'green' }} />
