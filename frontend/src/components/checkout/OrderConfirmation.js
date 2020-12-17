@@ -18,9 +18,8 @@ const OrderConfirmation = () => {
 
   useEffect(() => {
     clearCart()
+    console.log(state.isPaid)
   }, [])
-
-  console.log(stateCopy)
 
   const classes = useStyles()
   // TODO: Shipping and payment is hardcoded (Only option atm)

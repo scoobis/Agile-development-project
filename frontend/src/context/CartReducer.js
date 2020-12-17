@@ -12,9 +12,15 @@ export const CartReducer = (state, action) => {
       return removeProduct(state, action.payload)
     case 'CLEAR_CART':
       return clearCart()
+    case 'SET_PAID':
+      return setPaid(state)
     default:
       return { ...state }
   }
+}
+
+const setPaid = (state) => {
+  return { ...state, isPaid: true }
 }
 
 const clearCart = () => {

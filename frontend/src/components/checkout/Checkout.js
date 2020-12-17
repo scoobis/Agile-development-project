@@ -5,7 +5,7 @@ import { CartContext } from '../../context/CartContext'
 import CheckoutForm from './CheckoutForm'
 
 const Checkout = () => {
-  const { state } = useContext(CartContext)
+  const { state, setPaid } = useContext(CartContext)
 
   const handleChange = () => {}
   return (
@@ -15,7 +15,7 @@ const Checkout = () => {
           <CheckoutForm cartContext={state} />
         </Grid>
         <Grid item xs={4}>
-          <OrderCard state={state} />
+          <OrderCard state={state} setPaid={setPaid} />
           <FormControl fullWidth component='fieldset' style={{ marginTop: '30px', borderRadius: '5px', background: '#e3e3e3', padding: '30px' }}>
             <Typography variant='h5' style={{ marginBottom: '10px' }}>
               Betalalternativ

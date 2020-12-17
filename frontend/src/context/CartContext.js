@@ -9,6 +9,7 @@ const CartContextProvider = (props) => {
 
   const initialState = {
     cartProducts: itemsInCart,
+    isPaid: false,
     ...totalSum(itemsInCart)
   }
 
@@ -19,8 +20,11 @@ const CartContextProvider = (props) => {
   const decrease = (payload) => dispatch({ type: 'DECREASE', payload })
   const removeProduct = (payload) => dispatch({ type: 'REMOVE_PRODUCT', payload })
   const clearCart = () => dispatch({ type: 'CLEAR_CART' })
+  const setPaid = () => dispatch({ type: 'SET_PAID' })
 
-  return <CartContext.Provider value={{ state, addProduct, increase, decrease, removeProduct, clearCart }}>{props.children}</CartContext.Provider>
+  return (
+    <CartContext.Provider value={{ state, addProduct, increase, decrease, removeProduct, clearCart, setPaid }}>{props.children}</CartContext.Provider>
+  )
 }
 
 export default CartContextProvider

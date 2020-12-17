@@ -12,8 +12,6 @@ const CheckoutPage = ({ router }) => {
     <>
       <Head>
         <title>Tack För Din Order</title>
-        <h1>{router.query}</h1>
-        <h1>{router.pathname}</h1>
       </Head>
       <Layout>
         <OrderConfirmation />
@@ -22,4 +20,4 @@ const CheckoutPage = ({ router }) => {
   )
 }
 
-export default CheckoutPage
+export default withRouter(CheckoutPage)
