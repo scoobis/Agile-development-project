@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const CheckoutForm = (props) => {
-  const { cartContext } = props
+  const { cartContext, setPaid } = props
   const router = useRouter()
 
   const [state, setState] = useState({

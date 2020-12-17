@@ -12,10 +12,10 @@ const Checkout = () => {
     <Container>
       <Grid container spacing={2}>
         <Grid item xs={8}>
-          <CheckoutForm cartContext={state} />
+          <CheckoutForm cartContext={state} setPaid={setPaid} />
         </Grid>
         <Grid item xs={4}>
-          <OrderCard state={state} setPaid={setPaid} />
+          <OrderCard state={state} />
           <FormControl fullWidth component='fieldset' style={{ marginTop: '30px', borderRadius: '5px', background: '#e3e3e3', padding: '30px' }}>
             <Typography variant='h5' style={{ marginBottom: '10px' }}>
               Betalalternativ
