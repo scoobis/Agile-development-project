@@ -1,9 +1,13 @@
 const service = require('../services/producerService')
-const createError = require('http-errors')
 
 const controller = {}
 controller.get = async (req, res, next) => {
-  res.status(200)
+  try {
+    const status = await service.get()
+    res.status(200).json({ success: status })
+  } catch (error) {
+    next(error)
+  }
 }
 
 module.exports = controller
