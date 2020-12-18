@@ -17,6 +17,7 @@ async function list (req, res, next) {
 async function get (req, res, next) {
   try {
     const producer = await service.get(req.params.orgno)
+    console.dir(producer)
     res.status(200).json(producer)
   } catch (error) {
     next(error)
