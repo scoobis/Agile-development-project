@@ -1,10 +1,16 @@
 const service = require('../services/producerService')
 
+/**
+ * Exported functions in producer controller.
+ */
 module.exports = {
   list,
   get
 }
 
+/**
+ * Middleware for listing producers.
+ */
 async function list (req, res, next) {
   try {
     const producers = await service.list()
@@ -14,10 +20,12 @@ async function list (req, res, next) {
   }
 }
 
+/**
+ * Middleware for getting a specific producer.
+ */
 async function get (req, res, next) {
   try {
     const producer = await service.get(req.params.orgno)
-    console.dir(producer)
     res.status(200).json(producer)
   } catch (error) {
     next(error)
