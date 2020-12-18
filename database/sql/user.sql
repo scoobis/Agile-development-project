@@ -35,6 +35,7 @@ CREATE TABLE user_address (
 CREATE TABLE producer (
   org_no VARCHAR(10) NOT NULL,
   user_id INT NOT NULL,
+  description TEXT,
   PRIMARY KEY (org_no),
   FOREIGN KEY (user_id) REFERENCES user(id)
 );
@@ -177,9 +178,9 @@ INSERT INTO user_address (user_id, address_id, type)
 VALUES
   ('1', '1', 'business');
 
-INSERT INTO producer (org_no, user_id) 
+INSERT INTO producer (org_no, user_id, description) 
 VALUES
-  ('1111111111', '1');
+  ('1111111111', '1', 'ProduCent AB\nVi har allt du vill ha nära!');
 
 INSERT INTO product (producer_org_no, name, description, price, sale_price, unit, in_stock) 
 VALUES

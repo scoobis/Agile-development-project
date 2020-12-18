@@ -21,7 +21,7 @@ app.use(headers)
 app.use('/static', express.static('uploads'))
 
 // Root routes
-// app.use('/', require('./routes/WHICHROUTER?'))
+app.use('/producer', require('./routes/producerRouter'))
 app.use('/user', require('./routes/userRouter'))
 app.use('/product', require('./routes/productRouter'))
 app.use('/order', require('./routes/orderRouter'))

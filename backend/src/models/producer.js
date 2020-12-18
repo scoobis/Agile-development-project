@@ -5,10 +5,11 @@ const User = require('./user')
  * @class Producer
  */
 class Producer extends User {
-  constructor (id = null, email, password, name, phone, orgNumber, role = 'producer') {
+  constructor (id = null, email, password, name, phone, orgNumber, description = null, role = 'producer') {
     super(id, email, password, name)
     this.phone = phone
     this.orgNumber = orgNumber
+    this.description = description
     this.role = role
   }
 }
