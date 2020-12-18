@@ -1,0 +1,25 @@
+const Producer = require('../models/producer')
+const pool = require('./databaseConnection')
+
+module.exports = {
+  getAll
+}
+
+async function getAll () {
+  const query = `
+  SELECT u.id, u.email, u.password, u.full_name, u.phone_no, p.org_no, p.description
+  FROM producer AS p
+  INNER JOIN user AS u
+  ON p.user_id=u.id`
+  const rows = await pool.query(query)
+
+  return rows.map(row => new Producer(
+    row.id,
+    row.email,
+    row.password,
+    row.full_name,
+    row.phone_no,
+    row.org_no,
+    row.description
+  ))
+}
