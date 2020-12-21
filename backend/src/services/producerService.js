@@ -25,6 +25,5 @@ async function list () {
  */
 async function get (orgNo) {
   const res = await ProducerDAO.get(orgNo)
-  console.dir(res)
   return res
 }
