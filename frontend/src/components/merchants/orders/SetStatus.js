@@ -3,6 +3,7 @@ import { FormControl, InputLabel, Select } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { LEVERERAD, INKOMMEN, MAKULERAD, LERVERANSKLAR } from '../../../utils/config'
 import { updateOrderStatus } from '../../../utils/api'
+import { useSnackbar } from 'notistack'
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -21,12 +22,33 @@ const SetStatus = (props) => {
   const { status } = props
   const [currentStatus, setCurrentStatus] = useState(status)
   const [color, setColor] = useState('')
+  const { enqueueSnackbar } = useSnackbar()
   const classes = useStyles()
 
   const handleChange = (e) => {
     const { value: status } = e.target
     setCurrentStatus(status)
-    status !== '' ? updateOrderStatus({ status, id: 1 }) : '' // Do Nothing
+    status !== ''
+      ? updateOrderStatus({ status, id: 1 }).then((res) => {
+          if (res.status === 200) {
+            enqueueSnackbar(` Status har uppdaterats till: ${status}`, {
+              variant: 'success',
+              anchorOrigin: {
+                vertical: 'bottom',
+                horizontal: 'right'
+              }
+            })
+          } else {
+            enqueueSnackbar('Ops, något gick fel. Försök igen senare...', {
+              variant: 'error',
+              anchorOrigin: {
+                vertical: 'bottom',
+                horizontal: 'right'
+              }
+            })
+          }
+        })
+      : '' // Do Nothing
   }
   useEffect(() => {
     if (currentStatus === INKOMMEN) setColor('green')
