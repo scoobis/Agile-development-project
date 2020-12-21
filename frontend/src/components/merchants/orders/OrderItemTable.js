@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
 import { withStyles } from '@material-ui/core/styles'
-import { IconButton, makeStyles, TableCell, TableRow } from '@material-ui/core'
-import ClearIcon from '@material-ui/icons/Clear'
-import CheckIcon from '@material-ui/icons/Check'
+import { TableCell, TableRow } from '@material-ui/core'
+import SetStatus from './SetStatus'
 
 const StyledTableRow = withStyles((theme) => ({
   root: {
@@ -12,17 +11,7 @@ const StyledTableRow = withStyles((theme) => ({
   }
 }))(TableRow)
 
-const useStyles = makeStyles({
-  thumbnail: {
-    maxHeight: 50
-  },
-  active: { color: 'green', fontWeight: 'bold' },
-  notActive: { color: 'red', fontWeight: 'bold' }
-})
-
 const OrderItemTable = (props) => {
-  const classes = useStyles()
-
   const { order, setOrderDetialsComponent } = props
 
   const [activeDetials, setActiveDetails] = useState(false)
@@ -41,19 +30,11 @@ const OrderItemTable = (props) => {
       <TableCell align='right'>{order.customerEmail}</TableCell>
       <TableCell align='right'>Hämtas på plats</TableCell>
       <TableCell align='right'>{order.total} SEK</TableCell>
-      <TableCell align='right' className={classes.active}>
-        Aktiv
+      <TableCell align='right'>
+        <SetStatus status={order.status} id={order.id} />
       </TableCell>
       <TableCell align='right' style={{ cursor: 'pointer', fontWeight: 'bold' }} onClick={() => openOrderDetails()}>
         {!activeDetials ? 'Öppna' : 'Stäng'}
-      </TableCell>
-      <TableCell align='right'>
-        <IconButton onClick={() => setAction(ACTIONS.EDIT_PRODUCT)}>
-          <CheckIcon />
-        </IconButton>
-        <IconButton onClick={() => setAction(ACTIONS.REMOVE_PRODUCT)}>
-          <ClearIcon />
-        </IconButton>
       </TableCell>
     </StyledTableRow>
   )
