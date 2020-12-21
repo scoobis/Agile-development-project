@@ -1,36 +1,50 @@
 import Head from 'next/head'
+import Link from 'next/link'
 import Layout from '../src/components/layouts/Layout'
 import { useEffect, useState } from 'react'
-import { Box, CircularProgress, Container, Grid, Typography } from '@material-ui/core'
+import {
+  Box,
+  CircularProgress,
+  Container,
+  Grid,
+  Typography,
+  Card,
+  CardActionArea,
+  CardContent,
+  CardMedia
+} from '@material-ui/core'
+import { makeStyles } from '@material-ui/core/styles'
+import { getProducers } from '../src/utils/api'
 
-const ProductsOnSale = () => {
+const useStyles = makeStyles({
+  card: {
+    maxWidth: 345
+  },
+  cardImage: {
+    height: 140
+  },
+  hiddenLink: {
+    textDecoration: 'none',
+    color: 'inherit'
+  }
+})
+
+const Producers = () => {
   const [producers, setProducers] = useState([])
   const [isLoading, setLoading] = useState(false)
+  const classes = useStyles()
 
   useEffect(() => {
     setLoading(true)
     setProducers([])
 
-    getProducers().then((res) => {
-      setProducers(res)
+    getProducers().then(({ data, error }) => {
+      if (data) {
+        setProducers(data)
+      }
       setLoading(false)
     })
   }, [])
-
-  const getProducers = () => {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve([
-          {
-            name: 'Kristinas gård'
-          },
-          {
-            name: 'Jannes mejeri'
-          }
-        ])
-      }, 1000)
-    })
-  }
 
   return (
     <>
@@ -41,7 +55,7 @@ const ProductsOnSale = () => {
         <Container maxWidth='lg'>
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              <Typography variant='h1' component='h1' align='center'>
+              <Typography gutterBottom variant='h1' component='h1' align='center'>
                 Producenter
               </Typography>
             </Grid>
@@ -51,13 +65,33 @@ const ProductsOnSale = () => {
                   <CircularProgress />
                 </Box>
               ) : (
-                <>
-                  {producers.map((producer) => (
-                    <p align='center' key={producer.name}>
-                      {producer.name}
-                    </p>
-                  ))}
-                </>
+                producers.length && (
+                  <Grid container spacing={3}>
+                    {producers.map((producer) => (
+                      <Card key={producer.id} className={classes.card}>
+                        <Link href={`/producenter/${producer.orgNumber}`}>
+                          <a className={classes.hiddenLink}>
+                            <CardActionArea>
+                              <CardMedia
+                                className={classes.cardImage}
+                                image='https://via.placeholder.com/500x400.jpg'
+                                title={producer.name}
+                              />
+                            </CardActionArea>
+                            <CardContent>
+                              <Typography gutterBottom variant='h5' component='h2'>
+                                {producer.name}
+                              </Typography>
+                              <Typography variant='body2' component='p'>
+                                {producer.description}
+                              </Typography>
+                            </CardContent>
+                          </a>
+                        </Link>
+                      </Card>
+                    ))}
+                  </Grid>
+                )
               )}
             </Grid>
           </Grid>
@@ -67,4 +101,4 @@ const ProductsOnSale = () => {
   )
 }
 
-export default ProductsOnSale
+export default Producers
