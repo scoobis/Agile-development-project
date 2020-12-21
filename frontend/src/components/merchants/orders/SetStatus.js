@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { FormControl, InputLabel, Select } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { LEVERERAD, INKOMMEN, MAKULERAD, LERVERANSKLAR } from '../../../utils/config'
+import { updateOrderStatus } from '../../../utils/api'
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -23,12 +24,14 @@ const SetStatus = (props) => {
   const classes = useStyles()
 
   const handleChange = (e) => {
-    setCurrentStatus(e.target.value)
+    const { value: status } = e.target
+    setCurrentStatus(status)
+    status !== '' ? updateOrderStatus({ status, id: 1 }) : '' // Do Nothing
   }
   useEffect(() => {
     if (currentStatus === INKOMMEN) setColor('green')
-    else if (currentStatus === LERVERANSKLAR) setColor('green')
-    else if (currentStatus === LEVERERAD) setColor('green')
+    else if (currentStatus === LERVERANSKLAR) setColor('orange')
+    else if (currentStatus === LEVERERAD) setColor('black')
     else if (currentStatus === MAKULERAD) setColor('red')
   }, [currentStatus])
 
@@ -39,10 +42,10 @@ const SetStatus = (props) => {
         <option style={{ color: 'green', fontWeight: 'bold' }} value={INKOMMEN}>
           {INKOMMEN}
         </option>
-        <option style={{ color: 'green', fontWeight: 'bold' }} value={LERVERANSKLAR}>
+        <option style={{ color: 'orange', fontWeight: 'bold' }} value={LERVERANSKLAR}>
           {LERVERANSKLAR}
         </option>
-        <option style={{ color: 'green', fontWeight: 'bold' }} value={LEVERERAD}>
+        <option style={{ color: 'black', fontWeight: 'bold' }} value={LEVERERAD}>
           {LEVERERAD}
         </option>
         <option style={{ color: 'red', fontWeight: 'bold' }} value={MAKULERAD}>

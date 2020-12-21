@@ -136,3 +136,9 @@ export const getProducer = (orgNumber) =>
     .get(`/producer/${orgNumber}`)
     .then((response) => ({ data: response.data }))
     .catch((error) => ({ error: error }))
+
+export const updateOrderStatus = (status) =>
+  axios
+    .post('/order/updateStatus', status)
+    .then((response) => response)
+    .catch((err) => err.response)
