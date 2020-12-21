@@ -24,5 +24,7 @@ async function list () {
  * @throws {SqlError|Error} - SQL/Data problems.
  */
 async function get (orgNo) {
-  return await ProducerDAO.get(orgNo)
+  const res = await ProducerDAO.get(orgNo)
+  console.dir(res)
+  return res
 }
