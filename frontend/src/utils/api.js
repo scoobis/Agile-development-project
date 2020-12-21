@@ -124,3 +124,15 @@ export const getOrdersProducer = () =>
     .catch((err) => err.response)
 
 export const searchProducts = (query) => axios.get(`/product/all/search?q=${query}`)
+
+export const getProducers = () =>
+  axios
+    .get('/producer')
+    .then((response) => ({ data: response.data }))
+    .catch((error) => ({ error: error }))
+
+export const getProducer = (orgNumber) =>
+  axios
+    .get(`/producer/${orgNumber}`)
+    .then((response) => ({ data: response.data }))
+    .catch((error) => ({ error: error }))
