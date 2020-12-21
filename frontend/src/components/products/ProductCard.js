@@ -5,6 +5,8 @@ import { CartContext } from '../../context/CartContext'
 import Link from 'next/link'
 import PickAmount from './PickAmount'
 import { PRODUCTS_PATH } from '../../utils/config'
+import { itemsInCartAreFromSameProducer } from '../../utils/helpers'
+import { useSnackbar } from 'notistack'
 
 const useStyles = makeStyles({
   root: {
@@ -39,9 +41,34 @@ const useStyles = makeStyles({
 
 const ProductCard = (props) => {
   const { id, name, price, unit, inStock, imgSrc, orgNumber, category } = props
-  const { addProduct } = useContext(CartContext)
+  const { addProduct, state } = useContext(CartContext)
   const [amount, setAmount] = useState(1)
   const classes = useStyles()
+  const { enqueueSnackbar } = useSnackbar()
+
+  const handleAddProduct = () => {
+    const canAdd = itemsInCartAreFromSameProducer(state.cartProducts, orgNumber)
+
+    if (canAdd) {
+      addProduct({ id, amount, name, price, unit, orgNumber })
+
+      enqueueSnackbar(`${name} har lagts till i varukorgen`, {
+        variant: 'success',
+        anchorOrigin: {
+          vertical: 'bottom',
+          horizontal: 'right'
+        }
+      })
+    } else {
+      enqueueSnackbar('Du kan endast handla från en producent per köp', {
+        variant: 'error',
+        anchorOrigin: {
+          vertical: 'bottom',
+          horizontal: 'center'
+        }
+      })
+    }
+  }
 
   const handleAmountChange = (value) => setAmount(value)
 
@@ -65,11 +92,7 @@ const ProductCard = (props) => {
         </a>
       </Link>
       <CardActions>
-        <Button
-          variant='contained'
-          color='primary'
-          onClick={() => addProduct({ id, amount, name, price, unit, orgNumber })}
-        >
+        <Button variant='contained' color='primary' onClick={handleAddProduct}>
           Köp
         </Button>
         <PickAmount inStock={inStock} handleAmountChange={handleAmountChange} />
