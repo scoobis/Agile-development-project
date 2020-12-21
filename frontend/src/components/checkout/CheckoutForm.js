@@ -14,7 +14,7 @@ import {
   MIN_EMAIL_LENGTH,
   MIN_NAME_LENGTH
 } from '../../utils/user'
-import { Button, TextField, Container, Grid, Typography } from '@material-ui/core'
+import { Button, TextField, Container, Grid, Typography, Checkbox, FormControlLabel } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -38,6 +38,7 @@ const CheckoutForm = (props) => {
   const { cartContext, setPaid } = props
   const router = useRouter()
 
+  const [subscribe, setSubscribe] = useState(false)
   const [state, setState] = useState({
     name: { value: '', hasError: false, helperText: '' },
     email: { value: '', hasError: false, helperText: '' },
@@ -83,6 +84,7 @@ const CheckoutForm = (props) => {
       customerZip: state.zip.value,
       customerCity: state.city.value,
       products: cartContext.cartProducts,
+      subscribe: subscribe,
       shippingMethod: 'collect', // Only option atm
       paymentMethod: 'upon_collect', // only option atm
       subtotal: cartContext.total, // TODO: calc subTotal (not required atm?)
@@ -206,6 +208,12 @@ const CheckoutForm = (props) => {
                 inputProps={{
                   minLength: MIN_CITY_LENGTH
                 }}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <FormControlLabel
+                control={<Checkbox checked={subscribe} onChange={() => setSubscribe(!subscribe)} name='subscribe' />}
+                label='Ja, jag vill ta del av nyheter och erbjudanden från producenten'
               />
             </Grid>
             <Button type='submit' fullWidth variant='contained' color='primary' className={classes.submit}>
