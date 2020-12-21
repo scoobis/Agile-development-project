@@ -10,27 +10,43 @@ const useStyles = makeStyles((theme) => ({
   },
   formControl: {
     margin: theme.spacing(1),
-    minWidth: 130
+    minWidth: 130,
+    fontWeight: 'bold'
   }
 }))
 
 const SetStatus = (props) => {
   const { status } = props
   const [currentStatus, setCurrentStatus] = useState(status)
+  const [color, setColor] = useState('')
   const classes = useStyles()
 
   const handleChange = (e) => {
     setCurrentStatus(e.target.value)
   }
+  useEffect(() => {
+    if (currentStatus === 'Inkommen') setColor('green')
+    else if (currentStatus === 'Leveransklar') setColor('green')
+    else if (currentStatus === 'Levererad') setColor('green')
+    else if (currentStatus === 'Makulerad') setColor('red')
+  }, [currentStatus])
 
   return (
     <FormControl className={classes.formControl}>
-      <Select style={{ color: 'red' }} value={currentStatus} native onChange={handleChange}>
+      <Select style={{ color: color, fontWeight: 'bold' }} value={currentStatus} native onChange={handleChange}>
         <option aria-label='none' value='' />
-        <option value='status 1' style={{ color: 'red' }}>
-          Status 1
+        <option style={{ color: 'green', fontWeight: 'bold' }} value='Inkommen'>
+          Inkommen
         </option>
-        <option value={2}>Status 2</option>
+        <option style={{ color: 'green', fontWeight: 'bold' }} value='Leveransklar'>
+          Leveransklar
+        </option>
+        <option style={{ color: 'green', fontWeight: 'bold' }} value='Levererad'>
+          Levererad
+        </option>
+        <option style={{ color: 'red', fontWeight: 'bold' }} value='Makulerad'>
+          Makulerad
+        </option>
       </Select>
     </FormControl>
   )
