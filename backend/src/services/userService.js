@@ -99,6 +99,7 @@ service.parseProducerFromRequest = async (req) => {
     req.body.name,
     req.body.phone,
     req.body.orgNumber,
+    null,
     'producer'
   )
 }
