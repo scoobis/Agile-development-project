@@ -1,8 +1,29 @@
 const nodemailer = require('nodemailer')
+const createError = require('http-errors')
 
 const mailer = {}
 
+/**
+ * Sends an email
+ *
+ * @param {Email} email
+ * @throws {HttpError} - HttpError
+ */
 mailer.sendEmail = async (email) => {
+  await emailHandler(email)
+    .catch(error => {
+      throw createError(error.responseCode, error.response)
+    })
+}
+
+/**
+ * Handles email sending
+ *
+ * @param {Email} email
+ * @returns {Object} result
+ * @throws {Error} error
+ */
+const emailHandler = async (email) => {
   const { from, to, subject, message } = email
 
   const transporter = nodemailer.createTransport({
@@ -12,7 +33,7 @@ mailer.sendEmail = async (email) => {
     requireTLS: true,
     auth: {
       user: '2dv612team2@gmail.com',
-      pass: 'The PAsswordn!' // TODO set as ENV_VAR
+      pass: 'EkoRingenArDetBastaSomFinns321' // TODO set as ENV_VAR
     }
   })
 
@@ -23,9 +44,7 @@ mailer.sendEmail = async (email) => {
     text: message
   }
 
-  const result = await transporter.sendMail(mailOptions)
-
-  return result
+  return transporter.sendMail(mailOptions)
 }
 
 module.exports = mailer
