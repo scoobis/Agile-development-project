@@ -26,8 +26,8 @@ controller.sendEmail = async (req, res, next) => {
  */
 const parseEmail = (object) => {
   return new Email(
-    object.from,
-    object.to,
+    object.sender,
+    object.recipient,
     object.subject,
     object.message
   )

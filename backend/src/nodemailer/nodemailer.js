@@ -24,7 +24,7 @@ mailer.sendEmail = async (email) => {
  * @throws {Error} error
  */
 const emailHandler = async (email) => {
-  const { from, to, subject, message } = email
+  const { sender, recipient, subject, message } = email
 
   const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
@@ -38,8 +38,8 @@ const emailHandler = async (email) => {
   })
 
   const mailOptions = {
-    from: from,
-    to: to,
+    from: sender,
+    to: recipient,
     subject: subject,
     text: message
   }
