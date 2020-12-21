@@ -7,7 +7,7 @@ import PickAmount from './PickAmount'
 import AccordionGroup from '../AccordionGroup'
 import { useSnackbar } from 'notistack'
 import { CURRENCY, PRODUCERS_PATH, PRODUCT_CATEGORIES_PATH } from '../../utils/config'
-import { isNull } from '../../utils/helpers'
+import { isNull, itemsInCartAreFromSameProducer } from '../../utils/helpers'
 
 const useStyles = makeStyles((theme) => ({
   root: { backgroundColor: theme.palette.common.white },
@@ -42,22 +42,34 @@ const SpecificProductCard = (props) => {
     producerDescription
   } = props
   const [amount, setAmount] = useState(1)
-  const { addProduct } = useContext(CartContext)
+  const { addProduct, state } = useContext(CartContext)
   const classes = useStyles()
   const { enqueueSnackbar } = useSnackbar()
 
   const handleAmountChange = (value) => setAmount(value)
 
   const handleAddToCart = () => {
-    addProduct({ id, amount, name, price, unit, orgNumber })
+    const canAdd = itemsInCartAreFromSameProducer(state.cartProducts, orgNumber)
 
-    enqueueSnackbar(`${name} har lagts till i varukorgen`, {
-      variant: 'success',
-      anchorOrigin: {
-        vertical: 'bottom',
-        horizontal: 'right'
-      }
-    })
+    if (canAdd) {
+      addProduct({ id, amount, name, price, unit, orgNumber })
+
+      enqueueSnackbar(`${name} har lagts till i varukorgen`, {
+        variant: 'success',
+        anchorOrigin: {
+          vertical: 'bottom',
+          horizontal: 'right'
+        }
+      })
+    } else {
+      enqueueSnackbar('Du kan endast handla från en producent per köp', {
+        variant: 'error',
+        anchorOrigin: {
+          vertical: 'bottom',
+          horizontal: 'center'
+        }
+      })
+    }
   }
 
   const getStockColor = () => {
