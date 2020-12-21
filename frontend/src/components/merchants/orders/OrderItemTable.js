@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
 import { withStyles } from '@material-ui/core/styles'
-import { IconButton, makeStyles, TableCell, TableRow } from '@material-ui/core'
-import ClearIcon from '@material-ui/icons/Clear'
-import CheckIcon from '@material-ui/icons/Check'
+import { makeStyles, TableCell, TableRow } from '@material-ui/core'
+import SetStatus from './SetStatus'
 
 const StyledTableRow = withStyles((theme) => ({
   root: {
@@ -48,12 +47,7 @@ const OrderItemTable = (props) => {
         {!activeDetials ? 'Öppna' : 'Stäng'}
       </TableCell>
       <TableCell align='right'>
-        <IconButton onClick={() => setAction(ACTIONS.EDIT_PRODUCT)}>
-          <CheckIcon />
-        </IconButton>
-        <IconButton onClick={() => setAction(ACTIONS.REMOVE_PRODUCT)}>
-          <ClearIcon />
-        </IconButton>
+        <SetStatus />
       </TableCell>
     </StyledTableRow>
   )

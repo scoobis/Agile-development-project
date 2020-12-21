@@ -10,7 +10,6 @@ const useStyles = makeStyles((theme) => ({
   },
   formControl: {
     margin: theme.spacing(1),
-    minWidth: 250,
     '& > label': {
       marginTop: theme.spacing(-1)
     }
@@ -43,9 +42,7 @@ const FilterMenu = (props) => {
 
     // Check if category has children (sub category)
     const test = availableCategories.find((x) => parseInt(e.target.value) === x.id)
-    test && test.children
-      ? setHasSubCategory({ cat1: true, cat2: false })
-      : setHasSubCategory({ cat1: false, cat2: false })
+    test && test.children ? setHasSubCategory({ cat1: true, cat2: false }) : setHasSubCategory({ cat1: false, cat2: false })
   }
 
   const handleChangeSubCategory = (e) => {
