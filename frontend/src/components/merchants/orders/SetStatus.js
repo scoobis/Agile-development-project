@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { FormControl, InputLabel, Select } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 
@@ -17,14 +17,15 @@ const useStyles = makeStyles((theme) => ({
   disabledText: { opacity: 0.6 }
 }))
 
-const SetStatus = () => {
+const SetStatus = (props) => {
+  const { status } = props
+  const [currentStatus, setCurrentStatus] = useState(status)
   const classes = useStyles()
   return (
-    <FormControl variant='outlined' className={classes.formControl}>
-      <InputLabel shrink>Sätt status</InputLabel>
-      <Select value={status} native>
-        <option aria-label='none' value={status}>
-          {status}
+    <FormControl className={classes.formControl}>
+      <Select value={currentStatus} native>
+        <option aria-label='none' value={currentStatus}>
+          {currentStatus}
         </option>
         <option>Status 1</option>
       </Select>
