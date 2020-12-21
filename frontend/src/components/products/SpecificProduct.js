@@ -1,23 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { Container, Grid } from '@material-ui/core'
 import SpecificProductCard from './SpecificProductCard'
-import { getOneProduct, getProducer } from '../../utils/api'
 import { API_URL } from '../../utils/config'
 import SlickSlider from './SlickSlider'
 
-const SpecificProduct = (props) => {
-  const [product, setProduct] = useState({})
-  const { productId, onLoad } = props
-
-  useEffect(() => {
-    getOneProduct(productId).then((response) => {
-      onLoad(response.name)
-      getProducer(response.orgNumber).then(({ data }) => {
-        setProduct({ ...response, producer: data.name, producerDescription: data.description })
-      })
-    })
-  }, [props])
-
+const SpecificProduct = ({ product }) => {
   const getImages = () =>
     product.images && product.images.length
       ? product.images.map((img) => ({
