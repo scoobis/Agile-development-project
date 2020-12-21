@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { withStyles } from '@material-ui/core/styles'
-import { makeStyles, TableCell, TableRow } from '@material-ui/core'
+import { TableCell, TableRow } from '@material-ui/core'
 import SetStatus from './SetStatus'
 
 const StyledTableRow = withStyles((theme) => ({
@@ -11,17 +11,7 @@ const StyledTableRow = withStyles((theme) => ({
   }
 }))(TableRow)
 
-const useStyles = makeStyles({
-  thumbnail: {
-    maxHeight: 50
-  },
-  active: { color: 'green', fontWeight: 'bold' },
-  notActive: { color: 'red', fontWeight: 'bold' }
-})
-
 const OrderItemTable = (props) => {
-  const classes = useStyles()
-
   const { order, setOrderDetialsComponent } = props
 
   const [activeDetials, setActiveDetails] = useState(false)
@@ -41,7 +31,7 @@ const OrderItemTable = (props) => {
       <TableCell align='right'>Hämtas på plats</TableCell>
       <TableCell align='right'>{order.total} SEK</TableCell>
       <TableCell align='right'>
-        <SetStatus status={'aktiv'} />
+        <SetStatus status={'Inkommen'} />
       </TableCell>
       <TableCell align='right' style={{ cursor: 'pointer', fontWeight: 'bold' }} onClick={() => openOrderDetails()}>
         {!activeDetials ? 'Öppna' : 'Stäng'}

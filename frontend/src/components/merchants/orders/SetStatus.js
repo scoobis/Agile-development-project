@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { FormControl, InputLabel, Select } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
+import { LEVERERAD, INKOMMEN, MAKULERAD, LERVERANSKLAR } from '../../../utils/config'
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -25,27 +26,27 @@ const SetStatus = (props) => {
     setCurrentStatus(e.target.value)
   }
   useEffect(() => {
-    if (currentStatus === 'Inkommen') setColor('green')
-    else if (currentStatus === 'Leveransklar') setColor('green')
-    else if (currentStatus === 'Levererad') setColor('green')
-    else if (currentStatus === 'Makulerad') setColor('red')
+    if (currentStatus === INKOMMEN) setColor('green')
+    else if (currentStatus === LERVERANSKLAR) setColor('green')
+    else if (currentStatus === LEVERERAD) setColor('green')
+    else if (currentStatus === MAKULERAD) setColor('red')
   }, [currentStatus])
 
   return (
     <FormControl className={classes.formControl}>
       <Select style={{ color: color, fontWeight: 'bold' }} value={currentStatus} native onChange={handleChange}>
         <option aria-label='none' value='' />
-        <option style={{ color: 'green', fontWeight: 'bold' }} value='Inkommen'>
-          Inkommen
+        <option style={{ color: 'green', fontWeight: 'bold' }} value={INKOMMEN}>
+          {INKOMMEN}
         </option>
-        <option style={{ color: 'green', fontWeight: 'bold' }} value='Leveransklar'>
-          Leveransklar
+        <option style={{ color: 'green', fontWeight: 'bold' }} value={LERVERANSKLAR}>
+          {LERVERANSKLAR}
         </option>
-        <option style={{ color: 'green', fontWeight: 'bold' }} value='Levererad'>
-          Levererad
+        <option style={{ color: 'green', fontWeight: 'bold' }} value={LEVERERAD}>
+          {LEVERERAD}
         </option>
-        <option style={{ color: 'red', fontWeight: 'bold' }} value='Makulerad'>
-          Makulerad
+        <option style={{ color: 'red', fontWeight: 'bold' }} value={MAKULERAD}>
+          {MAKULERAD}
         </option>
       </Select>
     </FormControl>
