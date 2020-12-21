@@ -49,17 +49,18 @@ async function get (orgNo) {
   INNER JOIN user AS u
   ON p.user_id=u.id
   WHERE p.org_no=?`
-  const row = await pool.query(query, [orgNo])
-  if (row.length === 0) {
+  const queryResult = await pool.query(query, [orgNo])
+  if (queryResult.length === 0) {
     throw createError(404, 'Producer not found.')
   }
+  const producerRow = queryResult[0]
   return new Producer(
-    row.id,
-    row.email,
-    row.password,
-    row.full_name,
-    row.phone_no,
-    row.org_no,
-    row.description
+    producerRow.id,
+    producerRow.email,
+    producerRow.password,
+    producerRow.full_name,
+    producerRow.phone_no,
+    producerRow.org_no,
+    producerRow.description
   )
 }
