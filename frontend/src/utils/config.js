@@ -12,3 +12,8 @@ export const PRODUCER_DASHBOARD_PATH = '/merchants'
 export const LOGO_PATH = '/logga-reko-cirkel.svg'
 export const MY_ACCOUNT_PATH = '/mitt-konto'
 export const PRODUCT_PLACEHOLDER_IMG_PATH = '/apples.jpg'
+
+export const INKOMMEN = 'Inkommen'
+export const MAKULERAD = 'Makulerad'
+export const LEVERERAD = 'Levererad'
+export const LERVERANSKLAR = 'leveransklar'
