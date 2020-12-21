@@ -39,3 +39,11 @@ export const replaceNullsWithEmptyStr = (object) => {
 const isObjectValueNull = (obj, key) => obj[key] === null || obj[key] === undefined || obj[key] === 'null'
 
 export const isNull = (str) => str === null || str === undefined || str === 'null'
+
+export const itemsInCartAreFromSameProducer = (productsInCart, orgNumber) => {
+  if (!productsInCart || !productsInCart.length) {
+    return true
+  }
+
+  return !!productsInCart.find((product) => product.orgNumber === orgNumber)
+}
