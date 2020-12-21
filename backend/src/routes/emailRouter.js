@@ -1,7 +1,7 @@
 const router = require('express').Router()
 const controller = require('../controllers/emailController')
+const validate = require('../middlewares/validate')
 
-// TODO validate!, Check that email addresses are valid etc.
-router.post('/', controller.sendEmail)
+router.post('/', validate.email, controller.sendEmail)
 
 module.exports = router
