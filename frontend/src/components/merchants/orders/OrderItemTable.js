@@ -47,7 +47,7 @@ const OrderItemTable = (props) => {
         {!activeDetials ? 'Öppna' : 'Stäng'}
       </TableCell>
       <TableCell align='right'>
-        <SetStatus />
+        <SetStatus status={'aktiv'} />
       </TableCell>
     </StyledTableRow>
   )
