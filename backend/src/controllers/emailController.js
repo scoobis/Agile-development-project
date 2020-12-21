@@ -3,9 +3,9 @@ const Email = require('../models/email')
 
 const controller = {}
 
+// TODO Fix the error handling (try/catch)
 controller.sendEmail = async (req, res, next) => {
   try {
-    console.log(req.body)
     const mail = parseEmail(req.body)
 
     const result = await service.sendEmail(mail).catch(error => { res.status(400).json({ success: false, message: error }) })

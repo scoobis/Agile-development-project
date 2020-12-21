@@ -11,8 +11,8 @@ mailer.sendEmail = async (email) => {
     secure: false,
     requireTLS: true,
     auth: {
-      user: '2dv612team2@gmail.com', // enter your email address
-      pass: 'The PAsswordn!' // enter your visible/encripted password
+      user: '2dv612team2@gmail.com',
+      pass: 'The PAsswordn!' // TODO set as ENV_VAR
     }
   })
 
