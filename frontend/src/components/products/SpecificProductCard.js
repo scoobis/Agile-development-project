@@ -1,33 +1,46 @@
 import React, { useContext, useState } from 'react'
+import Link from 'next/link'
 import { makeStyles } from '@material-ui/core/styles'
 import { Card, CardContent, Typography, Button, Grid, Box } from '@material-ui/core'
 import { CartContext } from '../../context/CartContext'
 import PickAmount from './PickAmount'
-import { useSnackbar } from 'notistack'
-import Link from 'next/link'
 import AccordionGroup from '../AccordionGroup'
+import { useSnackbar } from 'notistack'
+import { CURRENCY, PRODUCERS_PATH, PRODUCT_CATEGORIES_PATH } from '../../utils/config'
 import { isNull } from '../../utils/helpers'
-import { CURRENCY, PRODUCT_CATEGORIES_PATH } from '../../utils/config'
+
+const useStyles = makeStyles((theme) => ({
+  root: { backgroundColor: theme.palette.common.white },
+  center: { textAlign: 'center' },
+  bold: { fontWeight: 'bold' },
+  oldPrice: { textDecoration: 'line-through', fontSize: 16 },
+  salePrice: { color: 'red', marginRight: '15px' },
+  cardContent: { padding: '15px 30px' },
+  lowInStock: { color: '#ffa700' },
+  highInStock: { color: 'green' },
+  outOfStock: { color: 'red' },
+  metaData: {
+    '& > *': {
+      fontSize: '13px'
+    }
+  }
+}))
 
 const SpecificProductCard = (props) => {
-  const useStyles = makeStyles((theme) => ({
-    root: { backgroundColor: theme.palette.common.white },
-    center: { textAlign: 'center' },
-    bold: { fontWeight: 'bold' },
-    oldPrice: { textDecoration: 'line-through', fontSize: 16 },
-    salePrice: { color: 'red', marginRight: '15px' },
-    cardContent: { padding: '15px 30px' },
-    lowInStock: { color: '#ffa700' },
-    highInStock: { color: 'green' },
-    outOfStock: { color: 'red' },
-    metaData: {
-      '& > *': {
-        fontSize: '13px'
-      }
-    }
-  }))
-
-  const { name, price, salePrice, unit, inStock, id, description, orgNumber, categories, tags } = props
+  const {
+    name,
+    price,
+    salePrice,
+    unit,
+    inStock,
+    id,
+    description,
+    orgNumber,
+    categories,
+    tags,
+    producer,
+    producerDescription
+  } = props
   const [amount, setAmount] = useState(1)
   const { addProduct } = useContext(CartContext)
   const classes = useStyles()
@@ -84,8 +97,8 @@ const SpecificProductCard = (props) => {
           </Grid>
           <Grid item md={6}>
             <Typography align='right' variant='h6'>
-              <Link href='#'>
-                <a style={{ textDecoration: 'none', color: 'inherit' }}>Lenas Gårdsbutik</a>
+              <Link href={`${PRODUCERS_PATH}/${orgNumber}`}>
+                <a style={{ textDecoration: 'none', color: 'inherit' }}>{producer}</a>
               </Link>
             </Typography>
           </Grid>
@@ -133,7 +146,7 @@ const SpecificProductCard = (props) => {
                 },
                 {
                   heading: 'Om producenten',
-                  content: 'Hello world!'
+                  content: !isNull(producerDescription) ? producerDescription : ''
                 }
               ]}
             />

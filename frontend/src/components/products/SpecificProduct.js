@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Container, Grid } from '@material-ui/core'
 import SpecificProductCard from './SpecificProductCard'
-import { getOneProduct } from '../../utils/api'
+import { getOneProduct, getProducer } from '../../utils/api'
 import { API_URL } from '../../utils/config'
 import SlickSlider from './SlickSlider'
 
@@ -11,8 +11,10 @@ const SpecificProduct = (props) => {
 
   useEffect(() => {
     getOneProduct(productId).then((response) => {
-      setProduct(response)
       onLoad(response.name)
+      getProducer(response.orgNumber).then(({ data }) => {
+        setProduct({ ...response, producer: data.name, producerDescription: data.description })
+      })
     })
   }, [props])
 
