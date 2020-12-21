@@ -31,7 +31,7 @@ const OrderItemTable = (props) => {
       <TableCell align='right'>Hämtas på plats</TableCell>
       <TableCell align='right'>{order.total} SEK</TableCell>
       <TableCell align='right'>
-        <SetStatus status={'Inkommen'} />
+        <SetStatus status={order.status} id={order.id} />
       </TableCell>
       <TableCell align='right' style={{ cursor: 'pointer', fontWeight: 'bold' }} onClick={() => openOrderDetails()}>
         {!activeDetials ? 'Öppna' : 'Stäng'}

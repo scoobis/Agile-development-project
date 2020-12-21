@@ -48,8 +48,6 @@ const Orders = () => {
     })
   }, [])
 
-  console.log(orders)
-
   return orders.length ? (
     <div>
       <TableContainer component={Paper}>

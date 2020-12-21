@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { FormControl, InputLabel, Select } from '@material-ui/core'
+import { FormControl, Select } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { LEVERERAD, INKOMMEN, MAKULERAD, LERVERANSKLAR } from '../../../utils/config'
 import { updateOrderStatus } from '../../../utils/api'
@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const SetStatus = (props) => {
-  const { status } = props
+  const { status, id } = props
   const [currentStatus, setCurrentStatus] = useState(status)
   const [color, setColor] = useState('')
   const { enqueueSnackbar } = useSnackbar()
@@ -29,7 +29,7 @@ const SetStatus = (props) => {
     const { value: status } = e.target
     setCurrentStatus(status)
     status !== ''
-      ? updateOrderStatus({ status, id: 1 }).then((res) => {
+      ? updateOrderStatus({ status, id }).then((res) => {
           if (res.status === 200) {
             enqueueSnackbar(` Status har uppdaterats till: ${status}`, {
               variant: 'success',
