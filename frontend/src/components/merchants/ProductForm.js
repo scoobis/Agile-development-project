@@ -1,22 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import {
-  Box,
-  Button,
-  Container,
-  FormControl,
-  Grid,
-  InputLabel,
-  MenuItem,
-  Select,
-  TextField,
-  Typography
-} from '@material-ui/core'
+import { Box, Button, Container, FormControl, Grid, InputLabel, MenuItem, Select, Typography } from '@material-ui/core'
 import MultipleSelect from './MultipleSelect'
 import { getCategories } from '../../utils/api'
 import UploadImages from './UploadImages'
 import SelectTags from './SelectTags'
 import { findParents } from '../../utils/helpers'
 import { API_URL } from '../../utils/config'
+import FormField from '../FormField'
+import { useSnackbar } from 'notistack'
 
 const EMPTY_INITIAL_STATE = {
   product: {
@@ -30,8 +21,7 @@ const EMPTY_INITIAL_STATE = {
     tags: [],
     categories: []
   },
-  errors: {},
-  message: ''
+  errors: {}
 }
 
 const ProductForm = ({ onSubmit, preFilled }) => {
@@ -39,6 +29,7 @@ const ProductForm = ({ onSubmit, preFilled }) => {
     preFilled ? { ...EMPTY_INITIAL_STATE, product: { ...preFilled, images: [] } } : EMPTY_INITIAL_STATE
   )
   const [categories, setCategories] = useState([])
+  const { enqueueSnackbar } = useSnackbar()
 
   useEffect(() => {
     convertInitialImagesToFiles().then((files) => {
@@ -64,7 +55,7 @@ const ProductForm = ({ onSubmit, preFilled }) => {
     })
   }, [])
 
-  async function convertInitialImagesToFiles () {
+  const convertInitialImagesToFiles = async () => {
     if (preFilled && preFilled.images) {
       const files = await Promise.all(
         preFilled.images.map(async (image) => {
@@ -161,15 +152,23 @@ const ProductForm = ({ onSubmit, preFilled }) => {
       }
 
       onSubmit(toSave).then((response) => {
+        let message = response.message
+        let variant = 'success'
+
         if (response.success || response.status === 200) {
-          preFilled
-            ? setState({ ...state, message: response.message, errors: {} })
-            : setState({ ...EMPTY_INITIAL_STATE, message: response.message, errors: {} })
+          preFilled ? setState({ ...state, errors: {} }) : setState({ ...EMPTY_INITIAL_STATE, errors: {} })
         } else if (response.status !== 200) {
-          setState({ ...state, message: response.data.message })
-        } else {
-          setState({ ...state, message: response.message })
+          message = response.data.message
+          variant = 'error'
         }
+
+        enqueueSnackbar(message, {
+          variant,
+          anchorOrigin: {
+            vertical: 'bottom',
+            horizontal: 'right'
+          }
+        })
       })
     }
   }
@@ -239,40 +238,24 @@ const ProductForm = ({ onSubmit, preFilled }) => {
       <form onSubmit={handleSubmit} onInvalid={handleError}>
         <Grid container spacing={2}>
           <Grid item xs={12}>
-            <TextField
-              placeholder='Namn'
+            <FormField
               name='name'
               label='Namn'
               value={state.product.name}
-              variant='outlined'
-              margin='normal'
-              InputLabelProps={{
-                shrink: true
-              }}
-              required
-              inputProps={{
-                minLength: 2,
-                maxLength: 20
-              }}
+              min={2}
+              max={20}
               error={!!state.errors.name}
-              fullWidth
               onChange={handleChange}
             />
           </Grid>
           <Grid item xs={12}>
-            <TextField
-              placeholder='Beskrivning'
+            <FormField
               name='description'
               label='Beskrivning'
               value={state.product.description}
-              variant='outlined'
-              margin='normal'
-              InputLabelProps={{
-                shrink: true
-              }}
               multiline
               rows={4}
-              fullWidth
+              optional
               onChange={handleChange}
             />
           </Grid>
@@ -280,40 +263,24 @@ const ProductForm = ({ onSubmit, preFilled }) => {
             <UploadImages images={state.product.images} setImages={handleImageChange} />
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
-            <TextField
-              placeholder='Pris'
+            <FormField
               name='price'
               label='Pris'
               value={state.product.price}
               type='number'
-              variant='outlined'
-              margin='normal'
-              InputLabelProps={{
-                shrink: true
-              }}
               error={!!state.errors.price}
-              inputProps={{
-                minLength: 1,
-                maxLength: 20
-              }}
-              required
-              fullWidth
+              min={1}
+              max={20}
               onChange={handleChange}
             />
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
-            <TextField
-              placeholder='Rabatterat pris'
+            <FormField
               name='salePrice'
               label='Rabatterat pris'
               value={state.product.salePrice}
               type='number'
-              margin='normal'
-              InputLabelProps={{
-                shrink: true
-              }}
-              variant='outlined'
-              fullWidth
+              optional
               onChange={handleChange}
             />
           </Grid>
@@ -328,24 +295,14 @@ const ProductForm = ({ onSubmit, preFilled }) => {
             </FormControl>
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
-            <TextField
-              placeholder='Antal enheter i lager'
+            <FormField
               name='inStock'
               label='Antal enheter i lager'
               value={state.product.inStock}
               type='number'
-              variant='outlined'
-              margin='normal'
-              InputLabelProps={{
-                shrink: true
-              }}
               error={!!state.errors.inStock}
-              inputProps={{
-                minLength: 1,
-                maxLength: 9999999
-              }}
-              required
-              fullWidth
+              min={1}
+              max={9999999}
               onChange={handleChange}
             />
           </Grid>
@@ -377,7 +334,6 @@ const ProductForm = ({ onSubmit, preFilled }) => {
           </Grid>
         </Grid>
       </form>
-      {state.message && <Typography style={{ marginTop: '20px' }}>{state.message}</Typography>}
     </Container>
   )
 }

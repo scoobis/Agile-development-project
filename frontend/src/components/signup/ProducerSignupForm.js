@@ -1,15 +1,6 @@
 import React, { useState } from 'react'
 import Link from 'next/link'
-import {
-  Button,
-  TextField,
-  FormControlLabel,
-  Checkbox,
-  Container,
-  Grid,
-  Typography,
-  FormControl
-} from '@material-ui/core'
+import { Button, FormControlLabel, Checkbox, Container, Grid, Typography, FormControl } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import {
   isValidName,
@@ -31,6 +22,7 @@ import {
 import { signup } from '../../utils/api'
 import { Producer } from '../../utils/roles'
 import { LOGIN_PATH } from '../../utils/config'
+import FormField from '../FormField'
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -125,86 +117,62 @@ const ProducerSignupForm = () => {
         <form className={classes.form} onSubmit={handleSubmit}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
-              <TextField
+              <FormField
                 name='name'
                 label='Fullständigt namn'
-                variant='outlined'
-                fullWidth
                 autoFocus
-                required
                 value={name.value}
                 onChange={handleChange}
                 error={name.hasError}
                 helperText={name.hasError && name.helperText}
-                inputProps={{
-                  minLength: MIN_NAME_LENGTH
-                }}
+                min={MIN_NAME_LENGTH}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField
+              <FormField
                 name='email'
                 label='E-post'
-                variant='outlined'
-                required
                 value={email.value}
                 onChange={handleChange}
                 error={email.hasError}
                 helperText={email.hasError && email.helperText}
-                inputProps={{
-                  minLength: MIN_EMAIL_LENGTH
-                }}
+                min={MIN_EMAIL_LENGTH}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField
+              <FormField
                 name='phone'
                 label='Telefonnummer'
-                variant='outlined'
-                required
                 value={phone.value}
                 onChange={handleChange}
                 error={phone.hasError}
                 helperText={phone.hasError && phone.helperText}
-                inputProps={{
-                  minLength: PHONE_LENGTH,
-                  maxLength: PHONE_LENGTH
-                }}
+                min={PHONE_LENGTH}
+                max={PHONE_LENGTH}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField
+              <FormField
                 name='orgNumber'
                 label='Organisationsnummer'
-                variant='outlined'
-                type='text'
-                required
-                fullWidth
                 value={orgNumber.value}
                 onChange={handleChange}
                 error={orgNumber.hasError}
                 helperText={orgNumber.hasError && orgNumber.helperText}
-                inputProps={{
-                  minLength: ORGNR_LENGTH,
-                  maxLength: MAX_ORGNR_LENGTH
-                }}
+                min={ORGNR_LENGTH}
+                max={MAX_ORGNR_LENGTH}
               />
             </Grid>
             <Grid item xs={12}>
-              <TextField
+              <FormField
                 name='password'
                 label='Lösenord'
-                variant='outlined'
                 type='password'
-                required
-                fullWidth
                 value={password.value}
                 onChange={handleChange}
                 error={password.hasError}
                 helperText={password.hasError && email.helperText}
-                inputProps={{
-                  minLength: MIN_PWD_LENGTH
-                }}
+                min={MIN_PWD_LENGTH}
               />
             </Grid>
 
@@ -212,54 +180,37 @@ const ProducerSignupForm = () => {
               <Typography>Adressuppgifter till er verksamhet</Typography>
             </Grid>
             <Grid item xs={6}>
-              <TextField
+              <FormField
                 name='streetAddress'
                 label='Gatuadress'
-                variant='outlined'
-                type='text'
-                required
-                fullWidth
                 value={streetAddress.value}
                 onChange={handleChange}
                 error={streetAddress.hasError}
                 helperText={streetAddress.hasError && streetAddress.helperText}
-                inputProps={{
-                  minLength: MIN_ADDRESS_LENGTH
-                }}
+                min={MIN_ADDRESS_LENGTH}
               />
             </Grid>
             <Grid item xs={6}>
-              <TextField
+              <FormField
                 name='zip'
                 label='Postnummer'
-                variant='outlined'
-                type='text'
-                required
-                fullWidth
                 value={zip.value}
                 onChange={handleChange}
                 error={zip.hasError}
                 helperText={zip.hasError && zip.helperText}
-                inputProps={{
-                  minLength: ZIPCODE_LENGTH,
-                  maxLength: ZIPCODE_LENGTH
-                }}
+                min={ZIPCODE_LENGTH}
+                max={ZIPCODE_LENGTH}
               />
             </Grid>
             <Grid item xs={12}>
-              <TextField
+              <FormField
                 name='city'
                 label='Ort'
-                variant='outlined'
-                type='text'
-                required
-                fullWidth
                 value={city.value}
                 onChange={handleChange}
-                error={city.hasError && city.helperText}
-                inputProps={{
-                  minLength: MIN_CITY_LENGTH
-                }}
+                error={city.hasError}
+                helperText={city.hasError && city.helperText}
+                min={MIN_CITY_LENGTH}
               />
             </Grid>
             <Grid item xs={12}>

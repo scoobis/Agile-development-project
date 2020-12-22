@@ -1,10 +1,11 @@
 import React, { useState, useContext } from 'react'
-import { Button, Container, Grid, TextField, Typography } from '@material-ui/core'
+import { Button, Container, Grid, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import Link from 'next/link'
 import { isValidEmail, isValidPassword, MIN_EMAIL_LENGTH, MIN_PWD_LENGTH } from '../utils/user'
 import { AuthContext } from '../context/AuthContext'
 import { REGISTER_CUSTOMER_PATH } from '../utils/config'
+import FormField from './FormField'
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -63,31 +64,22 @@ const LoginForm = () => {
         <form className={classes.form} onSubmit={handleSubmit} onChange={() => setMessage('')}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
-              <TextField
+              <FormField
                 name='email'
-                label='E-post'
-                variant='outlined'
-                required
+                label='Epost'
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                inputProps={{
-                  minLength: MIN_EMAIL_LENGTH
-                }}
+                min={MIN_EMAIL_LENGTH}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField
+              <FormField
                 name='password'
-                label='Lösenord'
-                variant='outlined'
+                label='Password'
                 type='password'
-                required
-                fullWidth
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                inputProps={{
-                  minLength: MIN_PWD_LENGTH
-                }}
+                min={MIN_PWD_LENGTH}
               />
             </Grid>
             <Grid item xs={12}>
