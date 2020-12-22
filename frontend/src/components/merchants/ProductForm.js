@@ -7,6 +7,7 @@ import SelectTags from './SelectTags'
 import { findParents } from '../../utils/helpers'
 import { API_URL } from '../../utils/config'
 import FormField from '../FormField'
+import { useSnackbar } from 'notistack'
 
 const EMPTY_INITIAL_STATE = {
   product: {
@@ -20,8 +21,7 @@ const EMPTY_INITIAL_STATE = {
     tags: [],
     categories: []
   },
-  errors: {},
-  message: ''
+  errors: {}
 }
 
 const ProductForm = ({ onSubmit, preFilled }) => {
@@ -29,6 +29,7 @@ const ProductForm = ({ onSubmit, preFilled }) => {
     preFilled ? { ...EMPTY_INITIAL_STATE, product: { ...preFilled, images: [] } } : EMPTY_INITIAL_STATE
   )
   const [categories, setCategories] = useState([])
+  const { enqueueSnackbar } = useSnackbar()
 
   useEffect(() => {
     convertInitialImagesToFiles().then((files) => {
@@ -151,15 +152,23 @@ const ProductForm = ({ onSubmit, preFilled }) => {
       }
 
       onSubmit(toSave).then((response) => {
+        let message = response.message
+        let variant = 'success'
+
         if (response.success || response.status === 200) {
-          preFilled
-            ? setState({ ...state, message: response.message, errors: {} })
-            : setState({ ...EMPTY_INITIAL_STATE, message: response.message, errors: {} })
+          preFilled ? setState({ ...state, errors: {} }) : setState({ ...EMPTY_INITIAL_STATE, errors: {} })
         } else if (response.status !== 200) {
-          setState({ ...state, message: response.data.message })
-        } else {
-          setState({ ...state, message: response.message })
+          message = response.data.message
+          variant = 'error'
         }
+
+        enqueueSnackbar(message, {
+          variant,
+          anchorOrigin: {
+            vertical: 'bottom',
+            horizontal: 'right'
+          }
+        })
       })
     }
   }
@@ -325,7 +334,6 @@ const ProductForm = ({ onSubmit, preFilled }) => {
           </Grid>
         </Grid>
       </form>
-      {state.message && <Typography style={{ marginTop: '20px' }}>{state.message}</Typography>}
     </Container>
   )
 }
