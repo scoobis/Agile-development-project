@@ -107,6 +107,7 @@ CREATE TABLE orders (
   discount INT,
   total INT,
   created DATE,
+  order_status VARCHAR(40),
   id INT NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (id)
 );
