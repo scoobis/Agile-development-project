@@ -19,6 +19,7 @@ module.exports = class Order {
     discount,
     total,
     created,
+    status = null,
     id = null
   ) {
     this.orgNumber = orgNumber
@@ -36,6 +37,7 @@ module.exports = class Order {
     this.discount = discount
     this.total = total
     this.created = created
+    this.status = status
     this.id = id
   }
 }
