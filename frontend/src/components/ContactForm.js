@@ -1,5 +1,6 @@
-import { Button, Grid, TextField } from '@material-ui/core'
+import { Button, Grid } from '@material-ui/core'
 import React, { useState } from 'react'
+import FormField from './FormField'
 
 const initialState = {
   name: '',
@@ -27,52 +28,13 @@ const ContactForm = ({ sendTo }) => {
     <form onSubmit={handleSubmit} onChange={handleChange}>
       <Grid container spacing={3}>
         <Grid item md={6}>
-          <TextField
-            name='name'
-            label='Namn'
-            placeholder='Namn'
-            variant='outlined'
-            value={state.name}
-            required
-            inputProps={{
-              minLength: 2,
-              maxLength: 50
-            }}
-            fullWidth
-          />
+          <FormField name='name' label='Namn' value={state.name} min={2} max={50} />
         </Grid>
         <Grid item md={6}>
-          <TextField
-            name='email'
-            label='E-post'
-            placeholder='E-post'
-            variant='outlined'
-            value={state.email}
-            required
-            inputProps={{
-              minLength: 3,
-              maxLength: 100
-            }}
-            type='email'
-            fullWidth
-          />
+          <FormField name='email' label='E-post' value={state.email} min={3} max={100} type='email' />
         </Grid>
         <Grid item xs={12}>
-          <TextField
-            name='message'
-            label='Meddelande'
-            placeholder='Meddelande'
-            variant='outlined'
-            value={state.message}
-            required
-            inputProps={{
-              minLength: 3,
-              maxLength: 500
-            }}
-            multiline
-            rows={4}
-            fullWidth
-          />
+          <FormField name='message' label='Meddelande' value={state.message} min={3} max={500} multiline rows={4} />
         </Grid>
         <div className='buttonContainer'>
           <Button variant='contained' type='submit' color='primary' disableElevation>

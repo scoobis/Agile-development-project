@@ -54,20 +54,10 @@ const NewsletterForm = () => {
           </Typography>
         </Grid>
         <Grid item xs={12}>
-          <FormField name='subject' label='Ämne' min={3} max={100} required fullWidth value={state.subject} />
+          <FormField name='subject' label='Ämne' min={3} max={100} value={state.subject} />
         </Grid>
         <Grid item xs={12}>
-          <FormField
-            name='body'
-            label='Innehåll'
-            min={10}
-            max={500}
-            required
-            fullWidth
-            multiline
-            rows={12}
-            value={state.body}
-          />
+          <FormField name='body' label='Innehåll' min={10} max={500} multiline rows={12} value={state.body} />
         </Grid>
         <Grid item xs={12}>
           {isSubmitConfirmed && (
