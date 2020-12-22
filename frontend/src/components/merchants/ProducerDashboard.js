@@ -5,8 +5,9 @@ import useAuth from '../../utils/useAuth'
 import MyProducts from './MyProducts/MyProducts'
 import { addProduct } from '../../utils/api'
 import Orders from './orders/Orders'
+import NewsletterForm from './NewsletterForm'
 
-function ProducerDashboard() {
+const ProducerDashboard = () => {
   const { user } = useAuth()
   const [activeComponent, setActiveComponent] = useState('')
 
@@ -15,7 +16,8 @@ function ProducerDashboard() {
   const OPTIONS = {
     ADD_PRODUCT: 'ADD_PRODUCT',
     VIEW_PRODUCTS: 'VIEW_PRODUCTS',
-    VIEW_ORDERS: 'VIEW_ORDERS'
+    VIEW_ORDERS: 'VIEW_ORDERS',
+    SEND_NEWSLETTER: 'SEND_NEWSLETTER'
   }
 
   const renderActiveComponent = () => {
@@ -41,6 +43,13 @@ function ProducerDashboard() {
             <Orders />
           </>
         )
+      case OPTIONS.SEND_NEWSLETTER:
+        return (
+          <>
+            {getActiveComponentHeading('Skicka nyhetsbrev')}
+            <NewsletterForm />
+          </>
+        )
       default:
         break
     }
@@ -64,14 +73,29 @@ function ProducerDashboard() {
         <Grid item xs={12} lg={3}>
           <Paper>
             <MenuList>
-              <MenuItem selected={activeComponent === OPTIONS.ADD_PRODUCT} onClick={() => setActiveComponent(OPTIONS.ADD_PRODUCT)}>
+              <MenuItem
+                selected={activeComponent === OPTIONS.ADD_PRODUCT}
+                onClick={() => setActiveComponent(OPTIONS.ADD_PRODUCT)}
+              >
                 Lägg till produkt
               </MenuItem>
-              <MenuItem selected={activeComponent === OPTIONS.VIEW_PRODUCTS} onClick={() => setActiveComponent(OPTIONS.VIEW_PRODUCTS)}>
+              <MenuItem
+                selected={activeComponent === OPTIONS.VIEW_PRODUCTS}
+                onClick={() => setActiveComponent(OPTIONS.VIEW_PRODUCTS)}
+              >
                 Mina produkter
               </MenuItem>
-              <MenuItem selected={activeComponent === OPTIONS.VIEW_ORDERS} onClick={() => setActiveComponent(OPTIONS.VIEW_ORDERS)}>
+              <MenuItem
+                selected={activeComponent === OPTIONS.VIEW_ORDERS}
+                onClick={() => setActiveComponent(OPTIONS.VIEW_ORDERS)}
+              >
                 Aktuella ordrar
+              </MenuItem>
+              <MenuItem
+                selected={activeComponent === OPTIONS.SEND_NEWSLETTER}
+                onClick={() => setActiveComponent(OPTIONS.SEND_NEWSLETTER)}
+              >
+                Skicka nyhetsbrev
               </MenuItem>
             </MenuList>
           </Paper>
