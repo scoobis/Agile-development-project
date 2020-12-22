@@ -13,7 +13,7 @@ orderDAO.order = async (order) => {
     await conn.beginTransaction()
 
     const insertOrderQuery =
-      'INSERT INTO orders (producer_org_no, customer_name, customer_email, customer_phone_no, customer_street_address, customer_zip, customer_city, shipping_method, payment_method, subtotal, shipping, discount, total, created) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
+      'INSERT INTO orders (producer_org_no, customer_name, customer_email, customer_phone_no, customer_street_address, customer_zip, customer_city, shipping_method, payment_method, subtotal, shipping, discount, total, created, order_status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
     const insertProductsQuery = 'INSERT INTO order_product (order_id, product_id, name, unit, price, quantity) VALUES (?, ?, ?, ?, ?, ?)'
     const {
       orgNumber,
@@ -31,6 +31,7 @@ orderDAO.order = async (order) => {
       total
     } = order
     const date = generatedDate.toISOString().slice(0, 10)
+    const statuss = 'Inkommen'
     const response = await conn.query(insertOrderQuery, [
       orgNumber,
       customerName,
@@ -45,7 +46,8 @@ orderDAO.order = async (order) => {
       shipping,
       discount,
       total,
-      date
+      date,
+      statuss
     ])
     const id = response.insertId
 
@@ -73,6 +75,7 @@ orderDAO.getAllOrdersFromProducer = async (orgNumber) => {
   const getAllOrders = 'SELECT * FROM orders WHERE producer_org_no=?'
   const getAllProductsFromOrder = 'SELECT * FROM order_product WHERE order_id=?'
   const orders = await pool.query(getAllOrders, orgNumber)
+  console.log(orders)
 
   if (orders) {
     for (const order of orders) {
@@ -84,6 +87,11 @@ orderDAO.getAllOrdersFromProducer = async (orgNumber) => {
   } else {
     throw createError(400, 'You do not have any orders!')
   }
+}
+
+orderDAO.updateStatus = async (status, id) => {
+  const update = 'UPDATE orders SET order_status=? WHERE id=?'
+  await pool.query(update, [status, id])
 }
 
 const parseOrder = (object) => {
@@ -113,6 +121,7 @@ const parseOrder = (object) => {
         order.discount,
         order.total,
         order.created,
+        order.order_status,
         order.id
       )
     )
