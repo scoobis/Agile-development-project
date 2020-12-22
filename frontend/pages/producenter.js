@@ -18,7 +18,7 @@ import { getProducers } from '../src/utils/api'
 
 const useStyles = makeStyles({
   card: {
-    maxWidth: 345
+    minHeight: 250
   },
   cardImage: {
     height: 140
@@ -68,27 +68,29 @@ const Producers = () => {
                 producers.length && (
                   <Grid container spacing={3}>
                     {producers.map((producer) => (
-                      <Card key={producer.id} className={classes.card}>
-                        <Link href={`/producenter/${producer.orgNumber}`}>
-                          <a className={classes.hiddenLink}>
-                            <CardActionArea>
-                              <CardMedia
-                                className={classes.cardImage}
-                                image='https://via.placeholder.com/500x400.jpg'
-                                title={producer.name}
-                              />
-                            </CardActionArea>
-                            <CardContent>
-                              <Typography gutterBottom variant='h5' component='h2'>
-                                {producer.name}
-                              </Typography>
-                              <Typography variant='body2' component='p'>
-                                {producer.description}
-                              </Typography>
-                            </CardContent>
-                          </a>
-                        </Link>
-                      </Card>
+                      <Grid key={producer.id} item xs={12} sm={4} md={3}>
+                        <Card className={classes.card}>
+                          <Link href={`/producenter/${producer.orgNumber}`}>
+                            <a className={classes.hiddenLink}>
+                              <CardActionArea>
+                                <CardMedia
+                                  className={classes.cardImage}
+                                  image='https://source.unsplash.com/random/500x400'
+                                  title={producer.name}
+                                />
+                              </CardActionArea>
+                              <CardContent>
+                                <Typography gutterBottom variant='h5' component='h2'>
+                                  {producer.name}
+                                </Typography>
+                                <Typography variant='body2' component='p'>
+                                  {producer.description}
+                                </Typography>
+                              </CardContent>
+                            </a>
+                          </Link>
+                        </Card>
+                      </Grid>
                     ))}
                   </Grid>
                 )
