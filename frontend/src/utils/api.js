@@ -142,3 +142,9 @@ export const updateOrderStatus = (status) =>
     .post('/order/updateStatus', status)
     .then((response) => response)
     .catch((err) => err.response)
+
+export const sendEmail = (data) =>
+  axios
+    .post('/email', data)
+    .then((response) => ({ data: response.data }))
+    .catch((error) => ({ error }))
