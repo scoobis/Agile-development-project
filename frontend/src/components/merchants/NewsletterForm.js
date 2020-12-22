@@ -1,8 +1,9 @@
-import { Box, Button, Grid, TextField, Typography } from '@material-ui/core'
+import { Box, Button, Grid, Typography } from '@material-ui/core'
 import { useSnackbar } from 'notistack'
 import React, { useState } from 'react'
 import ConfirmModal from '../ConfirmModal'
 import CheckIcon from '@material-ui/icons/Check'
+import FormField from '../FormField'
 
 const initialState = {
   subject: '',
@@ -53,32 +54,16 @@ const NewsletterForm = () => {
           </Typography>
         </Grid>
         <Grid item xs={12}>
-          <TextField
-            name='subject'
-            placeholder='Ämne'
-            label='Ämne'
-            variant='outlined'
-            inputProps={{
-              minLength: 3,
-              maxLength: 100
-            }}
-            fullWidth
-            required
-            value={state.subject}
-          />
+          <FormField name='subject' label='Ämne' min={3} max={100} required fullWidth value={state.subject} />
         </Grid>
         <Grid item xs={12}>
-          <TextField
+          <FormField
             name='body'
-            placeholder='Innehåll'
             label='Innehåll'
-            variant='outlined'
-            inputProps={{
-              minLength: 10,
-              maxLength: 500
-            }}
-            fullWidth
+            min={10}
+            max={500}
             required
+            fullWidth
             multiline
             rows={12}
             value={state.body}
