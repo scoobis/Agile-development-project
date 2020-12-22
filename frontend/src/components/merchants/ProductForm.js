@@ -1,16 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import {
-  Box,
-  Button,
-  Container,
-  FormControl,
-  Grid,
-  InputLabel,
-  MenuItem,
-  Select,
-  TextField,
-  Typography
-} from '@material-ui/core'
+import { Box, Button, Container, FormControl, Grid, InputLabel, MenuItem, Select, Typography } from '@material-ui/core'
 import MultipleSelect from './MultipleSelect'
 import { getCategories } from '../../utils/api'
 import UploadImages from './UploadImages'
@@ -65,7 +54,7 @@ const ProductForm = ({ onSubmit, preFilled }) => {
     })
   }, [])
 
-  async function convertInitialImagesToFiles() {
+  const convertInitialImagesToFiles = async () => {
     if (preFilled && preFilled.images) {
       const files = await Promise.all(
         preFilled.images.map(async (image) => {

@@ -1,15 +1,6 @@
 import React, { useState } from 'react'
 import Link from 'next/link'
-import {
-  Button,
-  TextField,
-  FormControlLabel,
-  Checkbox,
-  Container,
-  Grid,
-  Typography,
-  FormControl
-} from '@material-ui/core'
+import { Button, FormControlLabel, Checkbox, Container, Grid, Typography, FormControl } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import {
   isValidName,
