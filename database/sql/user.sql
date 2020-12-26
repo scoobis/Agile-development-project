@@ -40,6 +40,14 @@ CREATE TABLE producer (
   FOREIGN KEY (user_id) REFERENCES user(id)
 );
 
+-- SUBSCRIBER --
+CREATE TABLE subscriber (
+  producer_org_no VARCHAR(10) NOT NULL,
+  email VARCHAR(60) NOT NULL,
+  PRIMARY KEY (producer_org_no, email),
+  FOREIGN KEY (producer_org_no) REFERENCES producer(org_no) ON DELETE CASCADE
+);
+
 -- PRODUCT --
 CREATE TABLE product (
   id INT NOT NULL AUTO_INCREMENT,
@@ -213,6 +221,11 @@ VALUES
   ('Spanska', 3),
   ('Svenska', 4),
   ('Färsk', 5);
+
+INSERT INTO subscriber (producer_org_no, email) 
+VALUES
+  (1111111111, 'oh222fv@student.lnu.se'),
+  (1111111111, 'olofhaga@gmail.com');
 
 --INSERT INTO product_image (product_id, image_name, alt_text)
 --VALUES
