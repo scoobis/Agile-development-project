@@ -222,11 +222,6 @@ VALUES
   ('Svenska', 4),
   ('Färsk', 5);
 
-INSERT INTO subscriber (producer_org_no, email) 
-VALUES
-  (1111111111, 'oh222fv@student.lnu.se'),
-  (1111111111, 'olofhaga@gmail.com');
-
 --INSERT INTO product_image (product_id, image_name, alt_text)
 --VALUES
 --  (1,'test.jpg', 'Image of a test.jpg');

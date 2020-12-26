@@ -75,5 +75,8 @@ async function get (orgNo) {
 async function getSubscribers (orgNumber) {
   const selectSubscribers = 'SELECT email FROM subscriber WHERE producer_org_no = ?'
   const result = await pool.query(selectSubscribers, orgNumber)
+  if (result.length === 0) {
+    throw createError(404, 'No subscribers found.')
+  }
   return result.map(row => [row.email])
 }
