@@ -6,11 +6,26 @@ const controller = {}
 /**
  * Middleware for sending email
  */
-controller.sendEmail = async (req, res, next) => {
+controller.sendEmailToProducer = async (req, res, next) => {
   try {
     const mail = parseEmail(req.body)
 
-    await service.sendEmail(mail)
+    await service.sendEmailToProducer(mail)
+
+    res.status(200).json({ success: true, message: 'Email sent successfully' })
+  } catch (error) {
+    return next(error)
+  }
+}
+
+/**
+ * Middleware for sending email
+ */
+controller.sendEmailToCustomers = async (req, res, next) => {
+  try {
+    const mail = parseEmail({ ...req.body, sender: req.user.email, recipient: null })
+
+    await service.sendEmailToCustomers(mail)
 
     res.status(200).json({ success: true, message: 'Email sent successfully' })
   } catch (error) {
