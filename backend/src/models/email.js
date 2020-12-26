@@ -3,9 +3,9 @@
  * @class Email
  */
 class Email {
-  constructor (sender, recipient, subject, message) {
+  constructor (sender, recipients, subject, message) {
     this.sender = sender
-    this.recipient = recipient
+    this.recipients = recipients
     this.subject = subject
     this.message = message
   }

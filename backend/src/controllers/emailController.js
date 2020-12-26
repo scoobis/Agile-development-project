@@ -8,6 +8,7 @@ const controller = {}
  */
 controller.sendEmailToProducer = async (req, res, next) => {
   try {
+    // TODO Make recipients an array instead of single string
     const mail = parseEmail(req.body)
 
     await service.sendEmailToProducer(mail)
@@ -23,7 +24,7 @@ controller.sendEmailToProducer = async (req, res, next) => {
  */
 controller.sendEmailToCustomers = async (req, res, next) => {
   try {
-    const mail = parseEmail({ ...req.body, sender: req.user.email, recipient: null })
+    const mail = parseEmail({ ...req.body, sender: req.user.email, recipients: [] })
 
     await service.sendEmailToCustomers(mail)
 
@@ -42,7 +43,7 @@ controller.sendEmailToCustomers = async (req, res, next) => {
 const parseEmail = (object) => {
   return new Email(
     object.sender,
-    object.recipient,
+    object.recipients,
     object.subject,
     object.message
   )

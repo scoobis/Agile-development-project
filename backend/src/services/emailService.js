@@ -7,7 +7,7 @@ service.sendEmailToProducer = async (email) => {
 }
 
 service.sendEmailToCustomers = async (email) => {
-  email.recipient = ['oneEmailAddressHere@blabla.com, anotherEmailAddressHere@blablablab.com']
+  email.recipients = ['oneEmailAddressHere@blabla.com, anotherEmailAddressHere@blablablab.com']
   await mailer.sendEmail(email)
 }
 

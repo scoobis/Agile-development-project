@@ -187,9 +187,9 @@ validate.product = async (req, res, next) => {
  * Validates an email
  */
 validate.email = async (req, res, next) => {
-  const { sender, recipient, subject, message } = req.body
+  const { sender, recipients, subject, message } = req.body
 
-  if (!sender || !recipient || !subject || !message) {
+  if (!sender || !recipients || !subject || !message) {
     const error = createError(400, 'Enter all the parameters!')
     return next(error)
   }
@@ -202,9 +202,9 @@ validate.email = async (req, res, next) => {
   }
 
   /**
-   * to
+   * recipients
    */
-  if (!emailService.isValidEmail(recipient)) {
+  if (!emailService.isValidEmail(recipients)) {
     return next(createError(400, 'The email address of the recipient is invalid'))
   }
 
