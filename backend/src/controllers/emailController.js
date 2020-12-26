@@ -8,8 +8,9 @@ const controller = {}
  */
 controller.sendEmailToProducer = async (req, res, next) => {
   try {
-    // TODO Make recipients an array instead of single string
-    const email = parseEmail(req.body)
+    const recipients = Array.of(req.body.recipient)
+
+    const email = parseEmail({ ...req.body, recipients: recipients })
 
     await service.sendEmailToProducer(email)
 
