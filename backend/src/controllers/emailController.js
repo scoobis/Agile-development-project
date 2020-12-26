@@ -9,9 +9,9 @@ const controller = {}
 controller.sendEmailToProducer = async (req, res, next) => {
   try {
     // TODO Make recipients an array instead of single string
-    const mail = parseEmail(req.body)
+    const email = parseEmail(req.body)
 
-    await service.sendEmailToProducer(mail)
+    await service.sendEmailToProducer(email)
 
     res.status(200).json({ success: true, message: 'Email sent successfully' })
   } catch (error) {
@@ -24,9 +24,12 @@ controller.sendEmailToProducer = async (req, res, next) => {
  */
 controller.sendEmailToCustomers = async (req, res, next) => {
   try {
-    const mail = parseEmail({ ...req.body, sender: req.user.email, recipients: [] })
+    const emailOfProducer = req.user.email
+    const orgNumber = req.user.orgNumber
 
-    await service.sendEmailToCustomers(mail)
+    const email = parseEmail({ ...req.body, sender: emailOfProducer, recipients: [] })
+
+    await service.sendEmailToCustomers(email, orgNumber)
 
     res.status(200).json({ success: true, message: 'Email sent successfully' })
   } catch (error) {
