@@ -42,6 +42,7 @@ validate.user = async (req, res, next) => {
 validate.producer = async (req, res, next) => {
   if (req.body.role === 'producer') {
     const { orgNumber, phone, streetAddress, zip, city } = req.body
+
     if (!orgNumber || !phone || !streetAddress || !zip || !city) {
       const error = createError(400, 'Enter all the parameters!')
       return next(error)
@@ -187,25 +188,41 @@ validate.product = async (req, res, next) => {
  * Validates an email
  */
 validate.email = async (req, res, next) => {
-  const { sender, recipients, subject, message } = req.body
+  const { subject, message } = req.body
 
-  if (!sender || !recipients || !subject || !message) {
+  if (!subject || !message) {
     const error = createError(400, 'Enter all the parameters!')
     return next(error)
   }
 
-  /**
-   * Sender
-   */
-  if (!emailService.isValidEmail(sender)) {
-    return next(createError(400, 'The email address of the sender is invalid'))
+  if (!emailService.isValidSubject(subject)) {
+    const error = createError(400, 'The subject must be at least 3 characters long')
+    return next(error)
+  }
+
+  if (!emailService.isValidMessage(message)) {
+    const error = createError(400, 'The message must be at least 10 characters long')
+    return next(error)
   }
 
   /**
-   * recipients
+   * Producer
    */
-  if (!emailService.isValidEmail(recipients)) {
-    return next(createError(400, 'The email address of the recipient is invalid'))
+  if (!req.user) {
+    const { sender, recipient } = req.body
+
+    if (!sender || !recipient) {
+      const error = createError(400, 'Enter all the parameters!')
+      return next(error)
+    }
+
+    if (!emailService.isValidEmail(sender)) {
+      return next(createError(400, 'The email address of the sender is invalid'))
+    }
+
+    if (!emailService.isValidEmail(recipient)) {
+      return next(createError(400, 'The email address of the recipient is invalid'))
+    }
   }
 
   next()
