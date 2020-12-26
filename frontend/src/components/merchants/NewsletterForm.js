@@ -7,7 +7,7 @@ import { sendEmail } from '../../utils/api'
 
 const initialState = {
   subject: '',
-  body: ''
+  message: ''
 }
 
 const NewsletterForm = () => {
@@ -66,7 +66,7 @@ const NewsletterForm = () => {
           <FormField name='subject' label='Ämne' min={3} max={100} value={state.subject} />
         </Grid>
         <Grid item xs={12}>
-          <FormField name='body' label='Innehåll' min={10} max={500} multiline rows={12} value={state.body} />
+          <FormField name='message' label='Innehåll' min={10} max={500} multiline rows={12} value={state.message} />
         </Grid>
         <Button type='submit' variant='contained' color='primary'>
           Skicka
