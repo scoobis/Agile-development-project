@@ -14,7 +14,8 @@ import {
   MIN_EMAIL_LENGTH,
   MIN_NAME_LENGTH
 } from '../../utils/user'
-import { Button, TextField, Container, Grid, Typography } from '@material-ui/core'
+import { Button, Container, Grid, Typography, Checkbox, FormControlLabel } from '@material-ui/core'
+import FormField from '../FormField'
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -38,6 +39,7 @@ const CheckoutForm = (props) => {
   const { cartContext, setPaid } = props
   const router = useRouter()
 
+  const [subscribe, setSubscribe] = useState(false)
   const [state, setState] = useState({
     name: { value: '', hasError: false, helperText: '' },
     email: { value: '', hasError: false, helperText: '' },
@@ -83,6 +85,7 @@ const CheckoutForm = (props) => {
       customerZip: state.zip.value,
       customerCity: state.city.value,
       products: cartContext.cartProducts,
+      subscribe: subscribe,
       shippingMethod: 'collect', // Only option atm
       paymentMethod: 'upon_collect', // only option atm
       subtotal: cartContext.total, // TODO: calc subTotal (not required atm?)
@@ -108,104 +111,78 @@ const CheckoutForm = (props) => {
         <form className={classes.form} onSubmit={handleSubmit}>
           <Grid container spacing={3}>
             <Grid item xs={12} sm={6}>
-              <TextField
+              <FormField
                 name='name'
                 label='Fullständigt namn'
-                variant='outlined'
-                fullWidth
                 autoFocus
-                required
                 value={name.value}
                 onChange={handleChange}
                 error={name.hasError}
                 helperText={name.hasError && name.helperText}
-                inputProps={{
-                  minLength: MIN_NAME_LENGTH
-                }}
+                min={MIN_NAME_LENGTH}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField
+              <FormField
                 name='email'
                 label='E-post'
-                variant='outlined'
-                required
-                fullWidth
                 value={email.value}
                 onChange={handleChange}
                 error={email.hasError}
                 helperText={email.hasError && email.helperText}
-                inputProps={{
-                  minLength: MIN_EMAIL_LENGTH
-                }}
+                min={MIN_EMAIL_LENGTH}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField
+              <FormField
                 name='phone'
                 label='Telefonnummer'
-                variant='outlined'
-                required
-                fullWidth
                 value={phone.value}
                 onChange={handleChange}
                 error={phone.hasError}
                 helperText={phone.hasError && phone.helperText}
-                inputProps={{
-                  minLength: PHONE_LENGTH,
-                  maxLength: PHONE_LENGTH
-                }}
+                min={PHONE_LENGTH}
+                max={PHONE_LENGTH}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField
+              <FormField
                 name='streetAddress'
                 label='Gatuadress'
-                variant='outlined'
-                type='text'
-                required
-                fullWidth
                 value={streetAddress.value}
                 onChange={handleChange}
                 error={streetAddress.hasError}
                 helperText={streetAddress.hasError && streetAddress.helperText}
-                inputProps={{
-                  minLength: MIN_ADDRESS_LENGTH
-                }}
+                min={MIN_ADDRESS_LENGTH}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField
+              <FormField
                 name='zip'
                 label='Postnummer'
-                variant='outlined'
-                type='text'
-                required
-                fullWidth
                 value={zip.value}
                 onChange={handleChange}
                 error={zip.hasError}
                 helperText={zip.hasError && zip.helperText}
-                inputProps={{
-                  minLength: ZIPCODE_LENGTH,
-                  maxLength: ZIPCODE_LENGTH
-                }}
+                min={ZIPCODE_LENGTH}
+                max={ZIPCODE_LENGTH}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField
+              <FormField
                 name='city'
                 label='Ort'
-                variant='outlined'
-                type='text'
-                required
-                fullWidth
                 value={city.value}
                 onChange={handleChange}
-                error={city.hasError && city.helperText}
-                inputProps={{
-                  minLength: MIN_CITY_LENGTH
-                }}
+                error={city.hasError}
+                helperText={city.hasError && city.helperText}
+                min={MIN_CITY_LENGTH}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <FormControlLabel
+                control={<Checkbox checked={subscribe} onChange={() => setSubscribe(!subscribe)} name='subscribe' />}
+                label='Ja, jag vill ta del av nyheter och erbjudanden från producenten'
               />
             </Grid>
             <Button type='submit' fullWidth variant='contained' color='primary' className={classes.submit}>

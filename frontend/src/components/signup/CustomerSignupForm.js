@@ -1,15 +1,6 @@
 import React, { useState } from 'react'
 import Link from 'next/link'
-import {
-  Button,
-  TextField,
-  FormControlLabel,
-  Checkbox,
-  Container,
-  Grid,
-  Typography,
-  FormControl
-} from '@material-ui/core'
+import { Button, FormControlLabel, Checkbox, Container, Grid, Typography, FormControl } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import {
   isValidName,
@@ -22,6 +13,7 @@ import {
 import { signup } from '../../utils/api'
 import { Customer } from '../../utils/roles'
 import { LOGIN_PATH } from '../../utils/config'
+import FormField from '../FormField'
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -107,52 +99,38 @@ const CustomerSignupForm = () => {
         <form className={classes.form} onSubmit={handleSubmit}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={12}>
-              <TextField
+              <FormField
                 name='name'
                 label='Fullständigt namn'
-                variant='outlined'
-                fullWidth
                 autoFocus
-                required
                 value={name.value}
                 onChange={handleChange}
                 error={name.hasError}
                 helperText={name.hasError && name.helperText}
-                inputProps={{
-                  minLength: MIN_NAME_LENGTH
-                }}
+                min={MIN_NAME_LENGTH}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField
+              <FormField
                 name='email'
                 label='E-post'
-                variant='outlined'
-                required
                 value={email.value}
                 onChange={handleChange}
                 error={email.hasError}
                 helperText={email.hasError && email.helperText}
-                inputProps={{
-                  minLength: MIN_EMAIL_LENGTH
-                }}
+                min={MIN_EMAIL_LENGTH}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField
+              <FormField
                 name='password'
                 label='Lösenord'
-                variant='outlined'
                 type='password'
-                required
-                fullWidth
                 value={password.value}
                 onChange={handleChange}
                 error={password.hasError}
                 helperText={password.hasError && email.helperText}
-                inputProps={{
-                  minLength: MIN_PWD_LENGTH
-                }}
+                min={MIN_PWD_LENGTH}
               />
             </Grid>
             <Grid item xs={12}>
