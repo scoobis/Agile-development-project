@@ -102,8 +102,6 @@ controller.getAllByName = async (req, res, next) => {
   try {
     const name = req.query.q
 
-    console.log(req.query)
-
     const result = await service.getAllByName(name)
     res.status(200).json(result)
   } catch (error) {

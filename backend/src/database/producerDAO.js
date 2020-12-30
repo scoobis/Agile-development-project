@@ -7,7 +7,8 @@ const pool = require('./databaseConnection')
  */
 module.exports = {
   list,
-  get
+  get,
+  getSubscribers
 }
 
 /**
@@ -63,4 +64,19 @@ async function get (orgNo) {
     producerRow.org_no,
     producerRow.description
   )
+}
+
+/**
+ * Returns an array of email addresses that subscribes on the producer's newsletter
+ *
+ * @param {Number} orgNumber
+ * @returns {Promise<String[]>} The email addresses to the subscribers
+ */
+async function getSubscribers (orgNumber) {
+  const selectSubscribers = 'SELECT email FROM subscriber WHERE producer_org_no = ?'
+  const result = await pool.query(selectSubscribers, orgNumber)
+  if (result.length === 0) {
+    throw createError(404, 'No subscribers found.')
+  }
+  return result.map(row => [row.email])
 }

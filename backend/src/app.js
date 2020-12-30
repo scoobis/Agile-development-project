@@ -25,6 +25,7 @@ app.use('/producer', require('./routes/producerRouter'))
 app.use('/user', require('./routes/userRouter'))
 app.use('/product', require('./routes/productRouter'))
 app.use('/order', require('./routes/orderRouter'))
+app.use('/email', require('./routes/emailRouter'))
 
 // Fall back to 404
 app.use('*', (req, res, next) => next(createError(404)))

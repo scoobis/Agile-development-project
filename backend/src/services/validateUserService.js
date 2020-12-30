@@ -19,15 +19,6 @@ service.isValidName = (name) => name.length >= 3
 service.isValidPassword = (pwd) => pwd.length >= 6
 
 /**
- * Uses a regex to check if the email is valid.
- *
- * @param {string} email - Email address.
- * @returns {boolean} - True if valid / False if not valid.
- */
-service.isValidEmail = (email) =>
-  /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email)
-
-/**
  * Checks if the provided email address is already in use.
  *
  * @param {string} email - Email address.

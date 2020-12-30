@@ -1,6 +1,7 @@
 const createError = require('http-errors')
 const userService = require('../services/validateUserService')
 const productService = require('../services/validateProductService')
+const emailService = require('../services/validateEmailService')
 
 const validate = {}
 
@@ -11,9 +12,14 @@ validate.user = async (req, res, next) => {
     return next(error)
   }
 
+  if (!name || !email || !password) {
+    const error = createError(400, 'Enter all the parameters!')
+    return next(error)
+  }
+
   const isValidPassword = userService.isValidPassword(password)
   const isValidName = userService.isValidName(name)
-  const isValidEmail = userService.isValidEmail(email)
+  const isValidEmail = emailService.isValidEmail(email)
   const isAlreadyRegistered = userService.isAlreadyRegistered(email)
 
   if (!isValidPassword) {
@@ -35,7 +41,12 @@ validate.user = async (req, res, next) => {
 
 validate.producer = async (req, res, next) => {
   if (req.body.role === 'producer') {
-    const { orgNumber, phone, zip } = req.body
+    const { orgNumber, phone, streetAddress, zip, city } = req.body
+
+    if (!orgNumber || !phone || !streetAddress || !zip || !city) {
+      const error = createError(400, 'Enter all the parameters!')
+      return next(error)
+    }
 
     const isValidOrganizationNumber = userService.isValidOrganizationNumber(orgNumber)
     const isValidPhoneNumber = userService.isValidPhoneNumber(phone)
@@ -62,14 +73,11 @@ validate.producer = async (req, res, next) => {
 
 /**
  * Validates a product
- *
- * @param {*} req
- * @param {*} res
- * @param {*} next
  */
 validate.product = async (req, res, next) => {
   const { name, description, price, salePrice, unit, inStock, categories, images, tags } = req.body
   const { orgNumber } = req.user
+
   /**
    * OrgNumber
    */
@@ -171,6 +179,50 @@ validate.product = async (req, res, next) => {
    */
   if (!productService.isUndefined(tags) && !productService.isArray(tags)) {
     return next(createError(400, 'Tags is "undefined"'))
+  }
+
+  next()
+}
+
+/**
+ * Validates an email
+ */
+validate.email = async (req, res, next) => {
+  const { subject, message } = req.body
+
+  if (!subject || !message) {
+    const error = createError(400, 'Enter all the parameters!')
+    return next(error)
+  }
+
+  if (!emailService.isValidSubject(subject)) {
+    const error = createError(400, 'The subject must be at least 3 characters long')
+    return next(error)
+  }
+
+  if (!emailService.isValidMessage(message)) {
+    const error = createError(400, 'The message must be at least 10 characters long')
+    return next(error)
+  }
+
+  /**
+   * Producer
+   */
+  if (!req.user) {
+    const { sender, recipient } = req.body
+
+    if (!sender || !recipient) {
+      const error = createError(400, 'Enter all the parameters!')
+      return next(error)
+    }
+
+    if (!emailService.isValidEmail(sender)) {
+      return next(createError(400, 'The email address of the sender is invalid'))
+    }
+
+    if (!emailService.isValidEmail(recipient)) {
+      return next(createError(400, 'The email address of the recipient is invalid'))
+    }
   }
 
   next()
