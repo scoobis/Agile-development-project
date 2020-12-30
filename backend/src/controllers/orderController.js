@@ -21,8 +21,9 @@ controller.get = async (req, res, next) => {
 controller.sendorder = async (req, res, next) => {
   try {
     const order = parseOrder(req.body)
+    const subscribe = req.body.subscribe
 
-    await service.order(order)
+    await service.order(order, subscribe)
     res.status(200).json({ success: true, message: 'Order placed!' })
   } catch (error) {
     return next(error)

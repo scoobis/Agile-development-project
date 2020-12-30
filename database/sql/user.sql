@@ -101,7 +101,7 @@ CREATE TABLE product_tag (
 
 -- ORDER --
 CREATE TABLE orders (
-  producer_org_no INT,
+  producer_org_no VARCHAR(10),
   customer_name VARCHAR(100),
   customer_email VARCHAR(100),
   customer_phone_no VARCHAR(10),
