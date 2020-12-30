@@ -8,7 +8,8 @@ const pool = require('./databaseConnection')
 module.exports = {
   list,
   get,
-  getSubscribers
+  getSubscribers,
+  addSubscriber
 }
 
 /**
@@ -79,4 +80,21 @@ async function getSubscribers (orgNumber) {
     throw createError(404, 'No subscribers found.')
   }
   return result.map(row => [row.email])
+}
+
+/**
+ * Adds a subscriber to the producer's subscriber list
+ *
+ * @param {Number} orgNumber
+ * @param {String} customerEmail
+ */
+async function addSubscriber (orgNumber, customerEmail) {
+  const selectSubscriber = 'SELECT email FROM subscriber WHERE email = ?'
+  const insertSubscriber = 'INSERT INTO subscriber value (?, ?)'
+
+  const subscriber = await pool.query(selectSubscriber, customerEmail)
+
+  if (subscriber.length === 0) {
+    await pool.query(insertSubscriber, [orgNumber, customerEmail])
+  }
 }
