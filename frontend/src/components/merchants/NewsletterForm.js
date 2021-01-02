@@ -3,7 +3,7 @@ import { useSnackbar } from 'notistack'
 import React, { useState } from 'react'
 import ConfirmModal from '../ConfirmModal'
 import FormField from '../FormField'
-import { sendEmail } from '../../utils/api'
+import { sendEmailToSubscribers } from '../../utils/api'
 
 const initialState = {
   subject: '',
@@ -31,7 +31,7 @@ const NewsletterForm = () => {
 
   const sendNewsletter = () => {
     setShowConfirmModal(false)
-    sendEmail({ ...state }).then(({ data, error }) => {
+    sendEmailToSubscribers({ ...state }).then(({ data, error }) => {
       if (data) {
         enqueueSnackbar('Nyhetsbrev skickat', {
           variant: 'success',
