@@ -143,8 +143,14 @@ export const updateOrderStatus = (status) =>
     .then((response) => response)
     .catch((err) => err.response)
 
-export const sendEmail = (data) =>
+export const sendEmailToSubscribers = (data) =>
   axios
     .post('/email/producer', data)
+    .then((response) => ({ data: response.data }))
+    .catch((error) => ({ error }))
+
+export const sendEmailTo = (data) =>
+  axios
+    .post('/email/customer', data)
     .then((response) => ({ data: response.data }))
     .catch((error) => ({ error }))
