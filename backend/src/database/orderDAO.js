@@ -63,6 +63,15 @@ orderDAO.order = async (order) => {
 
     await Promise.all(queryResults)
     await conn.commit()
+
+    for (const product of order.products) {
+      const getSaldo = 'SELECT in_stock FROM product WHERE id=?'
+      const setSaldo = 'UPDATE product SET in_stock=? WHERE id=?'
+      const result = await pool.query(getSaldo, product.productId)
+      const saldo = Number(result[0].in_stock)
+      const newSaldo = saldo - product.quantity
+      await pool.query(setSaldo, [newSaldo, product.productId])
+    }
   } catch (error) {
     conn.rollback()
     throw error
