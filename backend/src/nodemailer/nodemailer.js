@@ -38,7 +38,7 @@ const emailHandler = async (email) => {
   })
 
   const mailOptions = {
-    from: sender,
+    replyTo: sender,
     to: recipients,
     subject: subject,
     text: message
