@@ -17,18 +17,30 @@ const OrderItemTable = (props) => {
   const [activeDetials, setActiveDetails] = useState(false)
 
   const openOrderDetails = () => {
-    activeDetials ? setOrderDetialsComponent({ order: {}, isActive: false }) : setOrderDetialsComponent({ order, isActive: true })
+    activeDetials
+      ? setOrderDetialsComponent({ order: {}, isActive: false })
+      : setOrderDetialsComponent({ order, isActive: true })
     setActiveDetails(!activeDetials)
   }
 
-  // TODO: order status fix
+  const getShippingMethod = () => {
+    switch (order.shippingMethod) {
+      case 'collect': {
+        return 'Hämtas på plats'
+      }
+      default: {
+        return 'Hämtas på plats'
+      }
+    }
+  }
+
   return (
     <StyledTableRow>
       <TableCell component='th' scope='row'>
         {order.customerName}
       </TableCell>
       <TableCell align='right'>{order.customerEmail}</TableCell>
-      <TableCell align='right'>Hämtas på plats</TableCell>
+      <TableCell align='right'>{getShippingMethod()}</TableCell>
       <TableCell align='right'>{order.total} SEK</TableCell>
       <TableCell align='right'>
         <SetStatus status={order.status} id={order.id} />
