@@ -1,7 +1,7 @@
 import React from 'react'
 import { Container, Grid } from '@material-ui/core'
 import SpecificProductCard from './SpecificProductCard'
-import { API_URL } from '../../utils/config'
+import { API_URL, PRODUCT_PLACEHOLDER_IMG_PATH } from '../../utils/config'
 import SlickSlider from './SlickSlider'
 
 const SpecificProduct = ({ product }) => {
@@ -16,7 +16,7 @@ const SpecificProduct = ({ product }) => {
         {
           id: 1,
           alt: 'Placeholder',
-          src: '/placeholder.png'
+          src: PRODUCT_PLACEHOLDER_IMG_PATH
         }
       ]
 

@@ -1,6 +1,6 @@
 import { Grid, Typography } from '@material-ui/core'
 import React from 'react'
-import { API_URL } from '../../utils/config'
+import { API_URL, PRODUCT_PLACEHOLDER_IMG_PATH } from '../../utils/config'
 import ProductCard from './ProductCard'
 
 const ProductsGrid = ({ products }) => {
@@ -8,7 +8,7 @@ const ProductsGrid = ({ products }) => {
     if (images.length) {
       return `${API_URL}/static/${images[0].imageName}`
     }
-    return '/placeholder.png'
+    return PRODUCT_PLACEHOLDER_IMG_PATH
   }
 
   const getFirstCategory = (categories) => {
