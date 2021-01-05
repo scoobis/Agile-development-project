@@ -19,7 +19,6 @@ const Producer = () => {
 
     if (orgNumber) {
       getProducer(orgNumber).then(({ data }) => {
-        console.log(data)
         setLoading(false)
 
         const address = {
