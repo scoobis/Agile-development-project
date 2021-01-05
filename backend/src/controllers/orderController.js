@@ -46,9 +46,14 @@ controller.getAllOrdersFromProducer = async (req, res, next) => {
 }
 
 controller.updateStatus = async (req, res, next) => {
-  const status = req.body.status
-  const id = req.body.id
-  await service.updateStatus(status, id)
+  try {
+    const status = req.body.status
+    const id = req.body.id
+    await service.updateStatus(status, id)
+    res.status(200).json({ success: true, message: 'Status updated!' })
+  } catch (error) {
+    return next(error)
+  }
 }
 
 const parseOrder = (object) => {
