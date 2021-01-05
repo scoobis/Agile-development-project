@@ -99,7 +99,11 @@ orderDAO.getAllOrdersFromProducer = async (orgNumber) => {
 
 orderDAO.updateStatus = async (status, id) => {
   const update = 'UPDATE orders SET order_status=? WHERE id=?'
-  await pool.query(update, [status, id])
+  const result = await pool.query(update, [status, id])
+
+  if (result.affectedRows === 0) {
+    throw createError(400, 'Order not found')
+  }
 }
 
 orderDAO.getCustomerEmail = async (id) => {
