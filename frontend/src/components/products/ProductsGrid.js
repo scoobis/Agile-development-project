@@ -8,7 +8,7 @@ const ProductsGrid = ({ products }) => {
     if (images.length) {
       return `${API_URL}/static/${images[0].imageName}`
     }
-    return '/apples.jpg'
+    return '/placeholder.png'
   }
 
   const getFirstCategory = (categories) => {

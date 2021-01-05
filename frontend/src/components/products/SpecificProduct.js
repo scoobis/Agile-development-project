@@ -15,8 +15,8 @@ const SpecificProduct = ({ product }) => {
       : [
         {
           id: 1,
-          alt: 'Apples',
-          src: '/apples.JPG'
+          alt: 'Placeholder',
+          src: '/placeholder.png'
         }
       ]
 
