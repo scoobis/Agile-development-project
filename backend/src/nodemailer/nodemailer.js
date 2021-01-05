@@ -38,10 +38,26 @@ const emailHandler = async (email) => {
   })
 
   const mailOptions = {
-    from: sender,
+    replyTo: sender,
     to: recipients,
     subject: subject,
-    text: message
+    html: `
+      <html>
+        <head>
+          <title></title>
+        </head>
+        <body>
+          <div>
+            <span style="font-weight: bold;">Meddelande från ${sender}: </span>
+            <br><br>
+            <span>${subject}</span>
+            <br><br>
+            <span>${message}</span>
+            <br><br>
+            <span style="font-weight: bold;">Svara ${sender} </span>
+          </div>
+        </body>
+      </html>`
   }
 
   return transporter.sendMail(mailOptions)
