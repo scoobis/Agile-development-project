@@ -59,8 +59,8 @@ export const getAllProductsFromCategory = (id) =>
 export const getOneProduct = (id) =>
   axios
     .get(`/product/${id}`)
-    .then((response) => response.data)
-    .catch((err) => err.response)
+    .then((response) => ({ data: response.data }))
+    .catch((error) => ({ error }))
 
 export const removeProduct = (id) => {
   return axios
