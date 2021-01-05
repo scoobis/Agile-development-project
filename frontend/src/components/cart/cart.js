@@ -48,11 +48,11 @@ const Cart = () => {
                   <TableBody>
                     {state.cartProducts.map((product) => (
                       <ProductTable
+                        key={product.id}
                         product={product}
                         increase={increase}
                         decrease={decrease}
                         removeProduct={removeProduct}
-                        key={product.id}
                       />
                     ))}
                   </TableBody>

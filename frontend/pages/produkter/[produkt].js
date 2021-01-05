@@ -11,13 +11,13 @@ const Product = () => {
   const [product, setProduct] = useState({})
 
   useEffect(() => {
-    if (produkt) {
+    produkt &&
       getOneProduct(produkt).then((response) => {
-        getProducer(response.orgNumber).then(({ data }) => {
-          setProduct({ ...response, producer: data.name, producerDescription: data.description })
-        })
+        response.data &&
+          getProducer(response.data.orgNumber).then(({ data }) => {
+            setProduct({ ...response.data, producer: data.name, producerDescription: data.description })
+          })
       })
-    }
   }, [produkt])
 
   return (
