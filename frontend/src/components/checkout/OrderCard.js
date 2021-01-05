@@ -36,10 +36,7 @@ const OrderCard = (props) => {
             justifyContent='space-between'
             key={product.id}
           >
-            <img
-              src={`${product.image ? API_URL + '/static/' + product.image : PRODUCT_PLACEHOLDER_IMG_PATH} `}
-              style={{ width: '40px' }}
-            />
+            <img src={`${product.image ? product.image : PRODUCT_PLACEHOLDER_IMG_PATH} `} style={{ width: '40px' }} />
             <Typography variant='body1'>
               {product.name} <b>x {product.quantity}</b>
             </Typography>
