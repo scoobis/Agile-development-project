@@ -8,7 +8,13 @@ const useStyles = makeStyles({
   title: { marginBottom: '15px' },
   rightGrid: { paddingLeft: '20px' },
   leftGrid: { paddingRight: '20px', borderRight: '1px solid #a3a3a3' },
-  container: { background: '#ededed', boxShadow: 'black 1px 1px 4px', padding: '20px', borderRadius: '5px', marginTop: '20px' }
+  container: {
+    background: '#ededed',
+    boxShadow: 'black 1px 1px 4px',
+    padding: '20px',
+    borderRadius: '5px',
+    marginTop: '20px'
+  }
 })
 
 const OrderDetials = (props) => {
@@ -24,7 +30,7 @@ const OrderDetials = (props) => {
         {order.products.map((product) => {
           return (
             <Box display='flex' mb={2} borderBottom='1px solid #d4d4d4' justifyContent='space-between' key={product.id}>
-              <img src='/apples.jpg' style={{ width: '40px' }} />
+              <img src='/placeholder.png' style={{ width: '40px' }} />
               <Typography variant='body1'>
                 {product.name} <b>x {product.quantity}</b>
               </Typography>

@@ -26,8 +26,16 @@ const OrderCard = (props) => {
 
       {cartProducts.map((product) => {
         return (
-          <Box pb={1} mt={2} mb={2} display='flex' borderBottom='1px solid #d4d4d4' justifyContent='space-between' key={product.id}>
-            <img src='/apples.jpg' style={{ width: '40px' }} />
+          <Box
+            pb={1}
+            mt={2}
+            mb={2}
+            display='flex'
+            borderBottom='1px solid #d4d4d4'
+            justifyContent='space-between'
+            key={product.id}
+          >
+            <img src='/placeholder.png' style={{ width: '40px' }} />
             <Typography variant='body1'>
               {product.name} <b>x {product.quantity}</b>
             </Typography>

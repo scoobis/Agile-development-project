@@ -1,12 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { Container, Typography, Box, Grid, Button } from '@material-ui/core'
 import CheckCircleIcon from '@material-ui/icons/CheckCircle'
-import { CURRENCY } from '../../utils/config'
+import { CURRENCY, PRODUCTS_PATH } from '../../utils/config'
 import { makeStyles } from '@material-ui/core/styles'
 import { CartContext } from '../../context/CartContext'
 import AccordionGroup from '../AccordionGroup'
 import Link from 'next/link'
-import { PRODUCTS_PATH } from '../../utils/config'
 
 const useStyles = makeStyles({
   price: { fontWeight: 'bold' }
@@ -40,9 +39,13 @@ const OrderConfirmation = () => {
                     <Grid container align='left'>
                       {stateCopy.cartProducts.map((product) => {
                         return (
-                          <Grid container style={{ borderBottom: '1px solid #d4d4d4', marginBottom: '15px', paddingBottom: '10px' }}>
+                          <Grid
+                            key={product.id}
+                            container
+                            style={{ borderBottom: '1px solid #d4d4d4', marginBottom: '15px', paddingBottom: '10px' }}
+                          >
                             <Grid item xs={4} key={product.id}>
-                              <img src='/apples.jpg' style={{ width: '90px' }} />
+                              <img src='/placeholder.png' style={{ width: '90px' }} />
                             </Grid>
                             <Grid item xs={8}>
                               <Typography variant='subtitle1'>
