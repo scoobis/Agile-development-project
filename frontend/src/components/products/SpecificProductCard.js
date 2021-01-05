@@ -39,7 +39,8 @@ const SpecificProductCard = (props) => {
     categories,
     tags,
     producer,
-    producerDescription
+    producerDescription,
+    images
   } = props
   const [amount, setAmount] = useState(1)
   const { addProduct, state } = useContext(CartContext)
@@ -52,7 +53,7 @@ const SpecificProductCard = (props) => {
     const canAdd = itemsInCartAreFromSameProducer(state.cartProducts, orgNumber)
 
     if (canAdd) {
-      addProduct({ id, amount, name, price, unit, orgNumber, inStock })
+      addProduct({ id, amount, name, price, unit, orgNumber, inStock, image: images.length && images[0].imageName })
 
       enqueueSnackbar(`${name} har lagts till i varukorgen`, {
         variant: 'success',
@@ -85,9 +86,8 @@ const SpecificProductCard = (props) => {
   const mapLinks = (arr, route) =>
     arr &&
     arr.map((item, i) => (
-      <>
+      <Box component='span' key={item.id}>
         <Link
-          key={item.id}
           href={
             route === 'search'
               ? `/search?q=${item.name}`
@@ -97,7 +97,7 @@ const SpecificProductCard = (props) => {
           <a>{item.name}</a>
         </Link>
         {i + 1 < arr.length && ', '}
-      </>
+      </Box>
     ))
 
   return (

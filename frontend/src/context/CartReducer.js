@@ -43,7 +43,8 @@ const addProduct = (state, payload) => {
       name: payload.name,
       price: payload.price,
       unit: payload.unit,
-      orgNumber: payload.orgNumber
+      orgNumber: payload.orgNumber,
+      image: payload.image
     })
   }
   saveInStorage('cart', state.cartProducts)

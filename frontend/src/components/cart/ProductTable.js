@@ -4,7 +4,7 @@ import DeleteForeverIcon from '@material-ui/icons/DeleteForever'
 import { makeStyles, withStyles } from '@material-ui/core/styles'
 import { IconButton, TableCell, TableRow } from '@material-ui/core'
 import Link from 'next/link'
-import { CURRENCY, PRODUCTS_PATH, PRODUCT_PLACEHOLDER_IMG_PATH } from '../../utils/config'
+import { API_URL, CURRENCY, PRODUCTS_PATH, PRODUCT_PLACEHOLDER_IMG_PATH } from '../../utils/config'
 
 const StyledTableRow = withStyles((theme) => ({
   root: {
@@ -23,14 +23,14 @@ const useStyles = makeStyles({
 const ProductTable = (props) => {
   const classes = useStyles()
 
-  const { name, quantity, price, id } = props.product
+  const { name, quantity, price, id, image } = props.product
 
   const { increase, decrease, removeProduct } = props
 
   return (
     <StyledTableRow>
       <TableCell align='center'>
-        <img src={PRODUCT_PLACEHOLDER_IMG_PATH} className={classes.img} />
+        <img src={`${image ? API_URL + '/static/' + image : PRODUCT_PLACEHOLDER_IMG_PATH}`} className={classes.img} />
       </TableCell>
       <TableCell align='left' className={classes.name}>
         <Link href={`${PRODUCTS_PATH}/${id}`}>

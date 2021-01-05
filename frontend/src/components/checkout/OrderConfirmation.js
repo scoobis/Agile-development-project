@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { Container, Typography, Box, Grid, Button } from '@material-ui/core'
 import CheckCircleIcon from '@material-ui/icons/CheckCircle'
-import { CURRENCY, PRODUCTS_PATH } from '../../utils/config'
+import { API_URL, CURRENCY, PRODUCTS_PATH, PRODUCT_PLACEHOLDER_IMG_PATH } from '../../utils/config'
 import { makeStyles } from '@material-ui/core/styles'
 import { CartContext } from '../../context/CartContext'
 import AccordionGroup from '../AccordionGroup'
@@ -45,7 +45,12 @@ const OrderConfirmation = () => {
                             style={{ borderBottom: '1px solid #d4d4d4', marginBottom: '15px', paddingBottom: '10px' }}
                           >
                             <Grid item xs={4} key={product.id}>
-                              <img src='/placeholder.png' style={{ width: '90px' }} />
+                              <img
+                                src={`${
+                                  product.image ? API_URL + '/static/' + product.image : PRODUCT_PLACEHOLDER_IMG_PATH
+                                } `}
+                                style={{ width: '90px' }}
+                              />
                             </Grid>
                             <Grid item xs={8}>
                               <Typography variant='subtitle1'>

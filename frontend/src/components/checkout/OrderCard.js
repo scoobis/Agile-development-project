@@ -1,7 +1,7 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import { Grid, Typography, Box } from '@material-ui/core'
-import { CURRENCY } from '../../utils/config'
+import { API_URL, CURRENCY, PRODUCT_PLACEHOLDER_IMG_PATH } from '../../utils/config'
 
 const useStyles = makeStyles({
   orderContainer: { borderRadius: '5px', padding: '30px', background: '#e3e3e3' },
@@ -16,6 +16,7 @@ const OrderCard = (props) => {
   const classes = useStyles()
   const { state } = props
   const { total, cartProducts } = state
+
   return (
     <Grid className={classes.orderContainer}>
       <Box borderBottom='1px solid #999'>
@@ -35,7 +36,10 @@ const OrderCard = (props) => {
             justifyContent='space-between'
             key={product.id}
           >
-            <img src='/placeholder.png' style={{ width: '40px' }} />
+            <img
+              src={`${product.image ? API_URL + '/static/' + product.image : PRODUCT_PLACEHOLDER_IMG_PATH} `}
+              style={{ width: '40px' }}
+            />
             <Typography variant='body1'>
               {product.name} <b>x {product.quantity}</b>
             </Typography>
