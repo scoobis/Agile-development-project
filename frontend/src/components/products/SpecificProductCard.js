@@ -6,7 +6,7 @@ import { CartContext } from '../../context/CartContext'
 import PickAmount from './PickAmount'
 import AccordionGroup from '../AccordionGroup'
 import { useSnackbar } from 'notistack'
-import { CURRENCY, PRODUCERS_PATH, PRODUCT_CATEGORIES_PATH } from '../../utils/config'
+import { API_URL, CURRENCY, PRODUCERS_PATH, PRODUCT_CATEGORIES_PATH } from '../../utils/config'
 import { isNull, itemsInCartAreFromSameProducer } from '../../utils/helpers'
 
 const useStyles = makeStyles((theme) => ({
@@ -62,7 +62,7 @@ const SpecificProductCard = (props) => {
         unit,
         orgNumber,
         inStock,
-        image: images.length && images[0].imageName
+        image: images.length && `${API_URL}/static/${images[0].imageName}`
       })
 
       enqueueSnackbar(`${name} har lagts till i varukorgen`, {

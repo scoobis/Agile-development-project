@@ -20,9 +20,6 @@ const useStyles = makeStyles({
   title: {
     fontSize: 14
   },
-  pos: {
-    marginBottom: 12
-  },
   img: {
     width: '260px',
     margin: 'auto',
@@ -36,11 +33,13 @@ const useStyles = makeStyles({
     height: 200
   },
   green: { color: 'green' },
-  yellow: { color: '#dee600' }
+  yellow: { color: '#ffa700' },
+  red: { color: 'red' },
+  stock: { marginBottom: 12, fontSize: 14 }
 })
 
 const ProductCard = (props) => {
-  const { id, name, price, unit, inStock, imgSrc, orgNumber, category } = props
+  const { id, name, price, salePrice, unit, inStock, imgSrc, orgNumber, category } = props
   const { addProduct, state } = useContext(CartContext)
   const [amount, setAmount] = useState(1)
   const classes = useStyles()
@@ -50,7 +49,7 @@ const ProductCard = (props) => {
     const canAdd = itemsInCartAreFromSameProducer(state.cartProducts, orgNumber)
 
     if (canAdd) {
-      addProduct({ id, amount, name, price, unit, orgNumber, inStock, image: imgSrc })
+      addProduct({ id, amount, name, price, salePrice, unit, orgNumber, inStock, image: imgSrc })
 
       enqueueSnackbar(`${name} har lagts till i varukorgen`, {
         variant: 'success',
@@ -82,17 +81,22 @@ const ProductCard = (props) => {
               {name}
             </Typography>
             <Typography color='textSecondary'>{category}</Typography>
-            <Typography className={(classes.pos, inStock <= 10 ? classes.yellow : classes.green)} color='textSecondary'>
-              {inStock} i lager
+            <Typography
+              className={`${classes.stock} ${
+                inStock <= 0 ? classes.red : inStock <= 2 ? classes.yellow : classes.green
+              }`}
+              color='textSecondary'
+            >
+              {inStock > 0 ? `${inStock} i lager` : 'Slutsåld'}
             </Typography>
-            <Typography variant='h5'>
-              {price} kr / {unit}
+            <Typography className={salePrice && classes.red} variant='h5'>
+              {salePrice || price} kr / {unit}
             </Typography>
           </CardContent>
         </a>
       </Link>
       <CardActions>
-        <Button variant='contained' color='primary' onClick={handleAddProduct}>
+        <Button disabled={inStock <= 0} variant='contained' color='primary' onClick={handleAddProduct}>
           Köp
         </Button>
         <PickAmount inStock={inStock} handleAmountChange={handleAmountChange} />
