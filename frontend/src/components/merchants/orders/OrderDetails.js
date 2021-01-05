@@ -1,7 +1,7 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import { Grid, Typography, Box } from '@material-ui/core'
-import { CURRENCY } from '../../../utils/config'
+import { API_URL, CURRENCY, PRODUCT_PLACEHOLDER_IMG_PATH } from '../../../utils/config'
 
 const useStyles = makeStyles({
   bold: { fontWeight: 'bold' },
@@ -21,6 +21,26 @@ const OrderDetials = (props) => {
   const { order } = props
   const classes = useStyles()
 
+  const getShippingMethod = () => {
+    switch (order.shippingMethod) {
+      case 'collect': {
+        return 'Hämtas på plats'
+      }
+      default: {
+        return 'Hämtas på plats'
+      }
+    }
+  }
+
+  const getPaymentMethod = () => {
+    switch (order.paymentMethod) {
+      case 'upon_collect':
+        return 'Betala på plats'
+      default:
+        return 'Betala på plats'
+    }
+  }
+
   return (
     <Grid container className={classes.container}>
       <Grid item xs={6} className={classes.leftGrid}>
@@ -30,7 +50,6 @@ const OrderDetials = (props) => {
         {order.products.map((product) => {
           return (
             <Box display='flex' mb={2} borderBottom='1px solid #d4d4d4' justifyContent='space-between' key={product.id}>
-              <img src='/placeholder.png' style={{ width: '40px' }} />
               <Typography variant='body1'>
                 {product.name} <b>x {product.quantity}</b>
               </Typography>
@@ -60,7 +79,7 @@ const OrderDetials = (props) => {
           Frakt
         </Typography>
         <Typography variant='body1'>
-          Frakt: <b>{order.shippingMethod}</b>
+          Frakt: <b>{getShippingMethod()}</b>
         </Typography>
         <Typography variant='body1'>
           Fraktkostnad:{' '}
@@ -91,7 +110,7 @@ const OrderDetials = (props) => {
           </b>
         </Typography>
         <Typography variant='body1'>
-          Betalmetod: <b>{order.paymentMethod}</b>
+          Betalmetod: <b>{getPaymentMethod()}</b>
         </Typography>
       </Grid>
     </Grid>
