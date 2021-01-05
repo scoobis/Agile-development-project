@@ -104,8 +104,11 @@ orderDAO.updateStatus = async (status, id) => {
 
 orderDAO.getCustomerEmail = async (id) => {
   const selectEmailQuery = 'SELECT customer_email FROM orders WHERE id=?'
-  const [customerEmail] = await pool.query(selectEmailQuery, id)
-  return customerEmail.customer_email
+  const customerEmail = await pool.query(selectEmailQuery, id)
+
+  if (customerEmail.length !== 0) {
+    return customerEmail[0].customer_email
+  }
 }
 
 const parseOrder = (object) => {
