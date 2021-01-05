@@ -32,7 +32,10 @@ const addProduct = (state, payload) => {
   const exists = state.cartProducts.find((product) => product.id === payload.id)
   if (exists) {
     const addedIndex = state.cartProducts.findIndex((product) => product.id === payload.id)
-    state.cartProducts[addedIndex].quantity += payload.amount
+
+    if (payload.inStock >= payload.amount + state.cartProducts[addedIndex].quantity) {
+      state.cartProducts[addedIndex].quantity += payload.amount
+    }
   } else {
     state.cartProducts.push({
       id: payload.id,
