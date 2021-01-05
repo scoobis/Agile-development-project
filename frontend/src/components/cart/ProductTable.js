@@ -2,7 +2,7 @@ import React from 'react'
 import PickAmountCart from './PickAmountCart'
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever'
 import { makeStyles, withStyles } from '@material-ui/core/styles'
-import { IconButton, TableCell, TableRow } from '@material-ui/core'
+import { IconButton, TableCell, TableRow, Typography } from '@material-ui/core'
 import Link from 'next/link'
 import { API_URL, CURRENCY, PRODUCTS_PATH, PRODUCT_PLACEHOLDER_IMG_PATH } from '../../utils/config'
 
@@ -17,13 +17,15 @@ const StyledTableRow = withStyles((theme) => ({
 const useStyles = makeStyles({
   img: { width: '90px', border: '1px solid grey' },
   bold: { fontWeight: 'bold' },
-  name: { fontWeight: 'bold', fontSize: '16px' }
+  name: { fontWeight: 'bold', fontSize: '16px' },
+  oldPrice: { textDecoration: 'line-through', fontSize: 13 },
+  salePrice: { color: 'red', marginLeft: '10px' }
 })
 
 const ProductTable = (props) => {
   const classes = useStyles()
 
-  const { name, quantity, price, id, image } = props.product
+  const { name, quantity, price, salePrice, id, image } = props.product
 
   const { increase, decrease, removeProduct } = props
 
@@ -42,7 +44,14 @@ const ProductTable = (props) => {
         {/* TODO: Set inStock */}
       </TableCell>
       <TableCell align='right' className={classes.bold}>
-        {price * quantity} {CURRENCY}
+        <Typography display='inline' className={`${classes.bold} ${salePrice && classes.oldPrice}`}>
+          {price} {CURRENCY}
+        </Typography>
+        {salePrice && (
+          <Typography display='inline' className={` ${classes.bold} ${classes.salePrice} `}>
+            {salePrice} {CURRENCY}
+          </Typography>
+        )}
       </TableCell>
       <TableCell>
         <IconButton onClick={() => removeProduct({ id })}>
