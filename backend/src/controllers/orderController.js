@@ -49,7 +49,7 @@ controller.updateStatus = async (req, res, next) => {
   try {
     const status = req.body.status
     const id = req.body.id
-    const producerEmail = req.user.customerEmail
+    const producerEmail = req.user.email
 
     await service.updateStatus(status, id, producerEmail)
     res.status(200).json({ success: true, message: 'Status updated!' })
