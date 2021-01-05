@@ -53,7 +53,17 @@ const SpecificProductCard = (props) => {
     const canAdd = itemsInCartAreFromSameProducer(state.cartProducts, orgNumber)
 
     if (canAdd) {
-      addProduct({ id, amount, name, price, unit, orgNumber, inStock, image: images.length && images[0].imageName })
+      addProduct({
+        id,
+        amount,
+        name,
+        price,
+        salePrice,
+        unit,
+        orgNumber,
+        inStock,
+        image: images.length && images[0].imageName
+      })
 
       enqueueSnackbar(`${name} har lagts till i varukorgen`, {
         variant: 'success',

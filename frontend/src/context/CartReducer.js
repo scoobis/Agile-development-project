@@ -42,6 +42,7 @@ const addProduct = (state, payload) => {
       quantity: payload.amount,
       name: payload.name,
       price: payload.price,
+      salePrice: payload.salePrice,
       unit: payload.unit,
       orgNumber: payload.orgNumber,
       image: payload.image
@@ -73,6 +74,7 @@ const removeProduct = (state, payload) => {
 }
 
 export const totalSum = (cartProducts) => {
-  const total = cartProducts.reduce((sum, item) => sum + item.price * item.quantity, 0) || 0
+  const total =
+    cartProducts.reduce((sum, item) => sum + (item.salePrice ? item.salePrice : item.price) * item.quantity, 0) || 0
   return { total }
 }
