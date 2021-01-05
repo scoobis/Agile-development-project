@@ -26,6 +26,7 @@ const ProductsGrid = ({ products }) => {
                 name={product.name}
                 description={product.description}
                 price={product.price}
+                salePrice={product.salePrice}
                 inStock={product.inStock}
                 imgSrc={getFirstImage(product.images)}
                 id={product.id}
