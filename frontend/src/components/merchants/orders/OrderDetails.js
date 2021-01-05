@@ -71,7 +71,7 @@ const OrderDetials = (props) => {
         <Typography variant='body1' style={{ borderBottom: '1px solid #a3a3a3', paddingBottom: '15px' }}>
           Adress:{' '}
           <b>
-            {order.cutomerStreetAddress}, {order.customerZip} {order.customerCity}
+            {order.customerStreetAddress}, {order.customerZip} {order.customerCity}
           </b>
         </Typography>
 
