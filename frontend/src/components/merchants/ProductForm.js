@@ -66,6 +66,7 @@ const ProductForm = ({ onSubmit, preFilled }) => {
           const file = {}
           file.data = finalResult
           file.file = new window.File([blob], image.imageName, { type: blob.type })
+          file.id = image.id
           return file
         })
       )
@@ -178,14 +179,13 @@ const ProductForm = ({ onSubmit, preFilled }) => {
       const images = state.product.images
       const preFilledImages = state.preFilledImages
 
-      const imagesToRemove = preFilledImages.filter((img) => !images.find((i) => i.data === img.data))
-      const idsToRemove = preFilled.images
-        .filter((img) => imagesToRemove.find((i) => img.image_name === i.file.name))
+      const imagesToRemove = preFilledImages
+        .filter((img) => !images.find((i) => i.data === img.data))
         .map((img) => img.id)
 
       const imagesToAdd = images.filter((img) => !preFilledImages.find((i) => i.data === img.data))
 
-      return { imagesToRemove: idsToRemove, imagesToAdd }
+      return { imagesToRemove, imagesToAdd }
     }
   }
 
