@@ -84,7 +84,6 @@ orderDAO.getAllOrdersFromProducer = async (orgNumber) => {
   const getAllOrders = 'SELECT * FROM orders WHERE producer_org_no=?'
   const getAllProductsFromOrder = 'SELECT * FROM order_product WHERE order_id=?'
   const orders = await pool.query(getAllOrders, orgNumber)
-  console.log(orders)
 
   if (orders) {
     for (const order of orders) {
@@ -100,7 +99,20 @@ orderDAO.getAllOrdersFromProducer = async (orgNumber) => {
 
 orderDAO.updateStatus = async (status, id) => {
   const update = 'UPDATE orders SET order_status=? WHERE id=?'
-  await pool.query(update, [status, id])
+  const result = await pool.query(update, [status, id])
+
+  if (result.affectedRows === 0) {
+    throw createError(400, 'Order not found')
+  }
+}
+
+orderDAO.getCustomerEmail = async (id) => {
+  const selectEmailQuery = 'SELECT customer_email FROM orders WHERE id=?'
+  const customerEmail = await pool.query(selectEmailQuery, id)
+
+  if (customerEmail.length !== 0) {
+    return customerEmail[0].customer_email
+  }
 }
 
 const parseOrder = (object) => {
