@@ -1,6 +1,8 @@
 const Order = require('../models/order')
 const orderDAO = require('../database/orderDAO')
 const producerDAO = require('../database/producerDAO')
+const mailer = require('../nodemailer/nodemailer')
+const Email = require('../models/email')
 
 const service = {}
 
@@ -19,8 +21,21 @@ service.getAllOrdersFromProducer = async (orgNumber) => {
   return orderDAO.getAllOrdersFromProducer(orgNumber)
 }
 
-service.updateStatus = async (status, id) => {
+service.updateStatus = async (status, id, producerEmail) => {
   await orderDAO.updateStatus(status, id)
+
+  const customerEmail = await orderDAO.getCustomerEmail(id)
+
+  if (customerEmail) {
+    const email = new Email(
+      producerEmail,
+      customerEmail,
+      'Updaterad orderstatus',
+      `Orderstatusen på orderid ${id} är nu ${status}`
+    )
+
+    mailer.sendEmail(email)
+  }
 }
 
 module.exports = service
